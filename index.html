@@ -865,6 +865,32 @@
         .demo-banner a:hover {
             color: var(--color-primary);
         }
+
+        /* ── Responsive ──────────────────────────────────────────────
+           Desktop = fixed 3-column tactical grid. Below ~1100px the layout
+           stacks to one column and the page scrolls normally so tabs, cards
+           and the capability catalog stay readable on tablet/mobile. */
+        @media (max-width: 1100px) {
+            body { height: auto; min-height: 100vh; overflow-y: auto; }
+            .dashboard-container {
+                grid-template-columns: 1fr;
+                height: auto;
+                overflow: visible;
+            }
+            .column { height: auto; overflow: visible; }
+            .center-column { grid-column: auto !important; }
+            #map { height: 320px; }
+        }
+
+        @media (max-width: 640px) {
+            header { flex-wrap: wrap; gap: 10px; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            /* any 2-up doc grids collapse to single column */
+            #doc-readiness-list,
+            #doc-docs-strategy-list { grid-template-columns: 1fr !important; }
+            .tab-nav { flex-wrap: wrap; }
+            #map { height: 240px; }
+        }
     </style>
 </head>
 
