@@ -739,6 +739,8 @@
             font-size: 11px;
         }
 
+        .node-name a { color: inherit; text-decoration: none; }
+        .node-name a:hover { text-decoration: underline; color: var(--color-primary); }
         .node-name {
             font-weight: 600;
         }
@@ -1520,36 +1522,47 @@
                 </div>
                 <div class="panel-content node-list">
                     <div class="node-item">
-                        <span class="node-name">FaunaScope (TrapSense)</span>
+                        <span class="node-name"><a href="https://github.com/tanmaynikhare45/FaunaScope-Wildlife-Camera-Trap-Analysis-Platform" target="_blank" rel="noopener">FaunaScope (TrapSense)</a></span>
                         <span class="node-status status-online">ONLINE</span>
                     </div>
                     <div class="node-item">
-                        <span class="node-name">Forest-Conservation (VanaRakshya)</span>
+                        <span class="node-name"><a href="https://github.com/KarnaPratik/Forest-Conservation-System" target="_blank" rel="noopener">Forest-Conservation (VanaRakshya)</a></span>
                         <span class="node-status status-online">ONLINE</span>
                     </div>
                     <div class="node-item">
-                        <span class="node-name">PAWS-public (Predictor)</span>
+                        <span class="node-name"><a href="https://github.com/lily-x/PAWS-public" target="_blank" rel="noopener">PAWS-public (Predictor)</a></span>
                         <span class="node-status status-online">ONLINE</span>
                     </div>
                     <div class="node-item">
-                        <span class="node-name">Wildlife-News (OSINT Parser)</span>
+                        <span class="node-name"><a href="https://github.com/Siddhanthkjain2005/Wildlife-News" target="_blank" rel="noopener">Wildlife-News (OSINT Parser)</a></span>
                         <span class="node-status status-online">ONLINE</span>
                     </div>
                     <div class="node-item">
-                        <span class="node-name">WildlifeFL (Federated Learning)</span>
+                        <span class="node-name"><a href="https://github.com/MeGaurav4/WildlifeFL" target="_blank" rel="noopener">WildlifeFL (Federated Learning)</a></span>
                         <span class="node-status status-degraded">DEGRADED</span>
                     </div>
                 </div>
             </div>
 
             <!-- OSINT Feed and Auto Chargesheet Draft -->
-            <div class="panel" style="flex: 1;">
+            <div class="panel" style="flex: 1; min-height: 0;">
                 <div class="panel-header">
                     <span class="panel-title"><i class="fa-solid fa-globe" style="color: var(--color-info);"></i><span
-                            id="txt-title-osint">Feed OSINT Notizie</span></span>
+                            id="txt-title-osint">Intelligence Feed</span></span>
                 </div>
-                <div class="panel-content" id="osint-feed-container">
-                    <!-- Populated dynamically via JS translations -->
+                <div class="panel-content" style="display:flex; flex-direction:column; gap:0; padding:0; overflow-y:auto;">
+                    <div id="osint-feed-container" style="padding:10px; display:flex; flex-direction:column; gap:8px;">
+                        <!-- Populated dynamically via JS translations -->
+                    </div>
+                    <!-- Legal Report output — shown when user clicks Draft Legal Report -->
+                    <div id="chargesheet-output" class="chargesheet-box" style="display:none; margin:0 10px 10px; border-radius:6px;">
+                        <h4 id="chargesheet-title-lbl">📋 Legal Report Draft</h4>
+                        <pre id="chargesheet-text" class="chargesheet-content"></pre>
+                        <div style="display:flex; gap:6px; margin-top:8px;">
+                            <button class="btn" style="font-size:9px; padding:3px 8px;" onclick="copyChargesheet()">Copy to clipboard</button>
+                            <button class="btn" style="font-size:9px; padding:3px 8px; opacity:0.6;" onclick="document.getElementById('chargesheet-output').style.display='none'">✕ Close</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1702,7 +1715,10 @@
                 // OSINT News Feed
                 osint: [
                     { title: "Sequestro di Zanne d'Avorio al Confine", desc: "La polizia forestale ha fermato un furgone con 4 zanne d'avorio grezze pronte per il contrabbando transfrontaliero. Due arresti.", tag: "Zanne", schedule: "WPA Schedule I", specie: "Elephas maximus", reato: "Sequestro Avorio", sezioni: "Sezione 9, 39, 51" },
-                    { title: "Smantellato Mercato Nero Online di Rettili", desc: "Rilevato canale Telegram privato dedito alla vendita di rettili rari e uccelli canori protetti provenienti dal Chitwan.", tag: "Rettili", schedule: "WPA Schedule II", specie: "Reptilia/Aves", reato: "Canale Telegram", sezioni: "Sezione 49-B" }
+                    { title: "Smantellato Mercato Nero Online di Rettili", desc: "Rilevato canale Telegram privato dedito alla vendita di rettili rari e uccelli canori protetti provenienti dal Chitwan.", tag: "Rettili", schedule: "WPA Schedule II", specie: "Reptilia/Aves", reato: "Canale Telegram", sezioni: "Sezione 49-B" },
+                    { title: "Spike Prezzi Corni Rinoceronti su Forum Dark Web", desc: "L'OSINT parser ha rilevato un incremento del 340% nelle inserzioni di corna di rinoceronte nelle ultime 72 ore. Pattern precedente a grandi sequestri nel 2022.", tag: "Corni", schedule: "CITES Appendice I", specie: "Rhinoceros unicornis", reato: "Traffico Corna", sezioni: "Sezione 9, 40, 51" },
+                    { title: "Motosierra Rilevata — Foresta Protetta Zona C", desc: "Sensore audio nodo #17 ha classificato suono di motosega a 94% di confidenza. Triangolazione TDoA: coordinate 27.4°N 84.2°E. Ranger dispiegati.", tag: "Deforestazione", schedule: "Forest Act §26", specie: "Habitat", reato: "Taglio Illegale", sezioni: "Sezione 26, 33" },
+                    { title: "Uccelli Esotici: 23 Esemplari Recuperati", desc: "Operazione congiunta ha liberato 23 uccelli tropicali protetti destinati all'export illegale. Sequestrata attrezzatura per cattura e gabbie.", tag: "Uccelli", schedule: "WPA Schedule IV", specie: "Psittaciformes", reato: "Traffico Uccelli", sezioni: "Sezione 49-B, 51" }
                 ],
 
                 // Notifications & Alerts
@@ -1787,8 +1803,11 @@
 
                 // OSINT News Feed
                 osint: [
-                    { title: "Ivory Tusk Seizure at Park Borders", desc: "Forest police stopped a van carrying 4 raw ivory tusks prepared for cross-border smuggling. Two arrests.", tag: "Tusks", schedule: "WPA Schedule I", specie: "Elephas maximus", reato: "Ivory Seizure", sezioni: "Section 9, 39, 51" },
-                    { title: "Online Exotic Wildlife Black Market Busted", desc: "Detected private Telegram channel dedicated to selling rare reptiles and protected songbirds sourced from Chitwan sanctuary.", tag: "Reptiles", schedule: "WPA Schedule II", specie: "Reptilia/Aves", reato: "Telegram Channel", sezioni: "Section 49-B" }
+                    { title: "Ivory Tusk Seizure at Park Borders", desc: "Forest police stopped a van carrying 4 raw ivory tusks prepared for cross-border smuggling. Two arrests made at checkpoint.", tag: "Tusks", schedule: "WPA Schedule I", specie: "Elephas maximus", reato: "Ivory Seizure", sezioni: "Section 9, 39, 51" },
+                    { title: "Online Exotic Wildlife Black Market Busted", desc: "Detected private Telegram channel selling rare reptiles and protected songbirds sourced from Chitwan sanctuary. 230+ members identified.", tag: "Reptiles", schedule: "WPA Schedule II", specie: "Reptilia/Aves", reato: "Telegram Channel", sezioni: "Section 49-B" },
+                    { title: "Rhino Horn Price Spike on Dark Web Forum", desc: "OSINT parser flagged a 340% surge in rhino horn listings in the last 72 hours — same pattern preceded major seizures in 2022.", tag: "Rhino Horn", schedule: "CITES Appendix I", specie: "Rhinoceros unicornis", reato: "Horn Trafficking", sezioni: "Section 9, 40, 51" },
+                    { title: "Chainsaw Detected — Protected Forest Zone C", desc: "Audio node #17 classified chainsaw sound at 94% confidence. TDoA triangulation: 27.4°N 84.2°E. Ranger unit dispatched.", tag: "Deforestation", schedule: "Forest Act §26", specie: "Habitat", reato: "Illegal Logging", sezioni: "Section 26, 33" },
+                    { title: "23 Exotic Birds Recovered — Trafficking Ring", desc: "Joint operation freed 23 protected tropical birds destined for illegal export. Trapping equipment and 14 cages seized.", tag: "Birds", schedule: "WPA Schedule IV", specie: "Psittaciformes", reato: "Bird Trafficking", sezioni: "Section 49-B, 51" }
                 ],
 
                 // Notifications & Alerts
@@ -1929,8 +1948,8 @@
                         <div class="osint-tags osint-item-actions">
                             <span class="badge badge-schedule">${item.schedule}</span>
                             <span class="badge">${item.tag}</span>
-                            <button class="btn" style="padding: 2px 6px; font-size: 9px; margin-left: auto;" onclick="generateChargesheet('${item.specie}', '${item.reato}', '${item.sezioni}')">${currentLanguage === 'it' ? 'Genera Verbale' : 'Generate Writ'}</button>
-                            <button class="btn" style="padding: 2px 6px; font-size: 9px; background:rgba(0,188,212,0.1); border-color:rgba(0,188,212,0.3); color:var(--color-info);" onclick="openScriptplay('${encodeURIComponent(item.title)}','${encodeURIComponent(item.desc)}','${item.specie}','${item.tag}')">📹 Script</button>
+                            <button class="btn" style="padding: 2px 6px; font-size: 9px; margin-left: auto;" onclick="generateChargesheet('${item.specie}', '${item.reato}', '${item.sezioni}')">${currentLanguage === 'it' ? '📋 Bozza Verbale' : '📋 Draft Legal Report'}</button>
+                            <button class="btn" style="padding: 2px 6px; font-size: 9px; background:rgba(0,188,212,0.1); border-color:rgba(0,188,212,0.3); color:var(--color-info);" onclick="openScriptplay('${encodeURIComponent(item.title)}','${encodeURIComponent(item.desc)}','${item.specie}','${item.tag}')">✍️ Video Script</button>
                         </div>
                     </div>
                 `;
