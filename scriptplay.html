@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TheRoarWire — Script Generator</title>
+
+  <!-- Reuse hub vendor fonts & icons (offline-first) -->
+  <link rel="stylesheet" href="vendor/fonts/fonts.css">
+  <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/brand/favicon-32.png">
+
+  <style>
+    /* ─── Config ─────────────────────────────────────────────────────────────
+       DEMO_MODE = true  → mock LLM output (safe for public deploy, no API needed)
+       DEMO_MODE = false → calls Ollama or OpenRouter (set via config.js or env)
+       Set OLLAMA_URL / OPENROUTER_KEY in the <script id="sp-config"> block below.
+    ──────────────────────────────────────────────────────────────────────── */
+
+    :root {
+      --bg: #07090e;
+      --panel: rgba(13,17,26,0.85);
+      --border: rgba(0,188,212,0.18);
+      --primary: #00bcd4;
+      --green: #00ff66;
+      --muted: #7e8f9b;
+      --text: #f0f4f8;
+      --danger: #ff3344;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 24px;
+      background: rgba(7,9,14,0.92);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+    }
+    header img { height: 36px; border-radius: 6px; }
+    header h1 {
+      font-size: 17px;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--primary), var(--green));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    header span {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+    .demo-pill {
+      margin-left: auto;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,179,0,0.35);
+      color: #ffb300;
+      background: rgba(255,179,0,0.07);
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      padding: 20px;
+      flex: 1;
+    }
+    @media (max-width: 860px) { main { grid-template-columns: 1fr; } }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .panel-header {
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .panel-body { padding: 16px; flex: 1; overflow-y: auto; }
+
+    label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 4px; margin-top: 12px; }
+    label:first-child { margin-top: 0; }
+    input, textarea, select {
+      width: 100%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 6px;
+      color: var(--text);
+      font-family: 'Outfit', sans-serif;
+      font-size: 13px;
+      padding: 8px 10px;
+      outline: none;
+      transition: border-color .2s;
+    }
+    input:focus, textarea:focus, select:focus { border-color: var(--primary); }
+    textarea { resize: vertical; min-height: 80px; }
+    select option { background: #07090e; }
+
+    .btn-gen {
+      margin-top: 16px;
+      width: 100%;
+      background: var(--primary);
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 12px;
+      cursor: pointer;
+      transition: opacity .2s, box-shadow .2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-gen:hover { opacity: .9; box-shadow: 0 0 14px rgba(0,188,212,.45); }
+    .btn-gen:disabled { opacity: .4; cursor: not-allowed; }
+
+    /* Output area */
+    .output-tabs {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .output-tab {
+      padding: 10px 16px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      color: var(--muted);
+      cursor: pointer;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      transition: color .2s, border-color .2s;
+    }
+    .output-tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+
+    .output-section { display: none; padding: 14px; }
+    .output-section.active { display: block; }
+
+    .script-block {
+      background: rgba(0,0,0,.3);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 13px;
+      line-height: 1.75;
+      white-space: pre-wrap;
+      font-family: 'Outfit', sans-serif;
+      min-height: 120px;
+    }
+    .scene-card {
+      border: 1px solid rgba(0,188,212,0.2);
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+    .scene-card strong { color: var(--primary); display: block; margin-bottom: 4px; }
+
+    .prompt-card {
+      border: 1px solid rgba(0,255,102,0.15);
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+      font-size: 12px;
+      line-height: 1.6;
+      background: rgba(0,255,102,0.03);
+    }
+    .prompt-card strong { color: var(--green); display: block; margin-bottom: 4px; }
+    .prompt-card code {
+      display: block;
+      margin-top: 6px;
+      background: rgba(0,0,0,.4);
+      border-radius: 4px;
+      padding: 8px 10px;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      white-space: pre-wrap;
+      color: #c8e6c9;
+    }
+
+    .copy-btn {
+      float: right;
+      font-size: 10px;
+      padding: 2px 8px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 4px;
+      color: var(--muted);
+      cursor: pointer;
+    }
+    .copy-btn:hover { color: var(--primary); border-color: var(--primary); }
+
+    .spinner {
+      display: none;
+      width: 18px; height: 18px;
+      border: 2px solid rgba(0,0,0,.3);
+      border-top-color: #000;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .status-bar {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      padding: 8px 20px;
+      border-top: 1px solid rgba(255,255,255,.04);
+      background: rgba(7,9,14,.7);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <img src="assets/brand/favicon-256.png" alt="TheRoarWire">
+  <div>
+    <h1>TheRoarWire — Script Generator</h1>
+    <span>From OSINT news to YouTube script · WildGuard AI</span>
+  </div>
+  <span class="demo-pill" id="mode-pill">DEMO MODE</span>
+</header>
+
+<main>
+
+  <!-- LEFT: Input panel -->
+  <div class="panel">
+    <div class="panel-header">
+      <i class="fa-solid fa-newspaper"></i> News Input
+    </div>
+    <div class="panel-body">
+      <label>News title</label>
+      <input type="text" id="inp-title" placeholder="e.g. Ivory price spike detected in South-East Asian markets">
+
+      <label>Summary / description</label>
+      <textarea id="inp-desc" rows="4" placeholder="Short summary of the news item…"></textarea>
+
+      <label>Species</label>
+      <input type="text" id="inp-species" placeholder="e.g. African Elephant">
+
+      <label>Tag / category</label>
+      <input type="text" id="inp-tag" placeholder="e.g. OSINT · Trafficking">
+
+      <label>Channel</label>
+      <select id="inp-channel">
+        <option value="TheRoarWire">TheRoarWire (animals, environment, geopolitics)</option>
+        <option value="PeakyStockRadar">PeakyStockRadar (finance, crypto)</option>
+        <option value="FunLabChannel">FunLabChannel (fun, viral, mystery)</option>
+      </select>
+
+      <label>Target length</label>
+      <select id="inp-length">
+        <option value="6">~6 min (6 scenes)</option>
+        <option value="4">~4 min (4 scenes)</option>
+        <option value="8">~8 min (8 scenes)</option>
+      </select>
+
+      <label>LLM backend</label>
+      <select id="inp-backend">
+        <option value="mock">Mock (demo — no API needed)</option>
+        <option value="ollama">Ollama (local — configure OLLAMA_URL)</option>
+        <option value="openrouter">OpenRouter (cloud — configure API key)</option>
+      </select>
+
+      <button class="btn-gen" id="btn-generate" onclick="generate()">
+        <span class="spinner" id="spinner"></span>
+        <i class="fa-solid fa-clapperboard" id="btn-icon"></i>
+        <span id="btn-label">Generate Script</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- RIGHT: Output panel -->
+  <div class="panel">
+    <div class="panel-header">
+      <i class="fa-solid fa-scroll"></i> Script Output
+    </div>
+    <div class="output-tabs">
+      <button class="output-tab active" onclick="switchOut(event,'out-script')">Script</button>
+      <button class="output-tab" onclick="switchOut(event,'out-scenes')">Scenes</button>
+      <button class="output-tab" onclick="switchOut(event,'out-prompts')">Image Prompts</button>
+      <button class="output-tab" onclick="switchOut(event,'out-meta')">YT Metadata</button>
+    </div>
+
+    <div id="out-script" class="output-section active">
+      <button class="copy-btn" onclick="copySection('script-text')">Copy</button>
+      <div class="script-block" id="script-text">Generate a script to see output here.</div>
+    </div>
+
+    <div id="out-scenes" class="output-section">
+      <div id="scenes-container"><p style="color:var(--muted);font-size:12px;">Generate first.</p></div>
+    </div>
+
+    <div id="out-prompts" class="output-section">
+      <div id="prompts-container"><p style="color:var(--muted);font-size:12px;">Generate first.</p></div>
+    </div>
+
+    <div id="out-meta" class="output-section">
+      <button class="copy-btn" onclick="copySection('meta-text')">Copy JSON</button>
+      <div class="script-block" id="meta-text">Generate first.</div>
+    </div>
+  </div>
+
+</main>
+
+<div class="status-bar" id="status-bar">Ready · <span id="backend-label">Mock mode</span></div>
+
+<!-- ── Config: edit these to enable real LLM ──────────────────────────────
+     Set DEMO_MODE = false to use Ollama or OpenRouter.
+     Copy this block to a separate config.js and gitignore it if you add real keys.
+──────────────────────────────────────────────────────────────────────────── -->
+<script id="sp-config">
+  const DEMO_MODE = true;              // ← flip to false for real LLM
+  const OLLAMA_URL = 'http://localhost:11434';
+  const OLLAMA_MODEL = 'phi3';
+  const OPENROUTER_KEY = '';           // set your key here (never commit)
+  const OPENROUTER_MODEL = 'meta-llama/llama-3-8b-instruct:free';
+</script>
+
+<script>
+  // ── Prefill from URL params (passed by hub OSINT feed) ──────────────────
+  (function prefill() {
+    const p = new URLSearchParams(location.search);
+    if (p.get('title'))   document.getElementById('inp-title').value   = p.get('title');
+    if (p.get('desc'))    document.getElementById('inp-desc').value    = p.get('desc');
+    if (p.get('specie'))  document.getElementById('inp-species').value = p.get('specie');
+    if (p.get('tag'))     document.getElementById('inp-tag').value     = p.get('tag');
+  })();
+
+  // Update mode pill and status bar on backend change
+  document.getElementById('inp-backend').addEventListener('change', function() {
+    const v = this.value;
+    const pill = document.getElementById('mode-pill');
+    const label = document.getElementById('backend-label');
+    if (v === 'mock') {
+      pill.textContent = 'DEMO MODE'; pill.style.color = '#ffb300'; pill.style.borderColor = 'rgba(255,179,0,.35)';
+      label.textContent = 'Mock mode — no API calls';
+    } else if (v === 'ollama') {
+      pill.textContent = 'OLLAMA LOCAL'; pill.style.color = '#00ff66'; pill.style.borderColor = 'rgba(0,255,102,.35)';
+      label.textContent = `Ollama · ${OLLAMA_MODEL} · ${OLLAMA_URL}`;
+    } else {
+      pill.textContent = 'OPENROUTER'; pill.style.color = '#00bcd4'; pill.style.borderColor = 'rgba(0,188,212,.35)';
+      label.textContent = `OpenRouter · ${OPENROUTER_MODEL}`;
+    }
+  });
+
+  // ── Tab switching ────────────────────────────────────────────────────────
+  function switchOut(evt, id) {
+    document.querySelectorAll('.output-section').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.output-tab').forEach(el => el.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    evt.currentTarget.classList.add('active');
+  }
+
+  function copySection(id) {
+    const el = document.getElementById(id);
+    navigator.clipboard.writeText(el.innerText || el.textContent)
+      .then(() => setStatus('Copied to clipboard.'))
+      .catch(() => setStatus('Copy failed — select and copy manually.'));
+  }
+
+  function setStatus(msg) {
+    document.getElementById('status-bar').querySelector('#backend-label').textContent = msg;
+    setTimeout(() => {
+      const backend = document.getElementById('inp-backend').value;
+      document.getElementById('backend-label').textContent =
+        backend === 'mock' ? 'Mock mode — no API calls' :
+        backend === 'ollama' ? `Ollama · ${OLLAMA_MODEL}` : `OpenRouter · ${OPENROUTER_MODEL}`;
+    }, 3000);
+  }
+
+  // ── Mock data generator ──────────────────────────────────────────────────
+  function mockGenerate(title, desc, species, channel, nScenes) {
+    const hook = `[HOOK]\nEvery year, thousands of ${species || 'wild animals'} vanish — not from disease, not from drought, but from human greed. Today we expose the intelligence trail that leads from a price spike on a dark-web marketplace all the way to a poacher's camp in the savanna.\n`;
+
+    const sceneTemplates = [
+      { title: 'The Price Signal', narration: `In the weeks before every major poaching wave, analysts notice the same pattern: the black-market price for ${species || 'the target species'} climbs quietly. ${desc || 'An OSINT alert flagged exactly this kind of anomaly.'} This is the story of what that signal means — and how conservationists are learning to read it.` },
+      { title: 'The Network Behind the Trade', narration: `Poaching isn't done by lone actors. It's organized, it's funded, and it crosses borders. The same networks that traffic drugs and weapons have diversified into wildlife parts. We map the chain — from the reserve to the black-market buyer.` },
+      { title: 'Eyes on the Ground', narration: `Camera traps don't sleep. Deep in the bush, a solar-powered node watches 24 hours a day. When it detects a human silhouette at 3 AM, the alert goes out in seconds. A ranger is dispatched before the poacher reaches the target.` },
+      { title: 'Listening for Gunshots', narration: `A network of cheap microphones hidden in the trees can detect a single gunshot from 800 meters away. The AI classifies the sound, triangulates the location, and alerts the nearest patrol team — all in under 30 seconds.` },
+      { title: 'The Evidence', narration: `Every detection event generates a tamper-proof evidence file. Time-stamped, GPS-tagged, SHA-256 hashed. When the case goes to court, the chain of custody is unbroken. Convictions follow.` },
+      { title: 'What You Can Do', narration: `Conservation technology is open-source. The tools exist. The playbooks are written. What's missing is people willing to deploy them. If you have technical skills — or know someone who does — the link in the description takes you to the full toolkit.` },
+      { title: 'The Stakes', narration: `${species || 'These animals'} have survived ice ages, mass extinctions, and millennia of change. What they can't survive is organized crime at industrial scale — not without our help.` },
+      { title: 'Call to Action', narration: `Subscribe for weekly intelligence on wildlife conservation and environmental geopolitics. The numbers behind the news. The technology behind the fight. TheRoarWire.` },
+    ].slice(0, nScenes);
+
+    const imagePrompts = sceneTemplates.map((s, i) => ({
+      scene: i + 1,
+      title: s.title,
+      prompt: `Cinematic wildlife documentary still. ${s.title}. ${species || 'African wildlife'} conservation. Dramatic lighting, golden hour, photorealistic, 16:9, no text.`
+    }));
+
+    const meta = {
+      title: `${title || 'The Hidden War on Wildlife'} | TheRoarWire`,
+      description: `${desc || 'A deep dive into wildlife crime intelligence.'}\n\n🔗 Full toolkit & playbooks: https://github.com/Arbogaste/open-wildguard-hub\n\n#Wildlife #Conservation #Poaching #Environment`,
+      tags: [species || 'wildlife', 'conservation', 'anti-poaching', 'environment', 'geopolitics', 'TheRoarWire', 'documentary'],
+      category: 'People & Blogs',
+      privacy: 'unlisted',
+      channel: channel
+    };
+
+    return {
+      script: hook + '\n' + sceneTemplates.map((s, i) => `[SCENE ${i+1}: ${s.title}]\n${s.narration}`).join('\n\n'),
+      scenes: sceneTemplates,
+      imagePrompts,
+      meta
+    };
+  }
+
+  // ── Real LLM call (Ollama or OpenRouter) ─────────────────────────────────
+  async function callLLM(prompt, backend) {
+    if (backend === 'ollama') {
+      const res = await fetch(`${OLLAMA_URL}/api/generate`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ model: OLLAMA_MODEL, prompt, stream: false })
+      });
+      const data = await res.json();
+      return data.response;
+    } else if (backend === 'openrouter') {
+      const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${OPENROUTER_KEY}`
+        },
+        body: JSON.stringify({
+          model: OPENROUTER_MODEL,
+          messages: [{ role: 'user', content: prompt }]
+        })
+      });
+      const data = await res.json();
+      return data.choices?.[0]?.message?.content || '';
+    }
+    throw new Error('Unknown backend');
+  }
+
+  function buildLLMPrompt(title, desc, species, channel, nScenes) {
+    return `You are a wildlife documentary YouTube scriptwriter for the channel ${channel}.
+Channel style: serious, data-driven, emotionally compelling, short sentences, strong hook.
+
+NEWS INPUT:
+Title: ${title}
+Summary: ${desc}
+Species: ${species}
+
+Generate a ${nScenes}-scene YouTube script. For each scene output:
+SCENE N: [TITLE]
+[narration text — 3-5 sentences, vivid, factual, no filler]
+
+After the scenes, output a JSON block like this:
+\`\`\`json
+{"title": "YouTube title (60 chars max)", "description": "YouTube description (3-4 lines + hashtags)", "tags": ["tag1","tag2","tag3","tag4","tag5"]}
+\`\`\`
+
+Write the script now:`;
+  }
+
+  // ── Main generate function ───────────────────────────────────────────────
+  async function generate() {
+    const title   = document.getElementById('inp-title').value.trim();
+    const desc    = document.getElementById('inp-desc').value.trim();
+    const species = document.getElementById('inp-species').value.trim();
+    const tag     = document.getElementById('inp-tag').value.trim();
+    const channel = document.getElementById('inp-channel').value;
+    const nScenes = parseInt(document.getElementById('inp-length').value);
+    const backend = document.getElementById('inp-backend').value;
+
+    if (!title && !desc) { setStatus('Add a title or description first.'); return; }
+
+    // Loading state
+    document.getElementById('btn-generate').disabled = true;
+    document.getElementById('spinner').style.display = 'block';
+    document.getElementById('btn-icon').style.display = 'none';
+    document.getElementById('btn-label').textContent = 'Generating…';
+    setStatus(`Using ${backend} backend…`);
+
+    try {
+      let result;
+
+      if (DEMO_MODE || backend === 'mock') {
+        // Simulate slight delay for realism
+        await new Promise(r => setTimeout(r, 1200));
+        result = mockGenerate(title, desc, species, channel, nScenes);
+        renderOutput(result);
+        setStatus('Generated (mock). Flip DEMO_MODE=false in config to use real LLM.');
+      } else {
+        const raw = await callLLM(buildLLMPrompt(title, desc, species, channel, nScenes), backend);
+        // Parse LLM output: extract scenes + JSON meta
+        result = parseLLMOutput(raw, title, desc, species, channel, nScenes);
+        renderOutput(result);
+        setStatus(`Generated with ${backend}.`);
+      }
+    } catch (err) {
+      setStatus(`Error: ${err.message}. Is ${backend} running?`);
+    } finally {
+      document.getElementById('btn-generate').disabled = false;
+      document.getElementById('spinner').style.display = 'none';
+      document.getElementById('btn-icon').style.display = '';
+      document.getElementById('btn-label').textContent = 'Generate Script';
+    }
+  }
+
+  function parseLLMOutput(raw, title, desc, species, channel, nScenes) {
+    // Best-effort parse: extract scenes and JSON block from free-text LLM output
+    const scenes = [];
+    const sceneRegex = /SCENE\s+(\d+):\s*([^\n]+)\n([\s\S]*?)(?=SCENE\s+\d+:|```|$)/gi;
+    let m;
+    while ((m = sceneRegex.exec(raw)) !== null) {
+      scenes.push({ title: m[2].trim(), narration: m[3].trim() });
+    }
+    let meta = { title, description: desc, tags: [species, channel] };
+    const jsonMatch = raw.match(/```json\s*([\s\S]*?)```/i);
+    if (jsonMatch) {
+      try { meta = { ...meta, ...JSON.parse(jsonMatch[1]) }; } catch (_) {}
+    }
+    return {
+      script: raw.replace(/```json[\s\S]*?```/gi, '').trim(),
+      scenes: scenes.length ? scenes : mockGenerate(title, desc, species, channel, nScenes).scenes,
+      imagePrompts: (scenes.length ? scenes : mockGenerate(title, desc, species, channel, nScenes).scenes)
+        .map((s, i) => ({ scene: i+1, title: s.title, prompt: `Cinematic wildlife documentary. ${s.title}. ${species} conservation. Dramatic lighting, 16:9, photorealistic, no text.` })),
+      meta: { ...meta, channel, privacy: 'unlisted' }
+    };
+  }
+
+  function renderOutput(result) {
+    // Script tab
+    document.getElementById('script-text').textContent = result.script;
+
+    // Scenes tab
+    const sc = document.getElementById('scenes-container');
+    sc.innerHTML = result.scenes.map((s, i) => `
+      <div class="scene-card">
+        <strong>Scene ${i+1} · ${s.title}</strong>
+        ${s.narration}
+      </div>`).join('');
+
+    // Image prompts tab
+    const pr = document.getElementById('prompts-container');
+    pr.innerHTML = result.imagePrompts.map(p => `
+      <div class="prompt-card">
+        <strong>Scene ${p.scene} image prompt</strong>
+        ${p.title}
+        <code>${p.prompt}</code>
+      </div>`).join('');
+
+    // Metadata tab
+    document.getElementById('meta-text').textContent = JSON.stringify(result.meta, null, 2);
+  }
+</script>
+</body>
+</html>

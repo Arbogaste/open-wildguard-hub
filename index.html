@@ -1781,6 +1781,7 @@
                             <span class="badge badge-schedule">${item.schedule}</span>
                             <span class="badge">${item.tag}</span>
                             <button class="btn" style="padding: 2px 6px; font-size: 9px; margin-left: auto;" onclick="generateChargesheet('${item.specie}', '${item.reato}', '${item.sezioni}')">${currentLanguage === 'it' ? 'Genera Verbale' : 'Generate Writ'}</button>
+                            <button class="btn" style="padding: 2px 6px; font-size: 9px; background:rgba(0,188,212,0.1); border-color:rgba(0,188,212,0.3); color:var(--color-info);" onclick="openScriptplay('${encodeURIComponent(item.title)}','${encodeURIComponent(item.desc)}','${item.specie}','${item.tag}')">📹 Script</button>
                         </div>
                     </div>
                 `;
@@ -2030,6 +2031,17 @@ Forest Officer Authorized Signature
             try { localStorage.setItem('wildguard_map_collapsed', collapsed ? '1' : '0'); } catch (_) {}
             // Leaflet needs a resize nudge when the container reopens
             if (!collapsed && typeof map !== 'undefined') setTimeout(() => map.invalidateSize(), 250);
+        }
+
+        // Open scriptplay generator page with OSINT news item data
+        function openScriptplay(titleEnc, descEnc, specie, tag) {
+            const params = new URLSearchParams({
+                title: decodeURIComponent(titleEnc),
+                desc: decodeURIComponent(descEnc),
+                specie: specie,
+                tag: tag
+            });
+            window.open('scriptplay.html?' + params.toString(), '_blank');
         }
 
         // i18n init: restore saved language, build selector, first render
