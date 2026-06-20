@@ -644,6 +644,83 @@
         .repo-what { font-size: 11px; line-height: 1.5; color: rgba(232,240,244,0.75); }
         .repo-tag { display: inline-block; margin-left: 6px; padding: 1px 5px; border-radius: 3px; font-size: 8px; background: rgba(0,188,212,0.15); color: var(--color-primary); text-transform: uppercase; vertical-align: middle; }
 
+        /* ── Overview Tab ── */
+        .overview-hero {
+            padding: 10px 0 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            margin-bottom: 12px;
+        }
+        .overview-tagline {
+            font-size: 12px;
+            line-height: 1.6;
+            color: rgba(232,240,244,0.9);
+            margin-bottom: 8px;
+        }
+        .overview-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        .ov-pill {
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            padding: 2px 7px;
+            border-radius: 10px;
+            background: rgba(0,188,212,0.08);
+            border: 1px solid rgba(0,188,212,0.2);
+            color: var(--color-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .ov-card {
+            padding: 10px 11px;
+            border-radius: 7px;
+            border: 1px solid rgba(255,255,255,0.06);
+            background: rgba(255,255,255,0.015);
+            transition: border-color 0.2s;
+        }
+        .ov-card:hover { border-color: rgba(0,188,212,0.25); }
+        .ov-card-icon { font-size: 16px; margin-bottom: 5px; }
+        .ov-card strong { display: block; font-size: 11px; color: var(--color-info); margin-bottom: 4px; line-height: 1.3; }
+        .ov-card p { font-size: 10px; line-height: 1.5; color: rgba(232,240,244,0.65); margin-bottom: 5px; }
+        .ov-card a { font-family: 'Space Mono', monospace; font-size: 9px; color: var(--color-primary); text-decoration: none; cursor: pointer; }
+        .ov-card a:hover { text-decoration: underline; }
+        .ov-card--vision { border-left: 2px solid var(--color-primary); }
+        .ov-card--audio  { border-left: 2px solid var(--color-warning); }
+        .ov-card--osint  { border-left: 2px solid var(--color-info); }
+        .ov-card--legal  { border-left: 2px solid var(--color-danger); }
+        .ov-card--patrol { border-left: 2px solid #7c4dff; }
+        .ov-card--open   { border-left: 2px solid rgba(255,255,255,0.2); }
+        .overview-nav-strip {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+        .ov-nav-btn {
+            flex: 1 1 auto;
+            padding: 6px 10px;
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: rgba(232,240,244,0.8);
+            border-radius: 5px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            transition: background 0.15s, border-color 0.15s;
+            text-align: center;
+        }
+        .ov-nav-btn:hover { background: rgba(0,188,212,0.08); border-color: rgba(0,188,212,0.3); color: var(--color-primary); }
+
         .ideas-intro {
             margin-bottom: 14px;
             padding: 10px 12px;
@@ -1168,7 +1245,7 @@
         <!-- CENTER COLUMN: Map View & Tabbed Roadmaps -->
         <div class="column center-column" style="grid-column: 2;">
             <!-- Map Top (collapsible for readability) -->
-            <button class="map-toggle" id="map-toggle" onclick="toggleMap()" aria-expanded="true" aria-controls="map-wrapper">
+            <button class="map-toggle" id="map-toggle" onclick="toggleMap()" aria-expanded="false" aria-controls="map-wrapper">
                 <span><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i> <span id="map-toggle-label">Mappa Tattica</span></span>
                 <i class="fa-solid fa-chevron-up map-chevron" aria-hidden="true"></i>
             </button>
@@ -1187,20 +1264,81 @@
             <!-- Tab Panel Bottom -->
             <div class="tab-panel">
                 <div class="tab-nav" role="tablist" aria-label="Dashboard sections">
-                    <button class="tab-link active" onclick="switchTab(event, 'tab-roadmap')" id="tab-lbl-roadmap"
-                            role="tab" aria-selected="true" aria-controls="tab-roadmap">10 Modules</button>
+                    <button class="tab-link active" onclick="switchTab(event, 'tab-overview')" id="tab-lbl-overview"
+                            role="tab" aria-selected="true" aria-controls="tab-overview">Overview</button>
+                    <button class="tab-link" onclick="switchTab(event, 'tab-roadmap')" id="tab-lbl-roadmap"
+                            role="tab" aria-selected="false" aria-controls="tab-roadmap">All Modules</button>
                     <button class="tab-link" onclick="switchTab(event, 'tab-docs')" id="tab-lbl-docs"
-                            role="tab" aria-selected="false" aria-controls="tab-docs">Playbooks &amp; Toolkit</button>
+                            role="tab" aria-selected="false" aria-controls="tab-docs">Playbooks</button>
                     <button class="tab-link" onclick="switchTab(event, 'tab-proposal')" id="tab-lbl-proposal"
                             role="tab" aria-selected="false" aria-controls="tab-proposal">NGO Pitch</button>
                     <button class="tab-link" onclick="switchTab(event, 'tab-repos')" id="tab-lbl-repos"
-                            role="tab" aria-selected="false" aria-controls="tab-repos">Open-Source Repos</button>
+                            role="tab" aria-selected="false" aria-controls="tab-repos">Repos</button>
                 </div>
 
                 <div class="tab-content-area">
 
-                    <!-- TAB 1: 10 CAPABILITY MODULES -->
-                    <div id="tab-roadmap" class="tab-pane active" role="tabpanel" aria-labelledby="tab-lbl-roadmap">
+                    <!-- TAB 0: OVERVIEW (default landing) -->
+                    <div id="tab-overview" class="tab-pane active" role="tabpanel" aria-labelledby="tab-lbl-overview">
+                        <div class="overview-hero">
+                            <div class="overview-tagline">An open-source anti-poaching command center —<br>built on free tools, runs offline, costs $0 in licenses.</div>
+                            <div class="overview-pills">
+                                <span class="ov-pill">10 capability modules</span>
+                                <span class="ov-pill">20+ repos integrated</span>
+                                <span class="ov-pill">works without internet</span>
+                                <span class="ov-pill">no vendor lock-in</span>
+                            </div>
+                        </div>
+
+                        <div class="overview-grid">
+                            <div class="ov-card ov-card--vision">
+                                <div class="ov-card-icon">📷</div>
+                                <strong>Detect poachers on camera traps</strong>
+                                <p>AI runs on-device. Alert in 30s when a human appears. No cloud, no subscription.</p>
+                                <a onclick="switchTab(null,'tab-roadmap')">M2 Playbook →</a>
+                            </div>
+                            <div class="ov-card ov-card--audio">
+                                <div class="ov-card-icon">🔊</div>
+                                <strong>Hear gunshots 3 km away, at night</strong>
+                                <p>Cheap microphone network. TDoA triangulation sends GPS coordinates in &lt;30s.</p>
+                                <a onclick="switchTab(null,'tab-roadmap')">M3 Playbook →</a>
+                            </div>
+                            <div class="ov-card ov-card--osint">
+                                <div class="ov-card-icon">🕵️</div>
+                                <strong>Monitor illegal wildlife markets</strong>
+                                <p>Automated scrapers watch Telegram and classifieds. Price spikes predict seizures.</p>
+                                <a onclick="switchTab(null,'tab-roadmap')">M7 Playbook →</a>
+                            </div>
+                            <div class="ov-card ov-card--legal">
+                                <div class="ov-card-icon">⚖️</div>
+                                <strong>Evidence that holds up in court</strong>
+                                <p>SHA-256 hash chain on every file. Auto-generated chargesheet with CITES sections.</p>
+                                <a onclick="switchTab(null,'tab-roadmap')">M9 Playbook →</a>
+                            </div>
+                            <div class="ov-card ov-card--patrol">
+                                <div class="ov-card-icon">🗺️</div>
+                                <strong>Patrol routes poachers can't predict</strong>
+                                <p>PAWS + RL generates a new route every day from historical incident data.</p>
+                                <a onclick="switchTab(null,'tab-roadmap')">M8 Playbook →</a>
+                            </div>
+                            <div class="ov-card ov-card--open">
+                                <div class="ov-card-icon">🔓</div>
+                                <strong>Fully open, fully yours</strong>
+                                <p>Fork it, adapt it, deploy it. No accounts, no API keys, no paywalls.</p>
+                                <a href="https://github.com/Arbogaste/open-wildguard-hub" target="_blank" rel="noopener">GitHub →</a>
+                            </div>
+                        </div>
+
+                        <div class="overview-nav-strip">
+                            <button class="ov-nav-btn" onclick="switchTab(null,'tab-roadmap')">📋 All 10 Modules</button>
+                            <button class="ov-nav-btn" onclick="switchTab(null,'tab-docs')">🛠 Playbooks &amp; Toolkit</button>
+                            <button class="ov-nav-btn" onclick="switchTab(null,'tab-proposal')">📄 NGO Pitch</button>
+                            <button class="ov-nav-btn" onclick="switchTab(null,'tab-repos')">🔗 Open-Source Repos</button>
+                        </div>
+                    </div>
+
+                    <!-- TAB 1: ALL MODULES -->
+                    <div id="tab-roadmap" class="tab-pane" role="tabpanel" aria-labelledby="tab-lbl-roadmap">
                         <div class="ideas-intro" id="ideas-intro-text">
                             Each module solves one field problem independently — deploy one, all, or any combination.
                             The Essential tier of every module works with a phone and a free app.
@@ -1550,18 +1688,16 @@
                     <span class="panel-title"><i class="fa-solid fa-globe" style="color: var(--color-info);"></i><span
                             id="txt-title-osint">Intelligence Feed</span></span>
                 </div>
-                <div class="panel-content" style="display:flex; flex-direction:column; gap:0; padding:0; overflow-y:auto;">
-                    <div id="osint-feed-container" style="padding:10px; display:flex; flex-direction:column; gap:8px;">
-                        <!-- Populated dynamically via JS translations -->
-                    </div>
-                    <!-- Legal Report output — shown when user clicks Draft Legal Report -->
-                    <div id="chargesheet-output" class="chargesheet-box" style="display:none; margin:0 10px 10px; border-radius:6px;">
-                        <h4 id="chargesheet-title-lbl">📋 Legal Report Draft</h4>
-                        <pre id="chargesheet-text" class="chargesheet-content"></pre>
-                        <div style="display:flex; gap:6px; margin-top:8px;">
-                            <button class="btn" style="font-size:9px; padding:3px 8px;" onclick="copyChargesheet()">Copy to clipboard</button>
-                            <button class="btn" style="font-size:9px; padding:3px 8px; opacity:0.6;" onclick="document.getElementById('chargesheet-output').style.display='none'">✕ Close</button>
-                        </div>
+                <div class="panel-content" id="osint-feed-container">
+                    <!-- Populated dynamically via JS translations -->
+                </div>
+                <!-- Legal Report output — shown when user clicks Draft Legal Report -->
+                <div id="chargesheet-output" class="chargesheet-box" style="display:none; margin:0 12px 12px; border-radius:6px; flex-shrink:0;">
+                    <h4 id="chargesheet-title-lbl">📋 Legal Report Draft</h4>
+                    <pre id="chargesheet-text" class="chargesheet-content"></pre>
+                    <div style="display:flex; gap:6px; margin-top:8px;">
+                        <button class="btn" style="font-size:9px; padding:3px 8px;" onclick="copyChargesheet()">Copy to clipboard</button>
+                        <button class="btn" style="font-size:9px; padding:3px 8px; opacity:0.6;" onclick="document.getElementById('chargesheet-output').style.display='none'">✕ Close</button>
                     </div>
                 </div>
             </div>
@@ -1655,7 +1791,8 @@
                 btn_txt_route: "Calcola Rotta (MST)",
                 btn_txt_clear: "Resetta",
                 map_toggle_label: "Mappa Tattica",
-                tab_lbl_roadmap: "10 Moduli",
+                tab_lbl_overview: "Panoramica",
+                tab_lbl_roadmap: "Tutti i Moduli",
                 tab_lbl_docs: "Playbook & Toolkit",
                 tab_lbl_repos: "Repo Open-Source",
                 tab_lbl_proposal: "Proposta per NGO",
@@ -1744,7 +1881,8 @@
                 btn_txt_route: "Calculate Route (MST)",
                 btn_txt_clear: "Reset Map",
                 map_toggle_label: "Tactical Map",
-                tab_lbl_roadmap: "10 Modules",
+                tab_lbl_overview: "Overview",
+                tab_lbl_roadmap: "All Modules",
                 tab_lbl_docs: "Playbooks & Toolkit",
                 tab_lbl_repos: "Open-Source Repos",
                 tab_lbl_proposal: "NGO Pitch",
@@ -1851,6 +1989,7 @@
             if (mtl && lang.map_toggle_label) mtl.innerText = lang.map_toggle_label;
 
             // Tab Labels
+            if (lang.tab_lbl_overview) document.getElementById('tab-lbl-overview').innerText = lang.tab_lbl_overview;
             document.getElementById('tab-lbl-roadmap').innerText = lang.tab_lbl_roadmap;
             document.getElementById('tab-lbl-docs').innerText = lang.tab_lbl_docs;
             document.getElementById('tab-lbl-repos').innerText = lang.tab_lbl_repos;
@@ -1997,17 +2136,22 @@
         // Tab Switching logic
         function switchTab(evt, tabName) {
             const tabpanes = document.getElementsByClassName("tab-pane");
-            for (let i = 0; i < tabpanes.length; i++) {
-                tabpanes[i].classList.remove("active");
-            }
+            for (let i = 0; i < tabpanes.length; i++) tabpanes[i].classList.remove("active");
             const tablinks = document.getElementsByClassName("tab-link");
             for (let i = 0; i < tablinks.length; i++) {
                 tablinks[i].classList.remove("active");
                 tablinks[i].setAttribute("aria-selected", "false");
             }
             document.getElementById(tabName).classList.add("active");
-            evt.currentTarget.classList.add("active");
-            evt.currentTarget.setAttribute("aria-selected", "true");
+            // evt can be null when called from overview nav buttons
+            if (evt && evt.currentTarget) {
+                evt.currentTarget.classList.add("active");
+                evt.currentTarget.setAttribute("aria-selected", "true");
+            } else {
+                // find matching tab-link by aria-controls
+                const match = document.querySelector(`.tab-link[aria-controls="${tabName}"]`);
+                if (match) { match.classList.add("active"); match.setAttribute("aria-selected", "true"); }
+            }
         }
 
         // Init Map of Serengeti-like park area (mocked coordinates)
@@ -2219,10 +2363,11 @@ Forest Officer Authorized Signature
         } catch (_) {}
         populateLangSelect();
         setLanguage(currentLanguage);
-        // restore map collapsed state
+        // map collapsed by default; restore if user explicitly opened it
         try {
-            if (localStorage.getItem('wildguard_map_collapsed') === '1') toggleMap(true);
-        } catch (_) {}
+            const saved = localStorage.getItem('wildguard_map_collapsed');
+            toggleMap(saved === '0' ? false : true);
+        } catch (_) { toggleMap(true); }
     </script>
 </body>
 
