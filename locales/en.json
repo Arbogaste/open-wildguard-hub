@@ -76,6 +76,29 @@
   "docs_arduino_desc":         "The camouflaged, low-cost ground nodes are based on Arduino Nicla Vision or ESP32-CAM. They use a PIR sensor to detect thermal presence/movement, wake the microcontroller from deep-sleep, capture a frame, and execute edge inference via TinyML (TensorFlow Lite for Microcontrollers), filtering out foliage/wind variations before satellite or LoRa transmission.",
   "docs_repos_title":          "Integrating Sub-Repositories into Unified Codebase",
   "docs_repos_desc":           "The open-wildguard-hub framework acts as a central orchestrator, integrating and reusing specific code from the 16 downloaded repositories. Below are the reference directories and how code integrates to implement the planned features:",
+  "docs_readiness_title":      "Production Readiness Baseline",
+  "docs_readiness_desc":       "The project must remain useful before every subsystem is complete. The first production target is a dependable command-center shell with local persistence, clear fallback behavior, and a documented operational path.",
+  "docs_playbooks_title":      "Real-World Operational Playbooks",
+  "docs_playbooks_desc":       "These guides describe how the platform should be used in concrete field scenarios. They are written for rangers, operators, and maintainers, not for architecture diagrams.",
+  "docs_strategy_title":       "Documentation Scaling Plan",
+  "docs_strategy_desc":        "`dev.md` is the master technical map. As recurring workflows stabilize, each use case should move into its own focused document so the project can be extended without losing clarity.",
+  "docs_readiness_items": [
+    { "title": "Offline first", "desc": "Every critical workflow must continue without network access and sync later when possible." },
+    { "title": "Local state", "desc": "Events, queues, and evidence must live locally with simple, auditable export paths." },
+    { "title": "Clear fallback", "desc": "Every automated action needs a degraded-mode behavior that operators can trust." },
+    { "title": "Operator ready", "desc": "The UI must explain what to do in the field, not just show telemetry." }
+  ],
+  "docs_playbooks_items": [
+    { "title": "Camera trap intrusion", "trigger": "Human or vehicle detected by edge vision.", "action": "Review the event, verify the location, and dispatch the nearest ranger team.", "output": "Incident marked, response routed, snapshot preserved." },
+    { "title": "Gunshot response", "trigger": "Acoustic spike consistent with a gunshot or chainsaw.", "action": "Cross-check the sensor cluster and build a rapid response route.", "output": "Localized alert, route plan, evidence hash." },
+    { "title": "Offline field report", "trigger": "Ranger returns from patrol without connectivity.", "action": "Capture the report locally and sync it later from base.", "output": "Queued report, preserved timestamps, no data loss." }
+  ],
+  "docs_strategy_items": [
+    { "title": "One guide per use case", "desc": "Split stable workflows into dedicated docs instead of overloading the master guide." },
+    { "title": "Keep master map short", "desc": "Use dev.md for architecture and conventions only." },
+    { "title": "Write for operators", "desc": "Each guide should explain steps, failure modes, and expected outputs." },
+    { "title": "Document rollout", "desc": "Add deployment notes for edge nodes and command centers as separate files." }
+  ],
 
   "proposal_title":            "Institutional Pitch for WWF, Reserves & Forestry Guards",
   "proposal_desc":             "open-wildguard-hub is designed as a low-cost, sustainable ecosystem for NGOs and government agencies. It ensures legal custody of evidence, optimizes patrol coordination with stochastic game theory, and reduces edge camera false alarms by 90%.",

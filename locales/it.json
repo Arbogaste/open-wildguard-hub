@@ -76,6 +76,29 @@
   "docs_arduino_desc":         "I nodi terrestri mimetizzati e low-cost sono basati su hardware Arduino Nicla Vision o ESP32-CAM. Utilizzano un sensore PIR per rilevare la presenza termica/movimento, svegliare il microcontrollore dallo deep-sleep, scattare un fotogramma ed eseguire l'inferenza di bordo tramite TinyML (TensorFlow Lite per Microcontrollori) filtrando le variazioni dovute al vento prima dell'invio satellitare o LoRa.",
   "docs_repos_title":          "Integrazione dei Sotto-Repository nel Codice Unificato",
   "docs_repos_desc":           "Il framework open-wildguard-hub agisce come orchestratore centrale integrando e riutilizzando il codice specifico proveniente dai 16 repository scaricati. Sotto trovi le directory di riferimento e le modalità con cui i codici si integrano per implementare le funzionalità previste:",
+  "docs_readiness_title":      "Baseline di Prontezza Operativa",
+  "docs_readiness_desc":       "Il progetto deve restare utile anche prima che tutte le capability siano complete. Il primo obiettivo di produzione è una shell affidabile del centro di comando con persistenza locale, fallback chiari e un percorso operativo documentato.",
+  "docs_playbooks_title":      "Playbook Operativi Reali",
+  "docs_playbooks_desc":       "Queste guide descrivono come usare la piattaforma in scenari concreti. Sono scritte per ranger, operatori e maintainer, non per diagrammi astratti.",
+  "docs_strategy_title":       "Piano di Scalabilità della Documentazione",
+  "docs_strategy_desc":        "`dev.md` è la mappa tecnica principale. Quando un flusso ricorrente si stabilizza, va spostato in un documento dedicato per mantenere il progetto estendibile senza perdere chiarezza.",
+  "docs_readiness_items": [
+    { "title": "Offline first", "desc": "Ogni workflow critico deve continuare senza rete e sincronizzarsi solo quando disponibile." },
+    { "title": "Local state", "desc": "Eventi, code e prove devono vivere localmente con export semplice e auditabile." },
+    { "title": "Clear fallback", "desc": "Ogni azione automatica deve avere un comportamento degradato comprensibile." },
+    { "title": "Operator ready", "desc": "La UI deve spiegare cosa fare sul campo, non solo mostrare dati." }
+  ],
+  "docs_playbooks_items": [
+    { "title": "Intrusione camera trap", "trigger": "Umano o veicolo rilevato dalla visione edge.", "action": "Verifica l'evento, controlla la posizione e dispiega la squadra ranger più vicina.", "output": "Incidente marcato, risposta instradata, snapshot preservato." },
+    { "title": "Risposta a sparo", "trigger": "Picco acustico coerente con sparo o motosega.", "action": "Confronta il cluster di sensori e genera una rotta di risposta rapida.", "output": "Allarme localizzato, piano di rotta, hash delle prove." },
+    { "title": "Report sul campo offline", "trigger": "Ranger rientra dalla pattuglia senza connettività.", "action": "Registra il report localmente e sincronizzalo più tardi dalla base.", "output": "Report in coda, timestamp conservati, nessuna perdita di dati." }
+  ],
+  "docs_strategy_items": [
+    { "title": "Un manuale per caso d'uso", "desc": "Scomponi i flussi stabili in documenti dedicati invece di sovraccaricare il manuale master." },
+    { "title": "Mantieni breve la mappa", "desc": "Usa dev.md solo per architettura e convenzioni." },
+    { "title": "Scrivi per operatori", "desc": "Ogni guida deve spiegare passi, failure mode e output attesi." },
+    { "title": "Documenta il rollout", "desc": "Aggiungi note di deployment per edge node e command center come file separati." }
+  ],
 
   "proposal_title":            "Proposta Istituzionale per WWF, Riserve & Guardie Forestali",
   "proposal_desc":             "open-wildguard-hub è concepito per essere presentato a ONG ed enti governativi come soluzione sostenibile a basso costo. Fornisce un ecosistema che garantisce la catena di custodia legale delle prove, ottimizza il coordinamento con logica di gioco stocastico e riduce del 90% i falsi allarmi sul campo.",

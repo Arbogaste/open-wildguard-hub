@@ -8,19 +8,14 @@
     <meta name="description"
         content="Dashboard di monitoraggio tattico anti-bracconaggio open-source. open-wildguard-hub: edge-first, offline-ready, WWF & Forestry ready.">
 
-    <!-- Google Fonts: Outfit & Space Mono -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
-        rel="stylesheet">
+    <!-- Fonts (self-hosted, offline-first): Outfit & Space Mono -->
+    <link rel="stylesheet" href="vendor/fonts/fonts.css">
 
-    <!-- Leaflet CSS for offline/online interactive map -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <!-- Leaflet CSS (self-hosted, offline-first) -->
+    <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
 
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- FontAwesome Icons (self-hosted, offline-first) -->
+    <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
 
     <style>
         :root {
@@ -1232,9 +1227,18 @@
         </div>
     </footer>
 
-    <!-- Leaflet.js library from CDN -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- Leaflet.js library (self-hosted, offline-first) -->
+    <script src="vendor/leaflet/leaflet.js"></script>
+
+    <!-- Register offline-first service worker (caches shell + vendor assets) -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch((err) =>
+                    console.warn('SW registration failed:', err));
+            });
+        }
+    </script>
 
     <!-- Dashboard Core Logic & Translations -->
     <script>
@@ -1276,6 +1280,29 @@
                 doc_desc_arduino: "I nodi terrestri mimetizzati e low-cost sono basati su hardware Arduino Nicla Vision o ESP32-CAM. Utilizzano un sensore PIR per rilevare la presenza termica/movimento, svegliare il microcontrollore dallo deep-sleep, scattare un fotogramma ed eseguire l'inferenza di bordo tramite TinyML (TensorFlow Lite per Microcontrollori) filtrando le variazioni dovute al vento prima dell'invio satellitare o LoRa.",
                 doc_title_repos: "Integrazione dei Sotto-Repository nel Codice Unificato",
                 doc_desc_repos: "Il framework open-wildguard-hub agisce come orchestratore centrale integrando e riutilizzando il codice specifico proveniente dai 16 repository scaricati. Sotto trovi le directory di riferimento e le modalità con cui i codici si integrano per implementare le funzionalità previste:",
+                doc_title_readiness: "Baseline di Prontezza Operativa",
+                doc_desc_readiness: "Il progetto deve restare utile anche prima che tutte le capability siano complete. Il primo obiettivo di produzione è una shell affidabile del centro di comando con persistenza locale, fallback chiari e un percorso operativo documentato.",
+                doc_title_playbooks: "Playbook Operativi Reali",
+                doc_desc_playbooks: "Queste guide descrivono come usare la piattaforma in scenari concreti. Sono scritte per ranger, operatori e maintainer, non per diagrammi astratti.",
+                doc_title_docs_strategy: "Piano di Scalabilità della Documentazione",
+                doc_desc_docs_strategy: "`dev.md` è la mappa tecnica principale. Quando un flusso ricorrente si stabilizza, va spostato in un documento dedicato per mantenere il progetto estendibile senza perdere chiarezza.",
+                readiness_items: [
+                    { title: "Offline first", desc: "Ogni workflow critico deve continuare senza rete e sincronizzarsi solo quando disponibile." },
+                    { title: "Local state", desc: "Eventi, code e prove devono vivere localmente con export semplice e auditabile." },
+                    { title: "Clear fallback", desc: "Ogni azione automatica deve avere un comportamento degradato comprensibile." },
+                    { title: "Operator ready", desc: "La UI deve spiegare cosa fare sul campo, non solo mostrare dati." }
+                ],
+                playbooks: [
+                    { title: "Camera trap intrusion", trigger: "Human or vehicle detected by edge vision.", action: "Review the event, verify location, and dispatch the nearest ranger team.", output: "Marked incident, routed response, preserved snapshot." },
+                    { title: "Gunshot response", trigger: "Acoustic spike consistent with a gunshot or chainsaw.", action: "Cross-check the sensor cluster and build a rapid response route.", output: "Localized alert, route plan, evidence hash." },
+                    { title: "Offline field report", trigger: "Ranger returns from patrol without connectivity.", action: "Enter the report locally and sync later from the base station.", output: "Queued report, retained timestamps, no data loss." }
+                ],
+                docs_strategy_items: [
+                    { title: "One guide per use case", desc: "Split stable workflows into dedicated docs instead of overloading the master guide." },
+                    { title: "Keep master map short", desc: "Use dev.md for architecture and conventions only." },
+                    { title: "Write for operators", desc: "Each guide should explain steps, failure modes, and expected outputs." },
+                    { title: "Document rollout", desc: "Add deployment notes for edge nodes and command centers as separate files." }
+                ],
 
                 // 10 Ideas detail
                 ideas: [
@@ -1337,6 +1364,29 @@
                 doc_desc_arduino: "The camouflaged, low-cost ground nodes are based on Arduino Nicla Vision or ESP32-CAM. They use a PIR sensor to detect thermal presence/movement, wake the microcontroller from deep-sleep, capture a frame, and execute edge inference via TinyML (TensorFlow Lite for Microcontrollers), filtering out foliage/wind variations before satellite or LoRa transmission.",
                 doc_title_repos: "Integrating Sub-Repositories into Unified Codebase",
                 doc_desc_repos: "The open-wildguard-hub framework acts as a central orchestrator, integrating and reusing specific code from the 16 downloaded repositories. Below are the reference directories and how code integrates to implement the planned features:",
+                doc_title_readiness: "Production Readiness Baseline",
+                doc_desc_readiness: "The project must remain useful before every subsystem is complete. The first production target is a dependable command-center shell with local persistence, clear fallback behavior, and a documented operational path.",
+                doc_title_playbooks: "Real-World Operational Playbooks",
+                doc_desc_playbooks: "These guides describe how the platform should be used in concrete field scenarios. They are written for rangers, operators, and maintainers, not for architecture diagrams.",
+                doc_title_docs_strategy: "Documentation Scaling Plan",
+                doc_desc_docs_strategy: "`dev.md` is the master technical map. As recurring workflows stabilize, each use case should move into its own focused document so the project can be extended without losing clarity.",
+                readiness_items: [
+                    { title: "Offline first", desc: "Every critical workflow must continue without network access and sync later when possible." },
+                    { title: "Local state", desc: "Events, queues, and evidence must live locally with simple, auditable export paths." },
+                    { title: "Clear fallback", desc: "Every automated action needs a degraded-mode behavior that operators can trust." },
+                    { title: "Operator ready", desc: "The UI must explain what to do in the field, not just show telemetry." }
+                ],
+                playbooks: [
+                    { title: "Camera trap intrusion", trigger: "Human or vehicle detected by edge vision.", action: "Review the event, verify the location, and dispatch the nearest ranger team.", output: "Incident marked, response routed, snapshot preserved." },
+                    { title: "Gunshot response", trigger: "Acoustic spike consistent with a gunshot or chainsaw.", action: "Cross-check the sensor cluster and build a rapid response route.", output: "Localized alert, route plan, evidence hash." },
+                    { title: "Offline field report", trigger: "Ranger returns from patrol without connectivity.", action: "Capture the report locally and sync it later from base.", output: "Queued report, preserved timestamps, no data loss." }
+                ],
+                docs_strategy_items: [
+                    { title: "One guide per use case", desc: "Split stable workflows into dedicated docs instead of overloading the master guide." },
+                    { title: "Keep master map short", desc: "Use dev.md for architecture and conventions only." },
+                    { title: "Write for operators", desc: "Each guide should explain steps, failure modes, and expected outputs." },
+                    { title: "Document rollout", desc: "Add deployment notes for edge nodes and command centers as separate files." }
+                ],
 
                 // 10 Ideas detail
                 ideas: [
@@ -1406,6 +1456,51 @@
             document.getElementById('doc-desc-arduino').innerText = lang.doc_desc_arduino;
             document.getElementById('doc-title-repos').innerText = lang.doc_title_repos;
             document.getElementById('doc-desc-repos').innerText = lang.doc_desc_repos;
+            document.getElementById('doc-title-readiness').innerText = lang.doc_title_readiness;
+            document.getElementById('doc-desc-readiness').innerText = lang.doc_desc_readiness;
+            document.getElementById('doc-title-playbooks').innerText = lang.doc_title_playbooks;
+            document.getElementById('doc-desc-playbooks').innerText = lang.doc_desc_playbooks;
+            document.getElementById('doc-title-docs-strategy').innerText = lang.doc_title_docs_strategy;
+            document.getElementById('doc-desc-docs-strategy').innerText = lang.doc_desc_docs_strategy;
+
+            const readinessContainer = document.getElementById('doc-readiness-list');
+            readinessContainer.innerHTML = '';
+            lang.readiness_items.forEach(item => {
+                readinessContainer.insertAdjacentHTML('beforeend', `
+                    <div class="idea-card">
+                        <div class="idea-card-header">
+                            <span class="idea-title">${item.title}</span>
+                        </div>
+                        <div class="idea-desc">${item.desc}</div>
+                    </div>
+                `);
+            });
+
+            const playbooksContainer = document.getElementById('doc-playbooks-list');
+            playbooksContainer.innerHTML = '';
+            lang.playbooks.forEach(item => {
+                playbooksContainer.insertAdjacentHTML('beforeend', `
+                    <div class="docs-block" style="margin:0; border-color: rgba(255,255,255,0.06);">
+                        <h3 style="margin-bottom:6px;">${item.title}</h3>
+                        <p style="margin-bottom:8px;"><strong>Trigger:</strong> ${item.trigger}</p>
+                        <p style="margin-bottom:8px;"><strong>Action:</strong> ${item.action}</p>
+                        <p><strong>Output:</strong> ${item.output}</p>
+                    </div>
+                `);
+            });
+
+            const docsStrategyContainer = document.getElementById('doc-docs-strategy-list');
+            docsStrategyContainer.innerHTML = '';
+            lang.docs_strategy_items.forEach(item => {
+                docsStrategyContainer.insertAdjacentHTML('beforeend', `
+                    <div class="idea-card">
+                        <div class="idea-card-header">
+                            <span class="idea-title">${item.title}</span>
+                        </div>
+                        <div class="idea-desc">${item.desc}</div>
+                    </div>
+                `);
+            });
 
             // Proposal tab texts
             document.getElementById('doc-title-proposal').innerText = lang.doc_title_proposal;
@@ -1487,9 +1582,13 @@
             attributionControl: false
         }).setView(centerCoords, 12);
 
-        // Dark-mode tactical map tiles
+        // Dark-mode tactical map tiles. Online: CartoCDN dark basemap.
+        // Offline-first: failed tiles fall back to a local dark placeholder so the
+        // command center (markers, routes, overlays) stays usable with no network.
         L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-            maxZoom: 20
+            maxZoom: 20,
+            errorTileUrl: 'vendor/leaflet/tile-offline.png',
+            crossOrigin: true
         }).addTo(map);
 
         // Layer groups for dynamic controls
