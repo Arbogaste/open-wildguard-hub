@@ -1289,8 +1289,8 @@
                         <div class="docs-block">
                             <h3 id="doc-title-repos">Integrazione dei Sotto-Repository nel Codice Unificato</h3>
                             <p id="doc-desc-repos">Il framework <code>open-wildguard-hub</code> agisce come
-                                orchestratore centrale integrando e riutilizzando il codice specifico proveniente dai 16
-                                repository scaricati. Sotto trovi le directory di riferimento e le modalità con cui i
+                                orchestratore centrale integrando e riutilizzando il codice specifico proveniente dai
+                                repository selezionati. Sotto trovi le aree di riferimento e le modalità con cui i
                                 codici si integrano per implementare le funzionalità previste:</p>
 
                             <div
@@ -1324,6 +1324,34 @@
                                     `planning/`) integrata come microservizio all'interno di
                                     `backend/services/prediction.py`. Permette di calcolare in background le rotte di
                                     pattuglia del giorno incrociando i dati geografici e le posizioni degli allarmi.
+                                </div>
+                                <div
+                                    style="background: rgba(255,255,255,0.02); padding: 8px; border: 1px solid rgba(255,255,255,0.05); border-radius: 4px;">
+                                    <strong style="color: var(--color-primary);">Model Hub, Dataset e Generalizzazione
+                                        (Ecosystem)</strong><br>
+                                    - *Sorgente:* `Pytorch-Wildlife`, `Biodiversity`, `MammAlps` e dataset camera-trap
+                                    collegati<br>
+                                    - *Integrazione:* Il catalogo modelli e i dataset multi-view diventano la base
+                                    comune per addestrare, testare e riadattare i moduli M2, M3, M5 e M10 su nuove
+                                    regioni, specie e condizioni operative senza duplicare la logica di pipeline.
+                                </div>
+                                <div
+                                    style="background: rgba(255,255,255,0.02); padding: 8px; border: 1px solid rgba(255,255,255,0.05); border-radius: 4px;">
+                                    <strong style="color: var(--color-warning);">API Geospaziali e Arricchimento
+                                        Dati</strong><br>
+                                    - *Sorgente:* GBIF, IUCN Red List, NOAA, Copernicus Sentinel-1, SoilGrids,
+                                    Nominatim, Open-Meteo<br>
+                                    - *Integrazione:* Queste fonti vengono usate come layer di arricchimento trasversale
+                                    per normalizzare specie, habitat, meteo e contesto territoriale in M4, M5, M7 e M8.
+                                </div>
+                                <div
+                                    style="background: rgba(255,255,255,0.02); padding: 8px; border: 1px solid rgba(255,255,255,0.05); border-radius: 4px;">
+                                    <strong style="color: var(--color-info);">Workflow Operativi e Ingestion</strong><br>
+                                    - *Sorgente:* `animl-frontend`, `audtheia-environmental-monitoring` e i servizi di
+                                    automazione associati<br>
+                                    - *Integrazione:* Gli schemi, le UI e le automazioni diventano pattern riusabili per
+                                    M1, M6 e M7, con priorità a ingestion pulita, sincronizzazione e reporting
+                                    operativo.
                                 </div>
                             </div>
                         </div>
@@ -1426,6 +1454,12 @@
         <div class="credits-repos">
             <a class="credit-chip our-repo" href="https://github.com/Arbogaste/open-wildguard-hub" target="_blank">⭐
                 open-wildguard-hub (questo repo)</a>
+            <a class="credit-chip" href="https://github.com/microsoft/Biodiversity" target="_blank">Biodiversity</a>
+            <a class="credit-chip" href="https://github.com/microsoft/Pytorch-Wildlife" target="_blank">Pytorch-Wildlife</a>
+            <a class="credit-chip" href="https://github.com/microsoft/MegaDetector" target="_blank">MegaDetector</a>
+            <a class="credit-chip" href="https://github.com/eceo-epfl/MammAlps" target="_blank">MammAlps</a>
+            <a class="credit-chip" href="https://github.com/tnc-ca-geo/animl-frontend" target="_blank">Animl</a>
+            <a class="credit-chip" href="https://github.com/AudtheiaOfficial/audtheia-environmental-monitoring" target="_blank">Audtheia</a>
             <a class="credit-chip" href="https://github.com/Kerbal12/Ecosentinel" target="_blank">Ecosentinel</a>
             <a class="credit-chip"
                 href="https://github.com/tanmaynikhare45/FaunaScope-Wildlife-Camera-Trap-Analysis-Platform"
@@ -1516,7 +1550,7 @@
                 doc_title_arduino: "Configurazione Nodo Sensore Periferico Arduino (TinyML)",
                 doc_desc_arduino: "I nodi terrestri mimetizzati e low-cost sono basati su hardware Arduino Nicla Vision o ESP32-CAM. Utilizzano un sensore PIR per rilevare la presenza termica/movimento, svegliare il microcontrollore dallo deep-sleep, scattare un fotogramma ed eseguire l'inferenza di bordo tramite TinyML (TensorFlow Lite per Microcontrollori) filtrando le variazioni dovute al vento prima dell'invio satellitare o LoRa.",
                 doc_title_repos: "Integrazione dei Sotto-Repository nel Codice Unificato",
-                doc_desc_repos: "Il framework open-wildguard-hub agisce come orchestratore centrale integrando e riutilizzando il codice specifico proveniente dai 16 repository scaricati. Sotto trovi le directory di riferimento e le modalità con cui i codici si integrano per implementare le funzionalità previste:",
+                doc_desc_repos: "Il framework open-wildguard-hub agisce come orchestratore centrale integrando e riutilizzando il codice specifico proveniente dai repository selezionati. Sotto trovi le aree di riferimento e le modalità con cui i codici si integrano per implementare le funzionalità previste:",
                 doc_title_readiness: "Baseline di Prontezza Operativa",
                 doc_desc_readiness: "Il progetto deve restare utile anche prima che tutte le capability siano complete. Il primo obiettivo di produzione è una shell affidabile del centro di comando con persistenza locale, fallback chiari e un percorso operativo documentato.",
                 doc_title_playbooks: "Playbook Operativi Reali",

@@ -28,6 +28,10 @@ protection, breeding season lockdowns, and population trend monitoring.
 
 External: **Movebank** (movebank.org) — open collar tracking data portal. **GBIF** — species occurrence records. **CITES MIKE** — elephant poaching incident database.
 
+If the source is not a collar feed, still treat it as M5 when it contributes identity, distribution, or conservation-status context. Camera-trap classifiers, taxonomic APIs, and historical incident datasets should converge into the same species profile.
+
+Useful inputs here: `Movebank`, `Wildbook`, `GBIF`, `IUCN`, `CITES MIKE`, `BirdNET`/bird audio refs, and camera-trap corpora such as `MammAlps`, `LILA BC`, and `iWildCam`.
+
 ## 4. Hardware
 - **GPS collars:** Savannah Tracking (savannah-tracking.com) and African Wildlife Tracking (awt.co.za) make affordable solar-assisted collars from ~$400–800/unit. Satellite uplink (Iridium/Thuraya) for remote areas with no GSM.
 - **Nest / water monitoring:** fixed trail cameras (M2 module) at known breeding sites, water sources. Trigger zone = animal home range, not park boundary.

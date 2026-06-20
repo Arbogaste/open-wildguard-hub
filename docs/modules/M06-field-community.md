@@ -28,6 +28,8 @@ local community benefiting enough to keep participating?
 | OpenRefine | deduplicate and normalize amateur sighting reports before they hit the DB | free; run locally; no cloud needed |
 | [DSA Alert Engine](https://github.com/Ruthwik9590/Tracking-and-Poaching-Alert-System-using-Advanced-Data-Structures) | offline CSV sync pattern + patrol log schema | adapt for ranger patrol export |
 
+Generalize field intake around offline capture, delayed sync, and safe attribution. Any survey, patrol form, or anonymous tip system fits M6 if it can be queued locally and merged later without losing timestamps.
+
 ## 4. Privacy & source protection
 - **Community tips:** never log the submitter's IP, phone number or identity. LimeSurvey and Typebot can be configured to strip all identifying metadata before storing. Make this default, not optional.
 - **Informant ledger:** store informant identity in a separate encrypted database, accessible only to the intelligence officer. Never link a tip record to an informant ID in the main event store — only a compartmented case number.

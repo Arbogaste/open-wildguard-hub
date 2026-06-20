@@ -30,6 +30,8 @@ ivory or horn to population databases to prove the crime crosses borders.
 
 Standards: **U.S. FWS evidence management policy** + **NIST SP 800-101** digital evidence guidelines. **CITES** seizure reporting templates.
 
+Generalize M9 around evidentiary integrity: if a source can be hashed, timestamped, and linked to a chain-of-custody record, it belongs here even when it starts as a photo, a genotype, a legal filing, or a structured OSINT artifact.
+
 ## 4. Evidence package format
 Every Tactical Event that results in a physical evidence item must carry an evidence manifest:
 

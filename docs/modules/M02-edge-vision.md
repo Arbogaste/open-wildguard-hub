@@ -26,6 +26,10 @@ minutes.
 | [Ecosentinel](https://github.com/Kerbal12/Ecosentinel) | OpenCV/YOLOv3 + MobileNet-SSD CCTV baseline | use as benchmark on legacy hardware |
 | [Forest-Conservation-System](https://github.com/KarnaPratik/Forest-Conservation-System) | video+audio **bimodal consensus** to cut false positives | pairs with M3 |
 
+Use shared datasets and model hubs whenever the scene changes: camera-trap imagery from MammAlps or Gorongosa, model backbones from Pytorch-Wildlife or MegaDetector, and region-specific fine-tuning from classifier repos. The reusable pattern is blank-frame filtering + class detection + evidence snapshot, not one model family.
+
+Good supporting resources: `OpenVINO` for CPU edge inference, `LILA BC` and `Snapshot Serengeti` for more camera-trap training data, and `iWildCam` for cross-region generalization.
+
 Labeling: use **CVAT** or **Label Studio** (both open-source) to annotate your own footage.
 Edge optimization: **TinyML** / **OpenVINO** to run on weak/old hardware.
 

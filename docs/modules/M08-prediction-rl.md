@@ -40,6 +40,8 @@ Feed these into your risk model (one row = one grid cell per day):
 | Distance to known entry points (roads, rivers) | GeoJSON from M4 terrain analysis |
 | Vegetation cover (NDVI) | Sentinel-2 from M4 |
 
+Generalize the prediction layer around features, not repos: patrol density, terrain accessibility, weather, species movement, and OSINT price pressure can be combined from different sources as long as they land in the same risk-vector schema.
+
 ## 5. Scripts & workflow
 **Risk score per grid cell (daily):**
 ```python

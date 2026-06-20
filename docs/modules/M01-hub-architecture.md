@@ -26,6 +26,10 @@ reliably, serve them to the dashboard, and queue them for sync when the connecti
 
 External: **SMART** (smartconservationtools.org) — patrol data standard. **EarthRanger** (earthranger.com) — real-time ops. **CyberTracker** — offline field data collection.
 
+Also reusable here: `animl-frontend` for camera-trap intake, `audtheia-environmental-monitoring` for workflow/schema ideas, and `DVC` for syncing versioned assets when the hub grows beyond one site.
+
+Generalize this module by treating every upstream project as a source of one of four primitives: event intake, identity/auth, map/rendering, or sync/retry. If a new repo exposes any of those primitives, it belongs here even if its original use case is different.
+
 ## 4. Core API design (FastAPI + SQLite)
 The hub is a central FastAPI service that:
 - Receives Tactical Events from all sensor modules (M2–M10) via `POST /events`

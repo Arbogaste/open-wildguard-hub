@@ -74,6 +74,21 @@ These are the projects the playbooks pull from. Clone the ones your use case nee
 | [WildlifeFL](https://github.com/MeGaurav4/WildlifeFL) | M10 | federated YOLOv8/CRNN training with differential privacy |
 | [Tracking-and-Poaching-Alert (DSA)](https://github.com/Ruthwik9590/Tracking-and-Poaching-Alert-System-using-Advanced-Data-Structures) | M5, M6, M8 | pure-Python R-Tree geofence + Dijkstra routing (edge-friendly) |
 | [Poaching-Hunting-Uncoop-Env](https://github.com/violentlydave/Poaching-Hunting-in-an-Uncooperative-Environment) | M7 | radio/Wi-Fi opsec audit so poachers can't intercept patrols |
+| [Biodiversity](https://github.com/microsoft/Biodiversity) | M2, M3, M5, M10 | umbrella hub, docs, model zoo, ecosystem links |
+| [Pytorch-Wildlife](https://github.com/microsoft/Pytorch-Wildlife) | M2, M3, M5, M10 | unified wildlife model framework and deployment layer |
+| [MammAlps](https://github.com/eceo-epfl/MammAlps) | M2, M3, M5, M10 | multi-view video/audio behavior dataset |
+| [animl-frontend](https://github.com/tnc-ca-geo/animl-frontend) | M1, M2, M5 | camera-trap ingestion and operator UI |
+| [audtheia-environmental-monitoring](https://github.com/AudtheiaOfficial/audtheia-environmental-monitoring) | M1, M4, M5, M6, M7 | schema, automations, geo enrichment |
+| [Biodiversity](https://github.com/microsoft/Biodiversity) | M2, M3, M5, M10 | umbrella hub, model zoo and ecosystem docs for wildlife AI |
+| [Pytorch-Wildlife](https://github.com/microsoft/Pytorch-Wildlife) | M2, M3, M5, M10 | unified wildlife model framework and deployment layer |
+| [MegaDetector](https://github.com/microsoft/MegaDetector) | M2, M5 | camera-trap detector with training and inference tooling |
+| [MegaDetector-Acoustic](https://github.com/microsoft/MegaDetector-Acoustic) | M3 | bioacoustic models for wildlife sound monitoring |
+| [MegaDetector-Classifier](https://github.com/microsoft/MegaDetector-Classifier) | M2, M5, M10 | classifier fine-tuning for region-specific species adaptation |
+| [MegaDetector-Overhead](https://github.com/microsoft/MegaDetector-Overhead) | M4, M5 | overhead/aerial wildlife detection for drones and aerial imagery |
+| [SPARROW](https://github.com/microsoft/SPARROW) | M3, M10 | edge audio recording and deployment reference |
+| [MammAlps](https://github.com/eceo-epfl/MammAlps) | M2, M3, M5, M10 | multi-view video, audio and dense behavior annotations |
+| [animl-frontend](https://github.com/tnc-ca-geo/animl-frontend) | M1, M2, M5 | operational camera-trap frontend and ingestion workflow |
+| [audtheia-environmental-monitoring](https://github.com/AudtheiaOfficial/audtheia-environmental-monitoring) | M1, M4, M5, M6, M7 | environmental monitoring workflows, schemas and automation |
 
 External platforms worth adopting (not in catalog, production-grade): **SMART** (smartconservationtools.org),
 **EarthRanger** (earthranger.com), **CyberTracker**, **Rainforest Connection / RFCx**, **OpenSoundscape**, **Wildbook**.

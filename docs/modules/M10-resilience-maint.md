@@ -27,6 +27,10 @@ contributor docs that let the open-source community keep the project growing.
 | Qdrant / Chroma | semantic search over past cases and poacher MO descriptions | local-first vector DB; no cloud needed |
 | OpenVINO | run neural networks on old Intel CPUs without a GPU | lets low-budget reserves run inference on recycled office hardware |
 
+Generalize M10 as the place where successful patterns get standardized: federated learning, shared model zoos, dataset versioning, rollout checklists, and cross-site adaptation all belong here once they are reusable beyond one park or one dataset.
+
+Support this with `DVC` for versioning, `Flower` for federation, `OpenVINO` for low-cost deployment, and `Biodiversity` / `Pytorch-Wildlife` for shared model references.
+
 ## 4. Health monitoring schema
 Each sensor node should report a heartbeat event every N minutes:
 

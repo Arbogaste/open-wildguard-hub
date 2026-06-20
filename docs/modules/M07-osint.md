@@ -22,6 +22,8 @@ jurisdiction and must be handled in a separate, audited investigative sublayer.
 | Intermediate | ScrapeGraphAI or Crawl4AI + local Ollama LLM for entity extraction | automated scraping + species/location extraction, no cloud API needed |
 | Advanced | Full pipeline: scrape → dedupe → LLM entity extraction → graph DB → price monitor → alerts to hub | structured smuggling network map, price time series, early warning system |
 
+Generalize the OSINT layer beyond news: public registries, marketplace metadata, forum mirrors, and legal/public datasets all fit here if the output can be normalized into species, place, time, actor, and price fields.
+
 ## 3. Recommended repos
 | Repo / tool | Take this | Notes |
 |-------------|-----------|-------|

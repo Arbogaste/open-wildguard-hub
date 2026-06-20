@@ -53,6 +53,10 @@ docker run -ti -p 8000:8000 opendronemap/webodm --media-root=/data
 5. Export as GeoJSON → POST to hub /zones.
 ```
 
+Generalize this module around terrain enrichment, not around one map provider: satellite layers, elevation, weather, water occurrence, and reverse geocoding can all feed the same route-risk layer.
+
+Use `OpenDroneMap` for drone-derived terrain, `QGIS` for offline GIS, `Copernicus Sentinel-1` for radar layers, and `Open-Meteo`/`Nominatim`/`SoilGrids` for environmental enrichment.
+
 ## 6. Agent prompts
 **Prompt A — generate patrol flight plan:**
 ```

@@ -26,6 +26,10 @@ and at night, where vision fails.
 Adopt **OpenSoundscape** (open-source detection/classification/localization) and **FFmpeg** for
 denoising (rain/wind). Reference platform: **Rainforest Connection (RFCx)**.
 
+Generalize the audio stack around three inputs: spectrogram inference, source localization, and hard-negative environmental sounds. Reuse the same public negative sets and any multi-view audio/video corpora so new regions only need threshold and class adaptation.
+
+Useful additions: `xeno-canto` for bird audio, `ESC-50` for negatives, `OpenSoundscape` and `RFCx` for acoustic workflows, and `birda-gui` as a review UI pattern.
+
 ## 4. Hardware
 - **Acoustic node**: ESP32 + I2S MEMS mic (INMP441 ~$3) + GPS module (for time sync) + LoRa.
   See [`../../toolkit/arduino/acoustic_node.ino`](../../toolkit/arduino/acoustic_node.ino) (scaffold:
