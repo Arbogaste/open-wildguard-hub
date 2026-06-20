@@ -386,6 +386,77 @@
       border-top: 1px solid var(--border);
       background: rgba(7,9,14,.8);
     }
+
+    /* Workflow tab */
+    .wf-phase {
+      margin-bottom: 22px;
+    }
+    .wf-phase-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--warn);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .wf-phase-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .wf-task {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 9px 0;
+      border-bottom: 1px solid rgba(255,255,255,.03);
+    }
+    .wf-task input[type=checkbox] {
+      margin-top: 2px;
+      accent-color: var(--primary);
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+    .wf-task label {
+      font-size: 13px;
+      line-height: 1.6;
+      cursor: pointer;
+    }
+    .wf-task label .tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 10px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+    .tag-manual { background: rgba(255,179,0,.1); color: var(--warn); border: 1px solid rgba(255,179,0,.2); }
+    .tag-ai     { background: rgba(0,188,212,.1);  color: var(--cyan); border: 1px solid rgba(0,188,212,.2); }
+
+    .outline-card {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      background: rgba(255,255,255,.015);
+    }
+    .outline-card .scene-num { color: var(--warn); }
+    .outline-bullets {
+      margin-top: 8px;
+      padding-left: 16px;
+    }
+    .outline-bullets li {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 2;
+      font-style: italic;
+    }
   </style>
 </head>
 <body>
@@ -487,6 +558,7 @@
       <button class="out-tab" onclick="switchTab(event,'tab-scenes')">Scenes</button>
       <button class="out-tab" onclick="switchTab(event,'tab-prompts')">Image prompts</button>
       <button class="out-tab" onclick="switchTab(event,'tab-meta')">YT metadata</button>
+      <button class="out-tab" onclick="switchTab(event,'tab-workflow')">Workflow</button>
     </div>
 
     <div class="out-content">
@@ -538,6 +610,19 @@
             </button>
           </div>
           <div class="script-area" id="meta-text"></div>
+        </div>
+      </div>
+
+    </div>
+
+      <div id="tab-workflow" class="out-section">
+        <div class="empty-state" id="empty-workflow">
+          <i class="fa-solid fa-list-check"></i>
+          <p>Generate a script first — workflow tasks will appear here.</p>
+          <p style="font-size:11px;margin-top:4px;opacity:.6">Or fill in the topic above and generate to get your outline.</p>
+        </div>
+        <div id="workflow-wrap" style="display:none">
+          <div id="workflow-checklist"></div>
         </div>
       </div>
 
@@ -773,6 +858,112 @@ Write the script now. No preamble.`;
     };
   }
 
+  // ── Workflow renderer ────────────────────────────────────────────────────
+  let _wfCtx = {};
+
+  function renderWorkflow(news, species, format, tone, nScenes, scenes) {
+    _wfCtx = { news, species, format, tone, nScenes, scenes };
+    const subj = species || 'the subject';
+
+    const phases = [
+      {
+        label: '① Research & Angle',
+        tasks: [
+          { text: `Read the full source article or report behind the alert`, tag: 'manual' },
+          { text: `Find 2–3 supporting facts or statistics about ${subj}`, tag: 'manual' },
+          { text: `Check latest IUCN / CITES / national status for ${subj}`, tag: 'manual' },
+          { text: `Identify one concrete impact viewers can take (donate, share, report)`, tag: 'manual' },
+          { text: `AI: ask LLM to summarise this news in 3 bullets + 1 counterpoint`, tag: 'ai' }
+        ]
+      },
+      {
+        label: '② Outline (fill manually or use AI)',
+        tasks: scenes.map((s, i) => ({
+          text: `Scene ${i+1}: <strong>${s.title}</strong> — write 3–5 sentences of narration`,
+          tag: 'manual'
+        })).concat([
+          { text: 'Write a hook sentence (first 5 seconds = retention)' , tag: 'manual' },
+          { text: 'Write a strong outro CTA: what should viewers DO next?', tag: 'manual' }
+        ])
+      },
+      {
+        label: '③ Production',
+        tasks: [
+          { text: 'Record voiceover audio — MP3 / WAV, 44.1 kHz', tag: 'manual' },
+          { text: `Gather B-roll: ${nScenes} clips or still images (CC0 or licensed)`, tag: 'manual' },
+          { text: 'Generate AI images for each scene (use Image Prompts tab)', tag: 'ai' },
+          { text: 'Assemble in video editor: sync VO + visuals + captions', tag: 'manual' },
+          { text: 'Add background music (CC0: Pixabay, Free Music Archive)', tag: 'manual' },
+          { text: 'Export: 1080p H.264, stereo audio, ~150 Mbps', tag: 'manual' }
+        ]
+      },
+      {
+        label: '④ Thumbnail',
+        tasks: [
+          { text: 'Create 1280×720 thumbnail — high-contrast, one bold text phrase', tag: 'manual' },
+          { text: 'AI: generate thumbnail concept (see Image Prompts tab, scene 1)', tag: 'ai' },
+          { text: 'Export as JPEG ≤ 2 MB', tag: 'manual' }
+        ]
+      },
+      {
+        label: '⑤ Upload & Optimize',
+        tasks: [
+          { text: 'Paste title from YT Metadata tab', tag: 'manual' },
+          { text: 'Paste description from YT Metadata tab', tag: 'manual' },
+          { text: 'Add all tags from YT Metadata tab', tag: 'manual' },
+          { text: 'Add to relevant playlist or create one', tag: 'manual' },
+          { text: 'Set language + subtitles (upload SRT or use auto-captions)', tag: 'manual' },
+          { text: 'Schedule or publish — share link to relevant conservation communities', tag: 'manual' }
+        ]
+      }
+    ];
+
+    let uid = 0;
+    const html = phases.map(ph => `
+      <div class="wf-phase">
+        <div class="wf-phase-title">${ph.label}</div>
+        ${ph.tasks.map(t => {
+          const id = 'wf_' + (uid++);
+          return `<div class="wf-task">
+            <input type="checkbox" id="${id}">
+            <label for="${id}">${t.text}<span class="tag tag-${t.tag}">${t.tag === 'ai' ? 'AI optional' : 'manual'}</span></label>
+          </div>`;
+        }).join('')}
+      </div>`).join('');
+
+    // bare outline for copy
+    const outlineHtml = `
+      <div class="wf-phase" style="margin-top:24px">
+        <div class="wf-phase-title" style="color:var(--cyan)">Script outline (blank — fill manually)</div>
+        <div class="copy-row" style="margin-bottom:8px">
+          <button class="copy-btn" onclick="copyOutline()"><i class="fa-solid fa-copy"></i> Copy plain text</button>
+        </div>
+        ${scenes.map((s, i) => `
+          <div class="outline-card">
+            <div class="scene-num">Scene ${i+1}</div>
+            <div class="scene-title">${s.title}</div>
+            <ul class="outline-bullets">
+              <li>Key fact or statistic here…</li>
+              <li>Visual / action happening on screen…</li>
+              <li>Transition / bridge to next scene…</li>
+            </ul>
+          </div>`).join('')}
+      </div>`;
+
+    document.getElementById('empty-workflow').style.display = 'none';
+    document.getElementById('workflow-wrap').style.display = 'block';
+    document.getElementById('workflow-checklist').innerHTML = html + outlineHtml;
+  }
+
+  function copyOutline() {
+    const { scenes } = _wfCtx;
+    if (!scenes) return;
+    const txt = scenes.map((s, i) =>
+      `SCENE ${i+1}: ${s.title}\n- Key fact or statistic here…\n- Visual / action on screen…\n- Transition to next scene…\n`
+    ).join('\n');
+    navigator.clipboard.writeText(txt).then(() => status('Outline copied!')).catch(() => {});
+  }
+
   // ── Render output ─────────────────────────────────────────────────────────
   function render(result) {
     // Script
@@ -803,6 +994,14 @@ Write the script now. No preamble.`;
     document.getElementById('empty-meta').style.display = 'none';
     document.getElementById('meta-wrap').style.display = 'block';
     document.getElementById('meta-text').textContent = JSON.stringify(result.meta, null, 2);
+
+    // Workflow
+    const news     = document.getElementById('inp-news').value.trim();
+    const species  = document.getElementById('inp-species').value.trim();
+    const format   = getChip('chips-format');
+    const tone     = getChip('chips-tone');
+    const nScenes  = parseInt(document.getElementById('inp-length').value);
+    renderWorkflow(news, species, format, tone, nScenes, result.scenes);
   }
 
   // ── Main ──────────────────────────────────────────────────────────────────
