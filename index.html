@@ -4,15 +4,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>open-wildguard-hub — Command Center</title>
-    <meta name="description"
-        content="Dashboard di monitoraggio tattico anti-bracconaggio open-source. open-wildguard-hub: edge-first, offline-ready, WWF & Forestry ready.">
+    <title>WildGuard AI — Open Anti-Poaching Command Center</title>
+    <meta name="description" content="Open-source, offline-first anti-poaching command center. Edge AI camera traps, bioacoustics, species tracking, OSINT and field operator playbooks — free for any conservation team worldwide.">
+    <meta name="author" content="TheRoarWire / Arbogaste">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://arbogaste.github.io/open-wildguard-hub/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="WildGuard AI — Open Anti-Poaching Command Center">
+    <meta property="og:description" content="Offline-first, edge-AI anti-poaching platform. 10 capability modules, runnable toolkit, field playbooks. Free for any conservation team.">
+    <meta property="og:url" content="https://arbogaste.github.io/open-wildguard-hub/">
+    <meta property="og:image" content="assets/brand/favicon-256.png">
+    <meta property="og:site_name" content="WildGuard AI">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="WildGuard AI — Open Anti-Poaching Command Center">
+    <meta name="twitter:description" content="Offline-first, edge-AI anti-poaching platform. 10 capability modules, runnable toolkit, field playbooks. Free for any conservation team.">
+    <meta name="twitter:image" content="assets/brand/favicon-256.png">
 
     <!-- Brand / favicons (TheRoarWire) -->
     <link rel="icon" type="image/png" sizes="32x32" href="assets/brand/favicon-32.png">
     <link rel="icon" type="image/png" sizes="256x256" href="assets/brand/favicon-256.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/brand/favicon-180.png">
-    <meta property="og:image" content="assets/brand/favicon-256.png">
 
     <!-- Fonts (self-hosted, offline-first): Outfit & Space Mono -->
     <link rel="stylesheet" href="vendor/fonts/fonts.css">
@@ -48,10 +63,33 @@
             --transition-speed: 0.25s;
         }
 
+        /* Skip link — hidden until focused by keyboard */
+        .skip-link {
+            position: absolute;
+            top: -100%;
+            left: 0;
+            padding: 10px 18px;
+            background: var(--color-primary);
+            color: #000;
+            font-weight: 700;
+            font-size: 14px;
+            z-index: 9999;
+            border-radius: 0 0 8px 0;
+            text-decoration: none;
+        }
+        .skip-link:focus { top: 0; }
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+        }
+
+        /* Keyboard focus indicator — visible ring on interactive elements */
+        :focus-visible {
+            outline: 2px solid var(--color-primary);
+            outline-offset: 2px;
+            border-radius: 4px;
         }
 
         body {
@@ -383,6 +421,7 @@
             transition: all var(--transition-speed);
             font-family: 'Outfit', sans-serif;
             font-weight: 600;
+            min-height: 36px; /* WCAG 2.5.5 touch target */
         }
 
         .btn:hover {
@@ -406,10 +445,24 @@
 
         /* Center Section: Map & Tabs split */
         .center-column {
-            display: grid;
-            grid-template-rows: 1fr 340px;
+            display: flex;
+            flex-direction: column;
             gap: 12px;
             height: 100%;
+        }
+
+        /* Map wrapper gets a fixed height; tab-panel expands to fill the rest */
+        .center-column .map-wrapper {
+            flex: 0 0 auto;
+            height: 340px;
+        }
+        .center-column .map-wrapper.collapsed {
+            height: 0;
+        }
+
+        .center-column .tab-panel {
+            flex: 1 1 0;
+            min-height: 300px;
         }
 
         .map-wrapper {
@@ -896,16 +949,19 @@
 
 <body>
 
+    <!-- Skip navigation for keyboard/screen reader users -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
     <!-- Demo Mode Notice Banner -->
-    <div class="demo-banner">
-        <i class="fa-solid fa-flask"></i>
+    <div class="demo-banner" role="status" aria-live="polite">
+        <i class="fa-solid fa-flask" aria-hidden="true"></i>
         <span><strong>DEMO MODE</strong> &mdash; All sensor data (camera traps, audio nodes, IoT collars, OSINT) is
             <strong>intentionally mocked</strong> to showcase system capabilities. No live hardware is connected. See <a
-                href="dev.md" target="_blank">dev.md</a> for the real backend architecture (Milestone 2).</span>
+                href="dev.md" target="_blank" rel="noopener">dev.md</a> for the real backend architecture (Milestone 2).</span>
     </div>
 
     <!-- Header Section -->
-    <header>
+    <header role="banner">
         <div class="logo-area">
             <img src="assets/brand/favicon-256.png" class="logo-icon" alt="WildGuard"
                  style="height:42px;width:42px;border-radius:8px;object-fit:cover;">
@@ -939,7 +995,7 @@
     </header>
 
     <!-- Main Grid Dashboard -->
-    <div class="dashboard-container">
+    <main id="main-content" class="dashboard-container" role="main" aria-label="Anti-poaching command center">
 
         <!-- LEFT COLUMN: Status & Alerts -->
         <div class="column">
@@ -1015,9 +1071,9 @@
         <!-- CENTER COLUMN: Map View & Tabbed Roadmaps -->
         <div class="column center-column" style="grid-column: 2;">
             <!-- Map Top (collapsible for readability) -->
-            <button class="map-toggle" id="map-toggle" onclick="toggleMap()" aria-expanded="true">
-                <span><i class="fa-solid fa-map-location-dot"></i> <span id="map-toggle-label">Mappa Tattica</span></span>
-                <i class="fa-solid fa-chevron-up map-chevron"></i>
+            <button class="map-toggle" id="map-toggle" onclick="toggleMap()" aria-expanded="true" aria-controls="map-wrapper">
+                <span><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i> <span id="map-toggle-label">Mappa Tattica</span></span>
+                <i class="fa-solid fa-chevron-up map-chevron" aria-hidden="true"></i>
             </button>
             <div class="map-wrapper" id="map-wrapper">
                 <div id="map"></div>
@@ -1033,28 +1089,32 @@
 
             <!-- Tab Panel Bottom -->
             <div class="tab-panel">
-                <div class="tab-nav">
-                    <button class="tab-link active" onclick="switchTab(event, 'tab-roadmap')" id="tab-lbl-roadmap">Piani
+                <div class="tab-nav" role="tablist" aria-label="Dashboard sections">
+                    <button class="tab-link active" onclick="switchTab(event, 'tab-roadmap')" id="tab-lbl-roadmap"
+                            role="tab" aria-selected="true" aria-controls="tab-roadmap">Piani
                         di Integrazione (10 Idee)</button>
-                    <button class="tab-link" onclick="switchTab(event, 'tab-docs')" id="tab-lbl-docs">Manuale
-                        Sviluppatori & Arduino</button>
-                    <button class="tab-link" onclick="switchTab(event, 'tab-proposal')" id="tab-lbl-proposal">Proposta
+                    <button class="tab-link" onclick="switchTab(event, 'tab-docs')" id="tab-lbl-docs"
+                            role="tab" aria-selected="false" aria-controls="tab-docs">Manuale
+                        Sviluppatori &amp; Arduino</button>
+                    <button class="tab-link" onclick="switchTab(event, 'tab-proposal')" id="tab-lbl-proposal"
+                            role="tab" aria-selected="false" aria-controls="tab-proposal">Proposta
                         Istituzionale (WWF)</button>
-                    <button class="tab-link" onclick="switchTab(event, 'tab-repos')" id="tab-lbl-repos">Integrazione
+                    <button class="tab-link" onclick="switchTab(event, 'tab-repos')" id="tab-lbl-repos"
+                            role="tab" aria-selected="false" aria-controls="tab-repos">Integrazione
                         Sotto-Repository</button>
                 </div>
 
                 <div class="tab-content-area">
 
                     <!-- TAB 1: 10 ROADMAP IDEAS & STATUS -->
-                    <div id="tab-roadmap" class="tab-pane active">
+                    <div id="tab-roadmap" class="tab-pane active" role="tabpanel" aria-labelledby="tab-lbl-roadmap">
                         <div class="ideas-grid" id="roadmap-ideas-container">
                             <!-- Populated dynamically via JS translations -->
                         </div>
                     </div>
 
                     <!-- TAB 2: DEVELOPER & ARDUINO TINYML GUIDE -->
-                    <div id="tab-docs" class="tab-pane">
+                    <div id="tab-docs" class="tab-pane" role="tabpanel" aria-labelledby="tab-lbl-docs">
                         <div class="docs-block" style="border:1px solid var(--color-primary,#00ff66);background:rgba(0,255,102,0.05);">
                             <h3>📚 Operator Playbooks &amp; Toolkit — the real content lives in <code>docs/</code></h3>
                             <p>This dashboard is an illustrative demo. The actionable material — one playbook per
@@ -1070,69 +1130,69 @@
                             <p style="font-size:12px;opacity:.8;">Clone the hub → pick your use case → follow the playbook with free tools. Wildlife can't wait.</p>
                         </div>
 
-                        <!-- Capability catalog: the ~100 capabilities, grouped in 10 modules, each linking its playbook -->
+                        <!-- Capability catalog: 10 modules, each with a clear "what can you DO" statement -->
                         <div class="docs-block">
-                            <h3>🧭 Capability Catalog — ~100 capabilities in 10 modules</h3>
-                            <p style="font-size:12px;opacity:.85;">What a full anti-poaching program can do. Each module links to a step-by-step playbook (recommended repos, scripts, hardware, agent prompts, milestones). Browse on GitHub:</p>
-                            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;margin-top:10px;font-size:12px;line-height:1.6;">
+                            <h3>🧭 What you can build — 10 capability modules</h3>
+                            <p style="font-size:12px;opacity:.85;">Each module is a complete playbook: what to build, which open repos to use, runnable code, field guides. Pick the one that fits your situation and follow the steps.</p>
+                            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin-top:10px;font-size:12px;line-height:1.6;">
 
                                 <div class="cap-card">
-                                    <strong>M1 · Hub, interop &amp; governance</strong>
-                                    <p>Shared data model, roles/permissions, Essential→Advanced tiers, SMART/EarthRanger interop.</p>
+                                    <strong>M1 · Set up the platform</strong>
+                                    <p>Get the hub running, define user roles, connect it to existing tools your team already uses (SMART, EarthRanger, local DB).</p>
                                     <a href="https://github.com/Arbogaste/open-wildguard-hub/blob/main/docs/modules/M01-hub-architecture.md" target="_blank" rel="noopener">→ playbook</a>
                                 </div>
 
                                 <div class="cap-card">
-                                    <strong>M2 · Edge computer vision</strong>
-                                    <p>Human-vs-animal, weapons, vehicles, snares on camera; wind/bird false-positive filter; night IR; synthetic training data; evidence snapshot.</p>
-                                    <a href="https://github.com/Arbogaste/open-wildguard-hub/blob/main/docs/modules/M02-edge-vision.md" target="_blank" rel="noopener">→ playbook (full)</a>
+                                    <strong>M2 · See what cameras see — automatically</strong>
+                                    <p>Camera traps detect humans, weapons and vehicles on-device — no cloud needed. Night vision and false-positive filtering included. Photos auto-tagged as evidence.</p>
+                                    <a href="https://github.com/Arbogaste/open-wildguard-hub/blob/main/docs/modules/M02-edge-vision.md" target="_blank" rel="noopener">→ full playbook + code</a>
                                 </div>
 
                                 <div class="cap-card">
-                                    <strong>M3 · Bioacoustics &amp; triangulation</strong>
-                                    <p>24/7 gunshot/chainsaw/vehicle detection, animal distress calls, TDoA source localization, audio denoising.</p>
-                                    <a href="https://github.com/Arbogaste/open-wildguard-hub/blob/main/docs/modules/M03-bioacoustics.md" target="_blank" rel="noopener">→ playbook (full)</a>
+                                    <strong>M3 · Hear gunshots and chainsaws 24/7</strong>
+                                    <p>Cheap microphone nodes detect gunshots, chainsaws and vehicles in the dark. Multiple nodes pinpoint the location. Works offline.</p>
+                                    <a href="https://github.com/Arbogaste/open-wildguard-hub/blob/main/docs/modules/M03-bioacoustics.md" target="_blank" rel="noopener">→ full playbook + code</a>
                                 </div>
 
                                 <div class="cap-card">
-                                    <strong>M4 · Aerial, thermal &amp; geo</strong>
-                                    <p>Scheduled/triggered drones, thermal night overwatch, 3D photogrammetry of escape routes, satellite habitat layers.</p>
+                                    <strong>M4 · Drone and satellite overwatch</strong>
+                                    <p>Schedule drone patrols, add thermal night flights, layer satellite maps to spot habitat changes and escape routes before rangers deploy.</p>
                                     <a href="https://github.com/Arbogaste/open-wildguard-hub/blob/main/docs/modules/M04-aerial-geo.md" target="_blank" rel="noopener">→ playbook</a>
                                 </div>
 
                                 <div class="cap-card">
-                                    <strong>M5 · Species intelligence</strong>
-                                    <p>GPS collars, geofencing red zones, density estimation, nest/calf protection, behavioral-anomaly alerts.</p>
+                                    <strong>M5 · Track animals, not just poachers</strong>
+                                    <p>GPS collars send alerts when animals leave safe zones. Detect when a herd stops moving — often the first sign of a poaching event.</p>
                                     <a href="https://github.com/Arbogaste/open-wildguard-hub/blob/main/docs/modules/M05-species-intel.md" target="_blank" rel="noopener">→ playbook</a>
                                 </div>
 
                                 <div class="cap-card">
-                                    <strong>M6 · Field &amp; community intel</strong>
-                                    <p>Fully offline patrol collection, anonymous citizen tips, informant safety/compartmentation, MEL metrics.</p>
+                                    <strong>M6 · Patrols and community tips</strong>
+                                    <p>Rangers log incidents offline with no phone signal. Local community members report sightings anonymously. All data syncs when connectivity returns.</p>
                                     <a href="https://github.com/Arbogaste/open-wildguard-hub/blob/main/docs/modules/M06-field-community.md" target="_blank" rel="noopener">→ playbook</a>
                                 </div>
 
                                 <div class="cap-card">
-                                    <strong>M7 · OSINT &amp; black-market intel</strong>
-                                    <p>Marketplace/forum scraping, slang decoding, EXIF geolocation, smuggling-network graphs, price-mutation early warning, radio opsec.</p>
+                                    <strong>M7 · Monitor illegal wildlife markets</strong>
+                                    <p>Watch online marketplaces and social media for wildlife trade. Geolocate photos. Map trafficking networks. Get early warning when prices spike for a protected species.</p>
                                     <a href="https://github.com/Arbogaste/open-wildguard-hub/blob/main/docs/modules/M07-osint.md" target="_blank" rel="noopener">→ playbook</a>
                                 </div>
 
                                 <div class="cap-card">
-                                    <strong>M8 · Prediction &amp; patrol planning</strong>
-                                    <p>Risk hotspots, PAWS game-theory optimal patrols, RL adversarial sim, lunar-phase windows, de-biased occupancy models.</p>
+                                    <strong>M8 · Predict where poachers strike next</strong>
+                                    <p>Historical incident data generates risk maps. AI optimises patrol routes so rangers cover high-risk areas first. Updated daily with moon phase and weather.</p>
                                     <a href="https://github.com/Arbogaste/open-wildguard-hub/blob/main/docs/modules/M08-prediction-rl.md" target="_blank" rel="noopener">→ playbook</a>
                                 </div>
 
                                 <div class="cap-card">
-                                    <strong>M9 · Forensics &amp; legal</strong>
-                                    <p>Court-ready evidence packages, SHA-256 chain-of-custody, auto chargesheet (live demo), DNA-portal trafficking trace, privacy/AI-Act compliance.</p>
+                                    <strong>M9 · Build court-ready evidence</strong>
+                                    <p>Every alert generates a tamper-proof evidence file with timestamp and location. Auto-generate incident reports compatible with CITES and national wildlife law. See live demo above.</p>
                                     <a href="https://github.com/Arbogaste/open-wildguard-hub/blob/main/docs/modules/M09-forensics-legal.md" target="_blank" rel="noopener">→ playbook</a>
                                 </div>
 
                                 <div class="cap-card">
-                                    <strong>M10 · Resilience &amp; open-source ops</strong>
-                                    <p>System-health dashboards, predictive sensor/battery maintenance, federated learning (data stays local), ranger training, DVC model versioning.</p>
+                                    <strong>M10 · Keep it running long-term</strong>
+                                    <p>Monitor sensor battery life, catch failures before they happen. Train new rangers with scenario exercises. Keep AI models improving without sharing raw data.</p>
                                     <a href="https://github.com/Arbogaste/open-wildguard-hub/blob/main/docs/modules/M10-resilience-maint.md" target="_blank" rel="noopener">→ playbook</a>
                                 </div>
 
@@ -1225,7 +1285,7 @@
                     </div>
 
                     <!-- TAB 3: REPOS INTEGRATION DOCS -->
-                    <div id="tab-repos" class="tab-pane">
+                    <div id="tab-repos" class="tab-pane" role="tabpanel" aria-labelledby="tab-lbl-repos">
                         <div class="docs-block">
                             <h3 id="doc-title-repos">Integrazione dei Sotto-Repository nel Codice Unificato</h3>
                             <p id="doc-desc-repos">Il framework <code>open-wildguard-hub</code> agisce come
@@ -1270,7 +1330,7 @@
                     </div>
 
                     <!-- TAB 4: PITCH PROPOSAL -->
-                    <div id="tab-proposal" class="tab-pane">
+                    <div id="tab-proposal" class="tab-pane" role="tabpanel" aria-labelledby="tab-lbl-proposal">
                         <div class="docs-block">
                             <h3 id="doc-title-proposal">Proposta Istituzionale per WWF, Riserve & Guardie Forestali</h3>
                             <p id="doc-desc-proposal">WildGuard AI è concepito per essere presentato a ONG ed enti
@@ -1357,10 +1417,10 @@
             </div>
         </div>
 
-    </div>
+    </main>
 
     <!-- Credits Footer: upstream open-source repos -->
-    <footer class="credits-footer">
+    <footer class="credits-footer" role="contentinfo">
         <span class="credits-label"><i class="fa-solid fa-heart" style="color:var(--color-danger);"></i>&nbsp;Built
             on</span>
         <div class="credits-repos">
@@ -1774,9 +1834,11 @@
             const tablinks = document.getElementsByClassName("tab-link");
             for (let i = 0; i < tablinks.length; i++) {
                 tablinks[i].classList.remove("active");
+                tablinks[i].setAttribute("aria-selected", "false");
             }
             document.getElementById(tabName).classList.add("active");
             evt.currentTarget.classList.add("active");
+            evt.currentTarget.setAttribute("aria-selected", "true");
         }
 
         // Init Map of Serengeti-like park area (mocked coordinates)
