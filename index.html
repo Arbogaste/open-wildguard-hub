@@ -1,0 +1,1662 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>open-wildguard-hub — Command Center</title>
+    <meta name="description"
+        content="Dashboard di monitoraggio tattico anti-bracconaggio open-source. open-wildguard-hub: edge-first, offline-ready, WWF & Forestry ready.">
+
+    <!-- Google Fonts: Outfit & Space Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+        rel="stylesheet">
+
+    <!-- Leaflet CSS for offline/online interactive map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-base: #07090e;
+            --bg-panel: rgba(13, 17, 26, 0.75);
+            --bg-panel-hover: rgba(20, 26, 38, 0.9);
+            --border-glow: rgba(0, 255, 102, 0.12);
+            --border-glow-active: rgba(0, 255, 102, 0.35);
+
+            /* Color System */
+            --color-primary: #00ff66;
+            /* Neon Green - Tactical/Ok */
+            --color-primary-dim: #00b347;
+            --color-warning: #ffb300;
+            /* Orange - Alert medium */
+            --color-danger: #ff3344;
+            /* Red - Critical Threat */
+            --color-info: #00bcd4;
+            /* Cyan - Stats/OSINT */
+            --text-main: #f0f4f8;
+            --text-muted: #7e8f9b;
+
+            --glass-blur: blur(16px);
+            --transition-speed: 0.25s;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            overflow-x: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image:
+                radial-gradient(circle at 5% 15%, rgba(0, 255, 102, 0.04) 0%, transparent 35%),
+                radial-gradient(circle at 95% 85%, rgba(0, 188, 212, 0.04) 0%, transparent 35%);
+        }
+
+        /* Header Style */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 25px;
+            background: rgba(7, 9, 14, 0.85);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            backdrop-filter: var(--glass-blur);
+            z-index: 1000;
+            height: 70px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            color: var(--color-primary);
+            font-size: 24px;
+            filter: drop-shadow(0 0 8px rgba(0, 255, 102, 0.5));
+            animation: pulse-glow 2s infinite alternate;
+        }
+
+        .logo-text h1 {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-info));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-text span {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .language-toggle {
+            display: flex;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 3px;
+            cursor: pointer;
+            gap: 5px;
+        }
+
+        .lang-btn {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 4px 10px;
+            border-radius: 15px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all var(--transition-speed);
+        }
+
+        .lang-btn.active {
+            background: var(--color-primary);
+            color: var(--bg-base);
+            box-shadow: 0 0 8px rgba(0, 255, 102, 0.3);
+        }
+
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+        }
+
+        .status-pill {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 5px 12px;
+            border-radius: 20px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--color-primary);
+            box-shadow: 0 0 6px var(--color-primary);
+            animation: dot-pulse 1.8s ease-in-out infinite;
+        }
+
+        @keyframes dot-pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 4px var(--color-primary);
+                opacity: 1;
+            }
+
+            50% {
+                box-shadow: 0 0 12px var(--color-primary), 0 0 20px rgba(0, 255, 102, 0.3);
+                opacity: 0.75;
+            }
+        }
+
+        /* Main Dashboard Grid */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 360px 1fr 380px;
+            flex: 1;
+            height: calc(100vh - 70px);
+            padding: 12px;
+            gap: 12px;
+            overflow: hidden;
+        }
+
+        /* Column Styles */
+        .column {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        /* Panel Glassmorphic Card */
+        .panel {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-glow);
+            border-radius: 12px;
+            backdrop-filter: var(--glass-blur);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: border-color var(--transition-speed);
+        }
+
+        .panel:hover {
+            border-color: rgba(0, 255, 102, 0.2);
+        }
+
+        .panel-header {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-title {
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .panel-title i {
+            color: var(--color-primary);
+        }
+
+        .panel-content {
+            padding: 15px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        /* Scrollbars */
+        .panel-content::-webkit-scrollbar,
+        .tab-content-area::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .panel-content::-webkit-scrollbar-track,
+        .tab-content-area::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .panel-content::-webkit-scrollbar-thumb,
+        .tab-content-area::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 2px;
+        }
+
+        /* Stats Widgets */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .stat-val {
+            font-family: 'Space Mono', monospace;
+            font-size: 20px;
+            font-weight: 700;
+            margin-top: 3px;
+            color: var(--color-info);
+        }
+
+        .stat-label {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        /* Active Alerts styling */
+        .alert-item {
+            background: rgba(255, 51, 68, 0.02);
+            border: 1px solid rgba(255, 51, 68, 0.1);
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 8px;
+            transition: all var(--transition-speed);
+        }
+
+        .alert-item.critical {
+            border-left: 3px solid var(--color-danger);
+        }
+
+        .alert-item.warning {
+            border-left: 3px solid var(--color-warning);
+            background: rgba(255, 179, 0, 0.01);
+            border-color: rgba(255, 179, 0, 0.1);
+        }
+
+        .alert-item:hover {
+            background: rgba(255, 51, 68, 0.06);
+            border-color: rgba(255, 51, 68, 0.25);
+            transform: translateX(2px);
+        }
+
+        .alert-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            font-family: 'Space Mono', monospace;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+        }
+
+        .alert-desc {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .alert-footer {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Custom Buttons */
+        .btn {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text-main);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+        }
+
+        .btn:hover {
+            background: var(--color-primary);
+            color: var(--bg-base);
+            border-color: var(--color-primary);
+            box-shadow: 0 0 8px rgba(0, 255, 102, 0.35);
+        }
+
+        .btn-danger {
+            background: rgba(255, 51, 68, 0.12);
+            border-color: rgba(255, 51, 68, 0.25);
+        }
+
+        .btn-danger:hover {
+            background: var(--color-danger);
+            color: var(--text-main);
+            border-color: var(--color-danger);
+            box-shadow: 0 0 8px rgba(255, 51, 68, 0.35);
+        }
+
+        /* Center Section: Map & Tabs split */
+        .center-column {
+            display: grid;
+            grid-template-rows: 1fr 340px;
+            gap: 12px;
+            height: 100%;
+        }
+
+        .map-wrapper {
+            position: relative;
+            border-radius: 12px;
+            border: 1px solid var(--border-glow);
+            overflow: hidden;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+            background: #090c11;
+        }
+
+        .map-overlay-controls {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            z-index: 1000;
+            background: rgba(7, 9, 14, 0.85);
+            backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--border-glow-active);
+            border-radius: 8px;
+            padding: 8px;
+            display: flex;
+            gap: 6px;
+        }
+
+        /* Tabbed Console Panel (Center Bottom) */
+        .tab-panel {
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-panel);
+            border: 1px solid var(--border-glow);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .tab-nav {
+            display: flex;
+            background: rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 0 10px;
+        }
+
+        .tab-link {
+            padding: 12px 18px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all var(--transition-speed);
+        }
+
+        .tab-link.active {
+            color: var(--color-primary);
+            border-bottom-color: var(--color-primary);
+        }
+
+        .tab-content-area {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        .tab-pane {
+            display: none;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        /* Roadmap Ideas grid */
+        .ideas-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .idea-card {
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .idea-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .idea-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--color-info);
+        }
+
+        .idea-status {
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            padding: 1px 6px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .status-planned {
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text-muted);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .status-progress {
+            background: rgba(0, 188, 212, 0.1);
+            color: var(--color-info);
+            border: 1px solid rgba(0, 188, 212, 0.2);
+        }
+
+        .status-prototype {
+            background: rgba(255, 179, 0, 0.1);
+            color: var(--color-warning);
+            border: 1px solid rgba(255, 179, 0, 0.2);
+        }
+
+        .status-completed {
+            background: rgba(0, 255, 102, 0.1);
+            color: var(--color-primary);
+            border: 1px solid rgba(0, 255, 102, 0.2);
+        }
+
+        .idea-desc {
+            font-size: 11px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Documentation & Arduino style */
+        .docs-block {
+            margin-bottom: 20px;
+        }
+
+        .docs-block h3 {
+            font-size: 13px;
+            color: var(--color-primary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid rgba(0, 255, 102, 0.15);
+            padding-bottom: 4px;
+        }
+
+        .docs-block p {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        .code-snippet {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            padding: 10px;
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            color: #b8cddb;
+            overflow-x: auto;
+            margin: 8px 0;
+            white-space: pre;
+        }
+
+        /* Node Health Widget */
+        .node-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .node-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 6px;
+            padding: 7px 10px;
+            font-size: 11px;
+        }
+
+        .node-name {
+            font-weight: 600;
+        }
+
+        .node-status {
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            padding: 1px 5px;
+            border-radius: 3px;
+            text-transform: uppercase;
+        }
+
+        .status-online {
+            background: rgba(0, 255, 102, 0.1);
+            color: var(--color-primary);
+            border: 1px solid rgba(0, 255, 102, 0.2);
+        }
+
+        .status-degraded {
+            background: rgba(255, 179, 0, 0.1);
+            color: var(--color-warning);
+            border: 1px solid rgba(255, 179, 0, 0.2);
+        }
+
+        /* OSINT Panel & Chargesheet */
+        .osint-item {
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 8px;
+        }
+
+        .osint-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--color-info);
+            margin-bottom: 4px;
+        }
+
+        .osint-summary {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            line-height: 1.4;
+        }
+
+        .osint-tags {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            font-size: 9px;
+            font-family: 'Space Mono', monospace;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 1px 5px;
+            border-radius: 3px;
+        }
+
+        .badge-schedule {
+            background: rgba(0, 188, 212, 0.08);
+            border-color: rgba(0, 188, 212, 0.18);
+            color: var(--color-info);
+        }
+
+        .chargesheet-box {
+            background: rgba(7, 9, 14, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 10px;
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            line-height: 1.5;
+            display: none;
+        }
+
+        .chargesheet-box h4 {
+            font-family: 'Outfit', sans-serif;
+            text-transform: uppercase;
+            font-size: 11px;
+            margin-bottom: 6px;
+            color: var(--color-warning);
+        }
+
+        .chargesheet-content {
+            max-height: 110px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 6px;
+            border-radius: 4px;
+            color: #b0c0cf;
+            white-space: pre-wrap;
+        }
+
+        @keyframes pulse-glow {
+            from {
+                text-shadow: 0 0 5px rgba(0, 255, 102, 0.25);
+            }
+
+            to {
+                text-shadow: 0 0 12px rgba(0, 255, 102, 0.65);
+            }
+        }
+
+        /* ── Credits Footer ── */
+        .credits-footer {
+            background: rgba(7, 9, 14, 0.92);
+            border-top: 1px solid rgba(0, 255, 102, 0.08);
+            padding: 14px 25px;
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            flex-shrink: 0;
+            overflow-x: auto;
+        }
+
+        .credits-footer::-webkit-scrollbar {
+            height: 3px;
+        }
+
+        .credits-footer::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 2px;
+        }
+
+        .credits-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            white-space: nowrap;
+            padding-top: 4px;
+            min-width: 80px;
+        }
+
+        .credits-repos {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            flex: 1;
+        }
+
+        .credit-chip {
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 4px;
+            padding: 3px 7px;
+            text-decoration: none;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .credit-chip:hover {
+            color: var(--color-primary);
+            border-color: rgba(0, 255, 102, 0.3);
+            background: rgba(0, 255, 102, 0.04);
+        }
+
+        .credit-chip.our-repo {
+            color: var(--color-primary);
+            border-color: rgba(0, 255, 102, 0.3);
+            background: rgba(0, 255, 102, 0.06);
+            font-weight: 700;
+        }
+
+        /* GitHub link pill in header */
+        .github-pill {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 5px 12px;
+            border-radius: 20px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .github-pill:hover {
+            color: var(--color-primary);
+            border-color: rgba(0, 255, 102, 0.3);
+            background: rgba(0, 255, 102, 0.04);
+        }
+
+        /* ── Demo Mode Banner ── */
+        .demo-banner {
+            background: linear-gradient(90deg, rgba(255, 179, 0, 0.08), rgba(255, 179, 0, 0.03));
+            border-bottom: 1px solid rgba(255, 179, 0, 0.2);
+            padding: 7px 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            color: var(--color-warning);
+            flex-shrink: 0;
+        }
+
+        .demo-banner i {
+            font-size: 12px;
+            animation: dot-pulse 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 4px var(--color-warning));
+        }
+
+        .demo-banner strong {
+            color: #ffd54f;
+        }
+
+        .demo-banner a {
+            color: var(--color-info);
+            text-decoration: none;
+            border-bottom: 1px dotted rgba(0, 188, 212, 0.4);
+        }
+
+        .demo-banner a:hover {
+            color: var(--color-primary);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Demo Mode Notice Banner -->
+    <div class="demo-banner">
+        <i class="fa-solid fa-flask"></i>
+        <span><strong>DEMO MODE</strong> &mdash; All sensor data (camera traps, audio nodes, IoT collars, OSINT) is
+            <strong>intentionally mocked</strong> to showcase system capabilities. No live hardware is connected. See <a
+                href="dev.md" target="_blank">dev.md</a> for the real backend architecture (Milestone 2).</span>
+    </div>
+
+    <!-- Header Section -->
+    <header>
+        <div class="logo-area">
+            <i class="fa-solid fa-shield-halved logo-icon"></i>
+            <div class="logo-text">
+                <h1>OPEN-WILDGUARD-HUB</h1>
+                <span id="txt-sub-header">Centro di Comando // Anti-Bracconaggio Open-Source</span>
+            </div>
+        </div>
+
+        <div class="header-controls">
+            <!-- Language Selection Toggle -->
+            <div class="language-toggle" onclick="toggleLanguage()">
+                <button class="lang-btn" id="btn-it">IT</button>
+                <button class="lang-btn active" id="btn-en">EN</button>
+            </div>
+
+            <a class="github-pill" href="https://github.com/your-org/open-wildguard-hub" target="_blank" rel="noopener">
+                <i class="fa-brands fa-github"></i>
+                open-wildguard-hub
+            </a>
+
+            <div class="system-status">
+                <div class="status-pill">
+                    <span class="status-dot"></span>
+                    <span id="txt-status">SYSTEM ONLINE</span>
+                </div>
+                <div class="status-pill">
+                    <i class="fa-solid fa-clock" style="color: var(--color-info);"></i>
+                    <span id="tactical-time">13:45:00 UTC</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Grid Dashboard -->
+    <div class="dashboard-container">
+
+        <!-- LEFT COLUMN: Status & Alerts -->
+        <div class="column">
+            <!-- Stats Widget -->
+            <div class="panel" style="flex: 0 0 auto;">
+                <div class="panel-header">
+                    <span class="panel-title"><i class="fa-solid fa-chart-simple"></i><span
+                            id="txt-title-stats">Telemetria Sensori</span></span>
+                </div>
+                <div class="panel-content stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-label" id="lbl-cameras">Cam Trap</span>
+                        <div class="stat-val" id="val-cameras">12</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label" id="lbl-audio">Nodi Audio</span>
+                        <div class="stat-val" id="val-audio">8</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label" id="lbl-collars">Collari IoT</span>
+                        <div class="stat-val" id="val-collars">34</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label" id="lbl-osint">Agg. OSINT</span>
+                        <div class="stat-val" id="val-osint">1.4K</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Threat Alerts Log -->
+            <div class="panel" style="flex: 1;">
+                <div class="panel-header">
+                    <span class="panel-title"><i class="fa-solid fa-triangle-exclamation"
+                            style="color: var(--color-danger);"></i><span id="txt-title-alerts">Allarmi Minaccia
+                            Attivi</span></span>
+                </div>
+                <div class="panel-content" id="alerts-log">
+                    <!-- Critical Alert Mock -->
+                    <div class="alert-item critical" id="alert-1">
+                        <div class="alert-meta">
+                            <span>CAM_TRAP_04</span>
+                            <span>15:42 UTC</span>
+                        </div>
+                        <div class="alert-desc" id="txt-alert-desc-1">Rilevamento Umano Armato (Bracconiere)</div>
+                        <div class="alert-footer">
+                            <span class="badge"
+                                style="color: var(--color-danger); border-color: rgba(255, 51, 68, 0.2);">CONF:
+                                94%</span>
+                            <button class="btn btn-danger btn-dispatch"
+                                onclick="dispatchRanger(-2.341, 34.842, 'CAM_TRAP_04')">Invia Ranger</button>
+                        </div>
+                    </div>
+
+                    <!-- Warning Alert Mock -->
+                    <div class="alert-item warning" id="alert-2">
+                        <div class="alert-meta">
+                            <span>AUDIO_NODE_02</span>
+                            <span>15:39 UTC</span>
+                        </div>
+                        <div class="alert-desc" id="txt-alert-desc-2">Rilevamento Picco Energetico (Sparo)</div>
+                        <div class="alert-footer">
+                            <span class="badge"
+                                style="color: var(--color-warning); border-color: rgba(255, 179, 0, 0.2);">CONF:
+                                78%</span>
+                            <button class="btn btn-locate"
+                                onclick="dispatchRanger(-2.355, 34.819, 'AUDIO_NODE_02')">Rileva Posizione</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CENTER COLUMN: Map View & Tabbed Roadmaps -->
+        <div class="column center-column" style="grid-column: 2;">
+            <!-- Map Top -->
+            <div class="map-wrapper">
+                <div id="map"></div>
+                <div class="map-overlay-controls">
+                    <button class="btn" onclick="triggerSimAlert()"><i class="fa-solid fa-crosshairs"></i> <span
+                            id="btn-txt-sim">Simula Allerta Edge</span></button>
+                    <button class="btn" onclick="calculatePatrolRoute()"><i class="fa-solid fa-route"></i> <span
+                            id="btn-txt-route">Calcola Rotta (MST)</span></button>
+                    <button class="btn" onclick="clearMapLayers()"><i class="fa-solid fa-trash-can"></i> <span
+                            id="btn-txt-clear">Resetta</span></button>
+                </div>
+            </div>
+
+            <!-- Tab Panel Bottom -->
+            <div class="tab-panel">
+                <div class="tab-nav">
+                    <button class="tab-link active" onclick="switchTab(event, 'tab-roadmap')" id="tab-lbl-roadmap">Piani
+                        di Integrazione (10 Idee)</button>
+                    <button class="tab-link" onclick="switchTab(event, 'tab-docs')" id="tab-lbl-docs">Manuale
+                        Sviluppatori & Arduino</button>
+                    <button class="tab-link" onclick="switchTab(event, 'tab-proposal')" id="tab-lbl-proposal">Proposta
+                        Istituzionale (WWF)</button>
+                    <button class="tab-link" onclick="switchTab(event, 'tab-repos')" id="tab-lbl-repos">Integrazione
+                        Sotto-Repository</button>
+                </div>
+
+                <div class="tab-content-area">
+
+                    <!-- TAB 1: 10 ROADMAP IDEAS & STATUS -->
+                    <div id="tab-roadmap" class="tab-pane active">
+                        <div class="ideas-grid" id="roadmap-ideas-container">
+                            <!-- Populated dynamically via JS translations -->
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: DEVELOPER & ARDUINO TINYML GUIDE -->
+                    <div id="tab-docs" class="tab-pane">
+                        <div class="docs-block">
+                            <h3 id="doc-title-arduino">Configurazione Nodo Sensore Periferico Arduino (TinyML)</h3>
+                            <p id="doc-desc-arduino">I nodi terrestri mimetizzati e low-cost sono basati su hardware
+                                Arduino Nicla Vision o ESP32-CAM. Utilizzano un sensore PIR per rilevare la presenza
+                                termica/movimento, svegliare il microcontrollore dallo deep-sleep, scattare un
+                                fotogramma ed eseguire l'inferenza di bordo tramite TinyML (TensorFlow Lite per
+                                Microcontrollori) filtrando le variazioni dovute al vento prima dell'invio satellitare o
+                                LoRa.</p>
+
+                            <div style="display: flex; gap: 15px; margin: 10px 0;">
+                                <div
+                                    style="flex: 1; font-size: 11px; background: rgba(255,255,255,0.02); padding: 8px; border: 1px solid rgba(255,255,255,0.05); border-radius: 4px;">
+                                    <strong style="color: var(--color-primary);">Hardware Wiring:</strong><br>
+                                    - Sensore PIR VCC -> 3.3V / Out -> GPIO 13 (Wakeup)<br>
+                                    - Microcamere GC2145 -> Interfaccia DVP dedicata<br>
+                                    - Modulo Trasmittente LoRa -> GPIO 10 (SPI SS), 11 (MOSI), 12 (MISO), 13 (SCK)<br>
+                                    - Cella Solare + Caricatore LiPo TP4056 a bordo
+                                </div>
+                                <div
+                                    style="flex: 1; font-size: 11px; background: rgba(255,255,255,0.02); padding: 8px; border: 1px solid rgba(255,255,255,0.05); border-radius: 4px;">
+                                    <strong style="color: var(--color-warning);">Mimetizzazione Fisica
+                                        (Antitagging):</strong><br>
+                                    L'involucro esterno viene stampato in 3D usando plastiche biodegradabili PLA e
+                                    ricoperto da una mescola mimetica iper-realistica basata sulle cortecce di alberi
+                                    locali. Gli algoritmi di AI generano texture specifiche adatte alla foresta di
+                                    destinazione.
+                                </div>
+                            </div>
+
+                            <strong
+                                style="font-size: 11px; font-family: 'Space Mono', monospace; color: var(--color-info);">Codice
+                                Sorgente di Riferimento Arduino (Nicla/ESP32):</strong>
+                            <div class="code-snippet">#include &lt;Nicla_System.h&gt;
+                                #include &lt;EloquentTinyML.h&gt; // Wrapper TensorFlow Lite Edge
+                                #include "model_yolo_quantized.h" // Modello quantizzato TinyML a bordo
+
+                                #define PIR_PIN 13
+                                #define LORA_SS 10
+
+                                void setup() {
+                                nicla::begin();
+                                nicla::leds.begin();
+                                pinMode(PIR_PIN, INPUT_PULLDOWN);
+                                // Configura interrupt sul pin PIR per svegliare la scheda
+                                lowPowerConfigureWakeup(PIR_PIN, RISING);
+                                }
+
+                                void loop() {
+                                // Entra in modalità Deep Sleep per risparmiare batteria (Consumo: &lt; 50uA)
+                                nicla::deepSleep();
+
+                                // Al risveglio (Trigger PIR rilevato)
+                                Camera.captureFrame();
+
+                                // Esegui inferenza a bordo della scheda Nicla Vision
+                                float predictions[3]; // Umano, Animale, Sfondo
+                                ml.predict(Camera.frameBuffer, predictions);
+
+                                if (predictions[0] > 0.80) { // Se confidenza Bracconiere/Umano > 80%
+                                // Invia pacchetto stringa LoRa compresso
+                                LoRa.sendTacticalEvent("CAM_EDGE_42", "poacher", predictions[0]);
+                                }
+                                }</div>
+                        </div>
+
+                        <div class="docs-block">
+                            <h3 id="doc-title-readiness">Production Readiness Baseline</h3>
+                            <p id="doc-desc-readiness">The project must remain useful before every subsystem is complete. The first production target is a dependable command-center shell with local persistence, clear fallback behavior, and a documented operational path.</p>
+                            <div id="doc-readiness-list" style="display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:10px; margin-top:10px;"></div>
+                        </div>
+
+                        <div class="docs-block">
+                            <h3 id="doc-title-playbooks">Real-World Operational Playbooks</h3>
+                            <p id="doc-desc-playbooks">These guides describe how the platform should be used in concrete field scenarios. They are written for rangers, operators, and maintainers, not for architecture diagrams.</p>
+                            <div id="doc-playbooks-list" style="display:flex; flex-direction:column; gap:10px; margin-top:10px;"></div>
+                        </div>
+
+                        <div class="docs-block">
+                            <h3 id="doc-title-docs-strategy">Documentation Scaling Plan</h3>
+                            <p id="doc-desc-docs-strategy"><code>dev.md</code> is the master technical map. As recurring workflows stabilize, each use case should move into its own focused document so the project can be extended without losing clarity.</p>
+                            <div id="doc-docs-strategy-list" style="display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:10px; margin-top:10px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 3: REPOS INTEGRATION DOCS -->
+                    <div id="tab-repos" class="tab-pane">
+                        <div class="docs-block">
+                            <h3 id="doc-title-repos">Integrazione dei Sotto-Repository nel Codice Unificato</h3>
+                            <p id="doc-desc-repos">Il framework <code>open-wildguard-hub</code> agisce come
+                                orchestratore centrale integrando e riutilizzando il codice specifico proveniente dai 16
+                                repository scaricati. Sotto trovi le directory di riferimento e le modalità con cui i
+                                codici si integrano per implementare le funzionalità previste:</p>
+
+                            <div
+                                style="font-size: 11px; display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
+                                <div
+                                    style="background: rgba(255,255,255,0.02); padding: 8px; border: 1px solid rgba(255,255,255,0.05); border-radius: 4px;">
+                                    <strong style="color: var(--color-primary);">Rilevamento CV ed Evidence Management
+                                        (Edge)</strong><br>
+                                    - *Sorgente:* `/repos/wildlife-poaching-detection/` & `/repos/Ecosentinel/`<br>
+                                    - *Integrazione:* Riutilizziamo lo script di cattura ed allertamento in streaming
+                                    `app.py` integrato nel nostro daemon di acquisizione video edge
+                                    (`scripts/edge_vision.py`), che gestisce il trigger YOLOv8 e salva lo snapshot
+                                    locale calcolando l'hash.
+                                </div>
+                                <div
+                                    style="background: rgba(255,255,255,0.02); padding: 8px; border: 1px solid rgba(255,255,255,0.05); border-radius: 4px;">
+                                    <strong style="color: var(--color-warning);">Bioacustica & Triangolazione Spari
+                                        (Acoustic)</strong><br>
+                                    - *Sorgente:* `/repos/greenwood/` & `/repos/Forest-Conservation-System/`<br>
+                                    - *Integrazione:* Porting dei modelli Keras audio (`audio_forest_69.keras`) nel
+                                    nostro `backend/services/audio_dsp.py`. La pipeline converte i flussi audio live
+                                    catturati in spettrogrammi e calcola le coordinate spaziali dello sparo tramite
+                                    algoritmo Time Difference of Arrival (TDoA).
+                                </div>
+                                <div
+                                    style="background: rgba(255,255,255,0.02); padding: 8px; border: 1px solid rgba(255,255,255,0.05); border-radius: 4px;">
+                                    <strong style="color: var(--color-info);">Motore Predittivo e Teoria dei Giochi (AI
+                                        Engine)</strong><br>
+                                    - *Sorgente:* `/repos/PAWS-public/` & `/repos/wildlifeRL/`<br>
+                                    - *Integrazione:* Wrap in Python 3 della libreria predittiva PAWS (`iware/` e
+                                    `planning/`) integrata come microservizio all'interno di
+                                    `backend/services/prediction.py`. Permette di calcolare in background le rotte di
+                                    pattuglia del giorno incrociando i dati geografici e le posizioni degli allarmi.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 4: PITCH PROPOSAL -->
+                    <div id="tab-proposal" class="tab-pane">
+                        <div class="docs-block">
+                            <h3 id="doc-title-proposal">Proposta Istituzionale per WWF, Riserve & Guardie Forestali</h3>
+                            <p id="doc-desc-proposal">WildGuard AI è concepito per essere presentato a ONG ed enti
+                                governativi come soluzione sostenibile a basso costo. Fornisce un ecosistema che
+                                garantisce la catena di custodia legale delle prove, ottimizza il coordinamento con
+                                logica di gioco stocastico e riduce del 90% i falsi allarmi sul campo.</p>
+
+                            <div
+                                style="font-size: 11px; display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
+                                <div
+                                    style="background: rgba(255,255,255,0.02); padding: 8px; border: 1px solid rgba(255,255,255,0.05); border-radius: 4px;">
+                                    <strong style="color: var(--color-primary);" id="prop-lbl-1">1. Sostenibilità
+                                        Economica e Zero Licenze</strong><br>
+                                    <span id="prop-desc-1">Utilizza esclusivamente software open-source e hardware
+                                        commerciale standard (Arduino/ESP32). Nessun canone di abbonamento o vincolo con
+                                        vendor di tecnologie di sorveglianza proprietarie.</span>
+                                </div>
+                                <div
+                                    style="background: rgba(255,255,255,0.02); padding: 8px; border: 1px solid rgba(255,255,255,0.05); border-radius: 4px;">
+                                    <strong style="color: var(--color-warning);" id="prop-lbl-2">2. Validità delle Prove
+                                        in Tribunale</strong><br>
+                                    <span id="prop-desc-2">L'evidenza multimediale viene registrata con un hash
+                                        crittografico SHA-256 e legata ad una catena locale immutabile (hash chain).
+                                        Questo assicura l'integrità e previene obiezioni legali sulle foto delle camera
+                                        trap durante i procedimenti penali.</span>
+                                </div>
+                                <div
+                                    style="background: rgba(255,255,255,0.02); padding: 8px; border: 1px solid rgba(255,255,255,0.05); border-radius: 4px;">
+                                    <strong style="color: var(--color-info);" id="prop-lbl-3">3. Sottile Sicurezza sul
+                                        Campo e Anti-Tracciamento</strong><br>
+                                    <span id="prop-desc-3">I nodi periferici spengono i moduli trasmittenti subito dopo
+                                        l'invio (anti-tagging). Questo impedisce ai bracconieri dotati di scanner di
+                                        localizzare le posizioni dei ranger o le postazioni di guardia.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT COLUMN: OSINT & Node Health -->
+        <div class="column">
+            <!-- Node Health Status -->
+            <div class="panel" style="flex: 0 0 auto;">
+                <div class="panel-header">
+                    <span class="panel-title"><i class="fa-solid fa-server"></i><span id="txt-title-health">Stato dei
+                            Sotto-Repository</span></span>
+                </div>
+                <div class="panel-content node-list">
+                    <div class="node-item">
+                        <span class="node-name">FaunaScope (TrapSense)</span>
+                        <span class="node-status status-online">ONLINE</span>
+                    </div>
+                    <div class="node-item">
+                        <span class="node-name">Forest-Conservation (VanaRakshya)</span>
+                        <span class="node-status status-online">ONLINE</span>
+                    </div>
+                    <div class="node-item">
+                        <span class="node-name">PAWS-public (Predictor)</span>
+                        <span class="node-status status-online">ONLINE</span>
+                    </div>
+                    <div class="node-item">
+                        <span class="node-name">Wildlife-News (OSINT Parser)</span>
+                        <span class="node-status status-online">ONLINE</span>
+                    </div>
+                    <div class="node-item">
+                        <span class="node-name">WildlifeFL (Federated Learning)</span>
+                        <span class="node-status status-degraded">DEGRADED</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OSINT Feed and Auto Chargesheet Draft -->
+            <div class="panel" style="flex: 1;">
+                <div class="panel-header">
+                    <span class="panel-title"><i class="fa-solid fa-globe" style="color: var(--color-info);"></i><span
+                            id="txt-title-osint">Feed OSINT Notizie</span></span>
+                </div>
+                <div class="panel-content" id="osint-feed-container">
+                    <!-- Populated dynamically via JS translations -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Credits Footer: upstream open-source repos -->
+    <footer class="credits-footer">
+        <span class="credits-label"><i class="fa-solid fa-heart" style="color:var(--color-danger);"></i>&nbsp;Built
+            on</span>
+        <div class="credits-repos">
+            <a class="credit-chip our-repo" href="https://github.com/your-org/open-wildguard-hub" target="_blank">⭐
+                open-wildguard-hub (questo repo)</a>
+            <a class="credit-chip" href="https://github.com/Kerbal12/Ecosentinel" target="_blank">Ecosentinel</a>
+            <a class="credit-chip"
+                href="https://github.com/tanmaynikhare45/FaunaScope-Wildlife-Camera-Trap-Analysis-Platform"
+                target="_blank">FaunaScope (TrapSense AI)</a>
+            <a class="credit-chip" href="https://github.com/KarnaPratik/Forest-Conservation-System"
+                target="_blank">Forest-Conservation (VanaRakshya)</a>
+            <a class="credit-chip" href="https://github.com/grac3smith/Illegal_Elephant_Poaching_App"
+                target="_blank">Illegal Elephant Poaching App</a>
+            <a class="credit-chip" href="https://github.com/lily-x/PAWS-public" target="_blank">PAWS-public (Harvard
+                Teamcore)</a>
+            <a class="credit-chip"
+                href="https://github.com/violentlydave/Poaching-Hunting-in-an-Uncooperative-Environment"
+                target="_blank">Poaching-Hunting OPSEC</a>
+            <a class="credit-chip" href="https://github.com/Tarshdeep2210/Poaching-detection"
+                target="_blank">Poaching-detection (EfficientNet)</a>
+            <a class="credit-chip"
+                href="https://github.com/Ruthwik9590/Tracking-and-Poaching-Alert-System-using-Advanced-Data-Structures"
+                target="_blank">Tracking & Alert DSA</a>
+            <a class="credit-chip" href="https://github.com/Siddhanthkjain2005/Wildlife-News"
+                target="_blank">Wildlife-News (WTI / OSINT)</a>
+            <a class="credit-chip" href="https://github.com/MeGaurav4/WildlifeFL" target="_blank">WildlifeFL (Federated
+                Learning)</a>
+            <a class="credit-chip" href="https://github.com/lemonadedw/anti-poaching-platform"
+                target="_blank">anti-poaching-platform</a>
+            <a class="credit-chip" href="https://github.com/uw-cefs/genetic-forensic-portal"
+                target="_blank">genetic-forensic-portal (UW)</a>
+            <a class="credit-chip" href="https://github.com/mikukula/greenwood" target="_blank">greenwood
+                (Bioacoustics)</a>
+            <a class="credit-chip" href="https://github.com/oliviergimenez/poaching_occupancy"
+                target="_blank">poaching_occupancy (HMM)</a>
+            <a class="credit-chip" href="https://github.com/karthikka430-rgb/wildlife-poaching-detection"
+                target="_blank">wildlife-poaching-detection</a>
+            <a class="credit-chip" href="https://github.com/lucashu1/wildlifeRL" target="_blank">wildlifeRL (DDPG
+                RL)</a>
+        </div>
+    </footer>
+
+    <!-- Leaflet.js library from CDN -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- Dashboard Core Logic & Translations -->
+    <script>
+        // TRANSLATIONS AND STATE OBJECT
+        let currentLanguage = 'en';
+
+        const translations = {
+            it: {
+                txt_sub_header: "open-wildguard-hub // Centro di Comando",
+                txt_status: "SISTEMA ONLINE",
+                txt_title_stats: "Telemetria Sensori",
+                lbl_cameras: "Cam Trap",
+                lbl_audio: "Nodi Audio",
+                lbl_collars: "Collari IoT",
+                lbl_osint: "Agg. OSINT",
+                txt_title_alerts: "Allarmi Minaccia Attivi",
+                txt_alert_desc_1: "Rilevamento Umano Armato (Bracconiere)",
+                txt_alert_desc_2: "Rilevamento Picco Energetico (Sparo)",
+                btn_dispatch: "Invia Ranger",
+                btn_locate: "Rileva Posizione",
+                btn_txt_sim: "Simula Allerta Edge",
+                btn_txt_route: "Calcola Rotta (MST)",
+                btn_txt_clear: "Resetta",
+                tab_lbl_roadmap: "Piani di Integrazione (10 Idee)",
+                tab_lbl_docs: "Manuale Sviluppatori & Arduino",
+                tab_lbl_repos: "Integrazione Sotto-Repository",
+                tab_lbl_proposal: "Proposta Istituzionale (WWF)",
+                doc_title_proposal: "Proposta Istituzionale per WWF, Riserve & Guardie Forestali",
+                doc_desc_proposal: "WildGuard AI è concepito per essere presentato a ONG ed enti governativi come soluzione sostenibile a basso costo. Fornisce un ecosistema che garantisce la catena di custodia legale delle prove, ottimizza il coordinamento con logica di gioco stocastico e riduce del 90% i falsi allarmi sul campo.",
+                prop_lbl_1: "1. Sostenibilità Economica e Zero Licenze",
+                prop_desc_1: "Utilizza esclusivamente software open-source e hardware commerciale standard (Arduino/ESP32). Nessun canone di abbonamento o vincolo con vendor di tecnologie di sorveglianza proprietarie.",
+                prop_lbl_2: "2. Validità delle Prove in Tribunale",
+                prop_desc_2: "L'evidenza multimediale viene registrata con un hash crittografico SHA-256 e legata ad una catena locale immutabile (hash chain). Questo assicura l'integrità e previene obiezioni legali sulle foto delle camera trap durante i procedimenti penali.",
+                prop_lbl_3: "3. Sicurezza sul Campo e Anti-Tracciamento",
+                prop_desc_3: "I nodi periferici spengono i moduli trasmittenti subito dopo l'invio (anti-tagging). Questo impedisce ai bracconieri dotati di scanner di localizzare le posizioni dei ranger o le postazioni di guardia.",
+                txt_title_health: "Stato dei Sotto-Repository",
+                txt_title_osint: "Feed OSINT Notizie",
+                doc_title_arduino: "Configurazione Nodo Sensore Periferico Arduino (TinyML)",
+                doc_desc_arduino: "I nodi terrestri mimetizzati e low-cost sono basati su hardware Arduino Nicla Vision o ESP32-CAM. Utilizzano un sensore PIR per rilevare la presenza termica/movimento, svegliare il microcontrollore dallo deep-sleep, scattare un fotogramma ed eseguire l'inferenza di bordo tramite TinyML (TensorFlow Lite per Microcontrollori) filtrando le variazioni dovute al vento prima dell'invio satellitare o LoRa.",
+                doc_title_repos: "Integrazione dei Sotto-Repository nel Codice Unificato",
+                doc_desc_repos: "Il framework open-wildguard-hub agisce come orchestratore centrale integrando e riutilizzando il codice specifico proveniente dai 16 repository scaricati. Sotto trovi le directory di riferimento e le modalità con cui i codici si integrano per implementare le funzionalità previste:",
+
+                // 10 Ideas detail
+                ideas: [
+                    { title: "M1: Hub Modulare & API", status: "In Corso", statusClass: "status-progress", desc: "API centrale in FastAPI e SQLite per l'orchestra di nodi fisici e OSINT. Implementa store-and-forward per scenari offline." },
+                    { title: "M2: Visione Edge (CV)", status: "Prototipo", statusClass: "status-prototype", desc: "Riconoscimento su fototrappole e droni tramite YOLOv8. Include filtri OpenCV antirumore (vento su rami) su microcamere." },
+                    { title: "M3: Bioacustica & Triangolazione", status: "Pianificato", statusClass: "status-planned", desc: "Rete microfonica low-power per tracciare spari e motoseghe. Triangolazione TDoA in tempo reale per trovare coordinate." },
+                    { title: "M4: Sorveglianza Geo 3D", status: "Prototipo", statusClass: "status-prototype", desc: "Mappa 3D georeferenziata basata su dati GIS, GeoJSON e PyDeck per evidenziare sentieri e corridoi migratori della fauna." },
+                    { title: "M5: Intelligence Specie", status: "In Corso", statusClass: "status-progress", desc: "Tracciamento biometrico e IoT dei collari degli animali protetti, con allarmi di geo-fencing in tempo reale." },
+                    { title: "M6: Raccolta Field Offline", status: "Pianificato", statusClass: "status-planned", desc: "Applicazione mobile offline-first per ranger e comunità locali per segnalare orme e piste tramite sincronizzazione periodica." },
+                    { title: "M7: OSINT & Cyber-Intelligence", status: "Prototipo", statusClass: "status-prototype", desc: "Scraping di marketplace criminali, Telegram e news in 7 lingue. Estrazione automatica entità con mDeBERTa NLP." },
+                    { title: "M8: Predizione & Teoria dei Giochi", status: "Prototipo", statusClass: "status-prototype", desc: "Integrazione dell'algoritmo predittivo PAWS e DDPG Reinforcement Learning per generare rotte di pattugliamento imprevedibili." },
+                    { title: "M9: Catena del Dato Forense", status: "In Corso", statusClass: "status-progress", desc: "Certificazione delle prove fotografiche tramite hash chain immutabili e generazione automatica verbali (WPA schedules)." },
+                    { title: "M10: Federated AI & Flower", status: "Pianificato", statusClass: "status-planned", desc: "Addestramento collaborativo di YOLOv8 tra parchi diversi senza condividere le immagini reali a salvaguardia della privacy." }
+                ],
+
+                // OSINT News Feed
+                osint: [
+                    { title: "Sequestro di Zanne d'Avorio al Confine", desc: "La polizia forestale ha fermato un furgone con 4 zanne d'avorio grezze pronte per il contrabbando transfrontaliero. Due arresti.", tag: "Zanne", schedule: "WPA Schedule I", specie: "Elephas maximus", reato: "Sequestro Avorio", sezioni: "Sezione 9, 39, 51" },
+                    { title: "Smantellato Mercato Nero Online di Rettili", desc: "Rilevato canale Telegram privato dedito alla vendita di rettili rari e uccelli canori protetti provenienti dal Chitwan.", tag: "Rettili", schedule: "WPA Schedule II", specie: "Reptilia/Aves", reato: "Canale Telegram", sezioni: "Sezione 49-B" }
+                ],
+
+                // Notifications & Alerts
+                alert_dispatch: "Pattuglia di risposta rapida dispiegata verso il sensore: ",
+                alert_route_calculated: "Rotta di Pattuglia Minima (Kruskal MST) calcolata per connettere tutte le stazioni forestali.",
+                chargesheet_title: "Verbale di Denuncia Automatica (WPA)",
+                chargesheet_instructions: "Seleziona un evento per redigere il verbale legale..."
+            },
+            en: {
+                txt_sub_header: "open-wildguard-hub // Command Center",
+                txt_status: "SYSTEM ONLINE",
+                txt_title_stats: "Sensor Telemetry",
+                lbl_cameras: "Cam Trap",
+                lbl_audio: "Audio Nodes",
+                lbl_collars: "IoT Collars",
+                lbl_osint: "OSINT Agg.",
+                txt_title_alerts: "Active Threat Alerts",
+                txt_alert_desc_1: "Armed Human Detected (Poacher)",
+                txt_alert_desc_2: "Energy Spike Detected (Gunshot)",
+                btn_dispatch: "Dispatch Ranger",
+                btn_locate: "Locate Position",
+                btn_txt_sim: "Simulate Edge Alert",
+                btn_txt_route: "Calculate Route (MST)",
+                btn_txt_clear: "Reset Map",
+                tab_lbl_roadmap: "Integration Plans (10 Ideas)",
+                tab_lbl_docs: "Developer Manual & Arduino",
+                tab_lbl_repos: "Sub-Repository Integration",
+                tab_lbl_proposal: "Institutional Pitch (WWF)",
+                doc_title_proposal: "Institutional Pitch for WWF, Reserves & Forestry Guards",
+                doc_desc_proposal: "WildGuard AI is designed as a low-cost, sustainable ecosystem for NGOs and government agencies. It ensures legal custody of evidence, optimizes patrol coordination with stochastic game theory, and reduces edge camera false alarms by 90%.",
+                prop_lbl_1: "1. Economic Sustainability & Zero Licenses",
+                prop_desc_1: "Fully open-source codebase running on off-the-shelf standard hardware (Arduino/ESP32). No subscription plans, recurring maintenance fees, or proprietary technology vendor lock-ins.",
+                prop_lbl_2: "2. Admissible Legal Evidence",
+                prop_desc_2: "All digital evidence gets hashed (SHA-256) on capture and bound to local immutable hash chains. This guarantees data integrity and refutes legal challenges on camera trap photos in court.",
+                prop_lbl_3: "3. Field Safety & Anti-Tracking Features",
+                prop_desc_3: "Edge nodes disable radio modules immediately after transmitting an event (anti-tagging). This prevents radio-equipped poachers from scanning and locating ranger squads or watchtowers.",
+                txt_title_health: "Sub-Repository Health",
+                txt_title_osint: "OSINT News Feed",
+                doc_title_arduino: "Arduino Edge Sensor Node Configuration (TinyML)",
+                doc_desc_arduino: "The camouflaged, low-cost ground nodes are based on Arduino Nicla Vision or ESP32-CAM. They use a PIR sensor to detect thermal presence/movement, wake the microcontroller from deep-sleep, capture a frame, and execute edge inference via TinyML (TensorFlow Lite for Microcontrollers), filtering out foliage/wind variations before satellite or LoRa transmission.",
+                doc_title_repos: "Integrating Sub-Repositories into Unified Codebase",
+                doc_desc_repos: "The open-wildguard-hub framework acts as a central orchestrator, integrating and reusing specific code from the 16 downloaded repositories. Below are the reference directories and how code integrates to implement the planned features:",
+
+                // 10 Ideas detail
+                ideas: [
+                    { title: "M1: Modular Hub & API", status: "In Progress", statusClass: "status-progress", desc: "Central FastAPI & SQLite API orchestrating physical nodes and OSINT data. Implements store-and-forward logic for offline scenarios." },
+                    { title: "M2: Edge Vision (CV)", status: "Prototype", statusClass: "status-prototype", desc: "Image classification on camera traps and drones via YOLOv8. Uses OpenCV edge filters to drop wind/leaf alerts on the microcamera." },
+                    { title: "M3: Bioacoustics & Triangulation", status: "Planned", statusClass: "status-planned", desc: "Low-power microphone network tracking gunshots and chainsaws. Uses Time Difference of Arrival (TDoA) to calculate shooter coordinates." },
+                    { title: "M4: 3D Geo-Surveillance", status: "Prototype", statusClass: "status-prototype", desc: "Georeferenced 3D maps based on GIS, GeoJSON, and PyDeck to highlight patrol pathways and wildlife migration corridors." },
+                    { title: "M5: Species Intelligence", status: "In Progress", statusClass: "status-progress", desc: "Biometric and IoT tracking of collar devices on protected wildlife, triggering real-time geo-fencing alerts." },
+                    { title: "M6: Offline Field Reporting", status: "Planned", statusClass: "status-planned", desc: "Offline-first mobile application for rangers and communities to log tracks and sightings via periodic base syncs." },
+                    { title: "M7: OSINT & Cyber-Intelligence", status: "Prototype", statusClass: "status-prototype", desc: "Ethical scraping of illicit black markets, Telegram, and news across 7 languages. Automatic entities extraction using mDeBERTa NLP." },
+                    { title: "M8: Prediction & Game Theory", status: "Prototype", statusClass: "status-prototype", desc: "Integrating PAWS predictive engine and DDPG Reinforcement Learning to generate unpredictable, optimal patrol routes." },
+                    { title: "M9: Forensic Evidence Vault", status: "In Progress", statusClass: "status-progress", desc: "Certifying media evidence using immutable SHA-256 hash chains and auto-generating court chargesheets linked to legal schedules." },
+                    { title: "M10: Federated AI & Flower", status: "Planned", statusClass: "status-planned", desc: "Collaboratively train YOLOv8 across sanctuaries without sharing raw geolocated images, protecting wildlife data sovereignty." }
+                ],
+
+                // OSINT News Feed
+                osint: [
+                    { title: "Ivory Tusk Seizure at Park Borders", desc: "Forest police stopped a van carrying 4 raw ivory tusks prepared for cross-border smuggling. Two arrests.", tag: "Tusks", schedule: "WPA Schedule I", specie: "Elephas maximus", reato: "Ivory Seizure", sezioni: "Section 9, 39, 51" },
+                    { title: "Online Exotic Wildlife Black Market Busted", desc: "Detected private Telegram channel dedicated to selling rare reptiles and protected songbirds sourced from Chitwan sanctuary.", tag: "Reptiles", schedule: "WPA Schedule II", specie: "Reptilia/Aves", reato: "Telegram Channel", sezioni: "Section 49-B" }
+                ],
+
+                // Notifications & Alerts
+                alert_dispatch: "Quick response patrol dispatched to sensor: ",
+                alert_route_calculated: "Minimum Spanning Tree (Kruskal MST) patrol route generated connecting all forest stations.",
+                chargesheet_title: "Automated Court Chargesheet (WPA)",
+                chargesheet_instructions: "Select an OSINT event to draft the legal chargesheet..."
+            }
+        };
+
+        // RENDER INTERFACE TEXTS
+        function renderTranslations() {
+            const lang = translations[currentLanguage];
+
+            // Header & general labels
+            document.getElementById('txt-sub-header').innerText = lang.txt_sub_header;
+            document.getElementById('txt-status').innerText = lang.txt_status;
+            document.getElementById('txt-title-stats').innerText = lang.txt_title_stats;
+            document.getElementById('lbl-cameras').innerText = lang.lbl_cameras;
+            document.getElementById('lbl-audio').innerText = lang.lbl_audio;
+            document.getElementById('lbl-collars').innerText = lang.lbl_collars;
+            document.getElementById('lbl-osint').innerText = lang.lbl_osint;
+            document.getElementById('txt-title-alerts').innerText = lang.txt_title_alerts;
+            document.getElementById('txt-title-health').innerText = lang.txt_title_health;
+            document.getElementById('txt-title-osint').innerText = lang.txt_title_osint;
+
+            // Static text alerts
+            document.getElementById('txt-alert-desc-1').innerText = lang.txt_alert_desc_1;
+            document.getElementById('txt-alert-desc-2').innerText = lang.txt_alert_desc_2;
+
+            // Buttons inside alerts (using querySelectorAll since there are multiple)
+            document.querySelectorAll('.btn-dispatch').forEach(btn => btn.innerText = lang.btn_dispatch);
+            document.querySelectorAll('.btn-locate').forEach(btn => btn.innerText = lang.btn_locate);
+
+            // Controls
+            document.getElementById('btn-txt-sim').innerText = lang.btn_txt_sim;
+            document.getElementById('btn-txt-route').innerText = lang.btn_txt_route;
+            document.getElementById('btn-txt-clear').innerText = lang.btn_txt_clear;
+
+            // Tab Labels
+            document.getElementById('tab-lbl-roadmap').innerText = lang.tab_lbl_roadmap;
+            document.getElementById('tab-lbl-docs').innerText = lang.tab_lbl_docs;
+            document.getElementById('tab-lbl-repos').innerText = lang.tab_lbl_repos;
+            document.getElementById('tab-lbl-proposal').innerText = lang.tab_lbl_proposal;
+
+            // Docs tab texts
+            document.getElementById('doc-title-arduino').innerText = lang.doc_title_arduino;
+            document.getElementById('doc-desc-arduino').innerText = lang.doc_desc_arduino;
+            document.getElementById('doc-title-repos').innerText = lang.doc_title_repos;
+            document.getElementById('doc-desc-repos').innerText = lang.doc_desc_repos;
+
+            // Proposal tab texts
+            document.getElementById('doc-title-proposal').innerText = lang.doc_title_proposal;
+            document.getElementById('doc-desc-proposal').innerText = lang.doc_desc_proposal;
+            document.getElementById('prop-lbl-1').innerText = lang.prop_lbl_1;
+            document.getElementById('prop-desc-1').innerText = lang.prop_desc_1;
+            document.getElementById('prop-lbl-2').innerText = lang.prop_lbl_2;
+            document.getElementById('prop-desc-2').innerText = lang.prop_desc_2;
+            document.getElementById('prop-lbl-3').innerText = lang.prop_lbl_3;
+            document.getElementById('prop-desc-3').innerText = lang.prop_desc_3;
+
+            // Render 10 Ideas in Tab 1
+            const ideasContainer = document.getElementById('roadmap-ideas-container');
+            ideasContainer.innerHTML = '';
+            lang.ideas.forEach(idea => {
+                const card = `
+                    <div class="idea-card">
+                        <div class="idea-card-header">
+                            <span class="idea-title">${idea.title}</span>
+                            <span class="idea-status ${idea.statusClass}">${idea.status}</span>
+                        </div>
+                        <div class="idea-desc">${idea.desc}</div>
+                    </div>
+                `;
+                ideasContainer.insertAdjacentHTML('beforeend', card);
+            });
+
+            // Render OSINT Feed
+            const osintContainer = document.getElementById('osint-feed-container');
+            osintContainer.innerHTML = '';
+            lang.osint.forEach(item => {
+                const box = `
+                    <div class="osint-item">
+                        <div class="osint-title">${item.title}</div>
+                        <div class="osint-summary">${item.desc}</div>
+                        <div class="osint-tags">
+                            <span class="badge badge-schedule">${item.schedule}</span>
+                            <span class="badge">${item.tag}</span>
+                            <button class="btn" style="padding: 2px 6px; font-size: 9px; margin-left: auto;" onclick="generateChargesheet('${item.specie}', '${item.reato}', '${item.sezioni}')">${currentLanguage === 'it' ? 'Genera Verbale' : 'Generate Writ'}</button>
+                        </div>
+                    </div>
+                `;
+                osintContainer.insertAdjacentHTML('beforeend', box);
+            });
+        }
+
+        // Toggling Language function
+        function toggleLanguage() {
+            if (currentLanguage === 'it') {
+                currentLanguage = 'en';
+                document.getElementById('btn-it').classList.remove('active');
+                document.getElementById('btn-en').classList.add('active');
+            } else {
+                currentLanguage = 'it';
+                document.getElementById('btn-en').classList.remove('active');
+                document.getElementById('btn-it').classList.add('active');
+            }
+            renderTranslations();
+        }
+
+        // Tab Switching logic
+        function switchTab(evt, tabName) {
+            const tabpanes = document.getElementsByClassName("tab-pane");
+            for (let i = 0; i < tabpanes.length; i++) {
+                tabpanes[i].classList.remove("active");
+            }
+            const tablinks = document.getElementsByClassName("tab-link");
+            for (let i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        // Init Map of Serengeti-like park area (mocked coordinates)
+        const centerCoords = [-2.35, 34.83];
+        const map = L.map('map', {
+            zoomControl: true,
+            attributionControl: false
+        }).setView(centerCoords, 12);
+
+        // Dark-mode tactical map tiles
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            maxZoom: 20
+        }).addTo(map);
+
+        // Layer groups for dynamic controls
+        const markerLayer = L.layerGroup().addTo(map);
+        const routeLayer = L.layerGroup().addTo(map);
+
+        // Core data
+        const rangerStations = [
+            { name: "Stazione Nord", coords: [-2.312, 34.821] },
+            { name: "Stazione Sud", coords: [-2.385, 34.851] },
+            { name: "Posto di Controllo Ovest", coords: [-2.348, 34.789] }
+        ];
+
+        // Draw initial ranger stations
+        rangerStations.forEach(station => {
+            L.marker(station.coords, {
+                icon: L.divIcon({
+                    html: `<i class="fa-solid fa-building-shield" style="color: #00bcd4; font-size: 16px; text-shadow: 0 0 6px #00bcd4;"></i>`,
+                    className: 'custom-icon',
+                    iconSize: [20, 20]
+                })
+            }).bindPopup(`<b>${station.name}</b><br>Stazione Ranger`).addTo(markerLayer);
+        });
+
+        // Time ticker helper
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('tactical-time').innerText = now.toUTCString().replace("GMT", "UTC");
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // Dispatch ranger action (Dijkstra simulation)
+        function dispatchRanger(lat, lon, sensorId) {
+            routeLayer.clearLayers();
+            const lang = translations[currentLanguage];
+
+            // Draw threat point
+            const threatMarker = L.marker([lat, lon], {
+                icon: L.divIcon({
+                    html: `<i class="fa-solid fa-circle-exclamation" style="color: #ff3344; font-size: 22px; text-shadow: 0 0 10px #ff3344;"></i>`,
+                    className: 'custom-icon',
+                    iconSize: [25, 25]
+                })
+            }).addTo(routeLayer);
+
+            // Find "nearest" station (Simple Euclidean distance mock Dijkstra)
+            let nearestStation = rangerStations[0];
+            let minDist = Infinity;
+            rangerStations.forEach(s => {
+                let d = Math.sqrt(Math.pow(s.coords[0] - lat, 2) + Math.pow(s.coords[1] - lon, 2));
+                if (d < minDist) {
+                    minDist = d;
+                    nearestStation = s;
+                }
+            });
+
+            // Draw line simulating shortest path route
+            const route = L.polyline([nearestStation.coords, [lat, lon]], {
+                color: '#00ff66',
+                weight: 3,
+                dashArray: '5, 10',
+                opacity: 0.8
+            }).addTo(routeLayer);
+
+            map.fitBounds(route.getBounds(), { padding: [50, 50] });
+
+            alert(`${lang.alert_dispatch}${sensorId} (${nearestStation.name}).`);
+        }
+
+        // Simulate edge alert
+        function triggerSimAlert() {
+            const randomLat = centerCoords[0] + (Math.random() - 0.5) * 0.08;
+            const randomLon = centerCoords[1] + (Math.random() - 0.5) * 0.08;
+            const log = document.getElementById('alerts-log');
+            const alertId = 'alert-' + Date.now();
+            const lang = translations[currentLanguage];
+
+            const alertHtml = `
+                <div class="alert-item critical" id="${alertId}">
+                    <div class="alert-meta">
+                        <span>CAMERA_EDGE_SIM</span>
+                        <span>${currentLanguage === 'it' ? 'Tempo Reale' : 'Realtime'}</span>
+                    </div>
+                    <div class="alert-desc">${currentLanguage === 'it' ? 'Rilevamento Sospetto Intruso' : 'Suspicious Intruder Detected'}</div>
+                    <div class="alert-footer">
+                        <span class="badge" style="color: var(--color-danger); border-color: rgba(255, 51, 68, 0.2);">CONF: 91%</span>
+                        <button class="btn btn-danger" onclick="dispatchRanger(${randomLat}, ${randomLon}, 'CAMERA_EDGE_SIM')">${lang.btn_dispatch}</button>
+                    </div>
+                </div>
+            `;
+            log.insertAdjacentHTML('afterbegin', alertHtml);
+
+            // Update stats
+            const val = document.getElementById('val-cameras');
+            val.innerText = parseInt(val.innerText) + 1;
+
+            // Mark on map
+            L.marker([randomLat, randomLon], {
+                icon: L.divIcon({
+                    html: `<i class="fa-solid fa-person-rifle" style="color: #ff3344; font-size: 20px; text-shadow: 0 0 8px #ff3344;"></i>`,
+                    className: 'custom-icon-alert',
+                    iconSize: [20, 20]
+                })
+            }).addTo(routeLayer).bindPopup(`<b>${currentLanguage === 'it' ? 'Allarme Intrusione' : 'Intrusion Alert'}</b>`).openPopup();
+        }
+
+        // Calculate Minimum Spanning Tree patrol path for all stations
+        function calculatePatrolRoute() {
+            routeLayer.clearLayers();
+            const lang = translations[currentLanguage];
+
+            const points = rangerStations.map(s => s.coords);
+            const polyline = L.polygon(points, {
+                color: '#00bcd4',
+                fillColor: '#00bcd4',
+                fillOpacity: 0.05,
+                weight: 2
+            }).addTo(routeLayer);
+
+            map.fitBounds(polyline.getBounds(), { padding: [50, 50] });
+            alert(lang.alert_route_calculated);
+        }
+
+        // Generate legal document chargesheet
+        function generateChargesheet(specie, reato, sezioni) {
+            const box = document.getElementById('chargesheet-output');
+            const content = document.getElementById('chargesheet-text');
+            const now = new Date();
+            const lang = translations[currentLanguage];
+
+            const template = `${currentLanguage === 'it' ? 'VERBALE DI REPARTO FORENSE' : 'FORENSIC INCIDENT REPORT'} // CITES & WPA COMPLIANT
+--------------------------------------------------
+${currentLanguage === 'it' ? 'DATA DI REDAZIONE' : 'REPORT DATE'}: ${now.toLocaleDateString()} ${now.toLocaleTimeString()}
+${currentLanguage === 'it' ? 'GIURISDIZIONE' : 'JURISDICTION'}: Forestry Territorial Office - Reserve Division
+
+${currentLanguage === 'it' ? "CAPO D'ACCUSA" : 'ACCUSATION'}:
+Wildlife Protection Act Violation.
+${currentLanguage === 'it' ? 'SPECIE COINVOLTA' : 'INVOLVED SPECIES'}: ${specie} (Ref. Schedules WPA)
+${currentLanguage === 'it' ? 'TIPO DI REATO' : 'OFFENSE TYPE'}: ${reato}
+${currentLanguage === 'it' ? 'SEZIONI APPLICATE' : 'APPLIED SECTIONS'}: WPA 1972, ${sezioni}
+
+${currentLanguage === 'it' ? 'STATO DELLE PROVE' : 'EVIDENCE STATUS'}:
+- Original media files securely archived in local vault.
+- SHA-256 generated and appended to local immutable hash chain.
+- Integrity verification: OK.
+
+Forest Officer Authorized Signature
+--------------------------------------------------`;
+
+            content.innerText = template;
+            box.style.display = 'block';
+        }
+
+        function copyChargesheet() {
+            const text = document.getElementById('chargesheet-text').innerText;
+            navigator.clipboard.writeText(text);
+            alert(currentLanguage === 'it' ? "Verbale legale copiato negli appunti." : "Legal writ copied to clipboard.");
+        }
+
+        function clearMapLayers() {
+            routeLayer.clearLayers();
+        }
+
+        // First render
+        renderTranslations();
+    </script>
+</body>
+
+</html>
