@@ -1,5 +1,6 @@
 # WildGuard AI / open-wildguard-hub
 
+Live Url: https://open-wildguard-hub.vercel.app/
 WildGuard AI is an offline-first, field-oriented anti-poaching platform designed for remote conservation areas where power, bandwidth, and hardware are limited. The repository is intentionally structured as a practical operating system for wildlife protection, not as a heavyweight enterprise stack.
 
 This repo has the purpose to track all open projects, open repositorys, open datasets, and open documentation that can be useful for building a real-world anti-poaching system. Please help me to track the available resources and repositories.
