@@ -55,6 +55,16 @@ The project is considered on track when the repository can provide:
 - Planned `docs/use-cases/*.md`
   - One file per real deployment scenario.
 
+## Practical Reuse
+
+The docs are intended to be directly reusable by:
+- conservation NGOs that need a starter architecture;
+- field teams that need offline operation and evidence integrity;
+- technical volunteers who want to adapt one module at a time;
+- mixed teams that need a shared reference before any code integration.
+
+They are sufficient as a planning and implementation base, but real deployments still need local legal, operational, and hardware validation.
+
 ## Near-Term Delivery Order
 
 1. Stabilize the product narrative and documentation structure. ✅

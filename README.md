@@ -62,6 +62,13 @@ Core external resources already integrated in the docs and toolkit:
 - `OpenSoundscape`, `RFCx`, `xeno-canto`, `ESC-50` for audio.
 - `DVC`, `Flower`, `OpenVINO` for resilience, versioning, and federation.
 
+## Who Can Reuse This
+
+- WWF / reserve teams: start with M1, M2, M3, M5, M6 and the datasets in `toolkit/data/`.
+- Activists / NGOs: use the docs as a field guide, then keep only the modules that match your workflow and legal context.
+- Small local teams: take the offline-first pieces, especially SMART/CyberTracker, camera-trap CV, and the event schema.
+- Technical teams: can extend the modules independently because the data contract and playbooks are already split by capability.
+
 ## Capability modules vs delivery milestones (two different axes)
 
 To avoid confusion: this README's **delivery milestones** (M0–M6 below) track how the *repository*
