@@ -570,30 +570,32 @@
             display: block;
         }
 
-        /* Roadmap Ideas grid */
+        /* Roadmap Ideas grid — single column for readability */
         .ideas-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+            grid-template-columns: 1fr;
+            gap: 10px;
         }
 
         .idea-card {
             background: rgba(255, 255, 255, 0.01);
-            border: 1px solid rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 8px;
-            padding: 12px;
+            padding: 13px 14px;
+            transition: border-color 0.2s;
         }
+        .idea-card:hover { border-color: rgba(0,188,212,0.25); }
 
         .idea-card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
         }
 
         .idea-title {
             font-size: 12px;
-            font-weight: 600;
+            font-weight: 700;
             color: var(--color-info);
         }
 
@@ -603,7 +605,56 @@
             padding: 1px 6px;
             border-radius: 4px;
             text-transform: uppercase;
+            flex-shrink: 0;
         }
+
+        .idea-problem, .idea-gets {
+            font-size: 11px;
+            line-height: 1.5;
+            margin-bottom: 4px;
+        }
+        .idea-problem { color: rgba(232,240,244,0.6); }
+        .idea-gets    { color: rgba(232,240,244,0.85); }
+        .idea-field-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-right: 4px;
+        }
+        .idea-problem .idea-field-label { color: var(--color-warning); }
+        .idea-gets    .idea-field-label { color: var(--color-primary); }
+        .idea-link {
+            display: inline-block;
+            margin-top: 7px;
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            color: var(--color-primary);
+            text-decoration: none;
+            opacity: 0.7;
+        }
+        .idea-link:hover { opacity: 1; text-decoration: underline; }
+
+        /* Repo list (tab-repos) */
+        .repo-list { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+        .repo-item { padding: 8px 10px; background: rgba(255,255,255,0.015); border: 1px solid rgba(255,255,255,0.05); border-radius: 6px; }
+        .repo-name { font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; color: var(--color-info); margin-bottom: 4px; }
+        .repo-name a { color: inherit; text-decoration: none; }
+        .repo-name a:hover { text-decoration: underline; }
+        .repo-what { font-size: 11px; line-height: 1.5; color: rgba(232,240,244,0.75); }
+        .repo-tag { display: inline-block; margin-left: 6px; padding: 1px 5px; border-radius: 3px; font-size: 8px; background: rgba(0,188,212,0.15); color: var(--color-primary); text-transform: uppercase; vertical-align: middle; }
+
+        .ideas-intro {
+            margin-bottom: 14px;
+            padding: 10px 12px;
+            background: rgba(0,188,212,0.04);
+            border: 1px solid rgba(0,188,212,0.12);
+            border-radius: 8px;
+            font-size: 11px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+        .ideas-intro strong { color: var(--color-info); }
 
         .status-planned {
             background: rgba(255, 255, 255, 0.04);
@@ -1135,23 +1186,25 @@
             <div class="tab-panel">
                 <div class="tab-nav" role="tablist" aria-label="Dashboard sections">
                     <button class="tab-link active" onclick="switchTab(event, 'tab-roadmap')" id="tab-lbl-roadmap"
-                            role="tab" aria-selected="true" aria-controls="tab-roadmap">Piani
-                        di Integrazione (10 Idee)</button>
+                            role="tab" aria-selected="true" aria-controls="tab-roadmap">10 Modules</button>
                     <button class="tab-link" onclick="switchTab(event, 'tab-docs')" id="tab-lbl-docs"
-                            role="tab" aria-selected="false" aria-controls="tab-docs">Manuale
-                        Sviluppatori &amp; Arduino</button>
+                            role="tab" aria-selected="false" aria-controls="tab-docs">Playbooks &amp; Toolkit</button>
                     <button class="tab-link" onclick="switchTab(event, 'tab-proposal')" id="tab-lbl-proposal"
-                            role="tab" aria-selected="false" aria-controls="tab-proposal">Proposta
-                        Istituzionale (WWF)</button>
+                            role="tab" aria-selected="false" aria-controls="tab-proposal">NGO Pitch</button>
                     <button class="tab-link" onclick="switchTab(event, 'tab-repos')" id="tab-lbl-repos"
-                            role="tab" aria-selected="false" aria-controls="tab-repos">Integrazione
-                        Sotto-Repository</button>
+                            role="tab" aria-selected="false" aria-controls="tab-repos">Open-Source Repos</button>
                 </div>
 
                 <div class="tab-content-area">
 
-                    <!-- TAB 1: 10 ROADMAP IDEAS & STATUS -->
+                    <!-- TAB 1: 10 CAPABILITY MODULES -->
                     <div id="tab-roadmap" class="tab-pane active" role="tabpanel" aria-labelledby="tab-lbl-roadmap">
+                        <div class="ideas-intro" id="ideas-intro-text">
+                            Each module solves one field problem independently — deploy one, all, or any combination.
+                            The Essential tier of every module works with a phone and a free app.
+                            Full playbooks with code, hardware lists, and agent prompts are in
+                            <a href="https://github.com/Arbogaste/open-wildguard-hub/tree/main/docs" target="_blank" rel="noopener" style="color:var(--color-primary)">docs/</a>.
+                        </div>
                         <div class="ideas-grid" id="roadmap-ideas-container">
                             <!-- Populated dynamically via JS translations -->
                         </div>
@@ -1245,67 +1298,54 @@
                         </div>
 
                         <div class="docs-block">
-                            <h3 id="doc-title-arduino">Configurazione Nodo Sensore Periferico Arduino (TinyML)</h3>
-                            <p id="doc-desc-arduino">I nodi terrestri mimetizzati e low-cost sono basati su hardware
-                                Arduino Nicla Vision o ESP32-CAM. Utilizzano un sensore PIR per rilevare la presenza
-                                termica/movimento, svegliare il microcontrollore dallo deep-sleep, scattare un
-                                fotogramma ed eseguire l'inferenza di bordo tramite TinyML (TensorFlow Lite per
-                                Microcontrollori) filtrando le variazioni dovute al vento prima dell'invio satellitare o
-                                LoRa.</p>
+                            <h3 id="doc-title-arduino">Hardware Node Reference — Arduino TinyML (M2 / M3)</h3>
+                            <p id="doc-desc-arduino">Low-cost camouflaged sensor nodes built on Arduino Nicla Vision or ESP32-CAM. A PIR sensor wakes the microcontroller from deep sleep (&lt;50 µA), captures a frame, runs on-device TinyML inference, and sends a compressed LoRa packet only if confidence exceeds 80%.</p>
 
                             <div class="hw-wiring-row" style="display: flex; gap: 15px; margin: 10px 0;">
                                 <div
                                     style="flex: 1; font-size: 11px; background: rgba(255,255,255,0.02); padding: 8px; border: 1px solid rgba(255,255,255,0.05); border-radius: 4px;">
                                     <strong style="color: var(--color-primary);">Hardware Wiring:</strong><br>
-                                    - Sensore PIR VCC -> 3.3V / Out -> GPIO 13 (Wakeup)<br>
-                                    - Microcamere GC2145 -> Interfaccia DVP dedicata<br>
-                                    - Modulo Trasmittente LoRa -> GPIO 10 (SPI SS), 11 (MOSI), 12 (MISO), 13 (SCK)<br>
-                                    - Cella Solare + Caricatore LiPo TP4056 a bordo
+                                    - PIR sensor VCC → 3.3V / Out → GPIO 13 (Wakeup)<br>
+                                    - GC2145 microcamera → dedicated DVP interface<br>
+                                    - LoRa module → GPIO 10 (SPI SS), 11 (MOSI), 12 (MISO), 13 (SCK)<br>
+                                    - Solar cell + LiPo TP4056 charger on-board
                                 </div>
                                 <div
                                     style="flex: 1; font-size: 11px; background: rgba(255,255,255,0.02); padding: 8px; border: 1px solid rgba(255,255,255,0.05); border-radius: 4px;">
-                                    <strong style="color: var(--color-warning);">Mimetizzazione Fisica
-                                        (Antitagging):</strong><br>
-                                    L'involucro esterno viene stampato in 3D usando plastiche biodegradabili PLA e
-                                    ricoperto da una mescola mimetica iper-realistica basata sulle cortecce di alberi
-                                    locali. Gli algoritmi di AI generano texture specifiche adatte alla foresta di
-                                    destinazione.
+                                    <strong style="color: var(--color-warning);">Physical camouflage (anti-tagging):</strong><br>
+                                    3D-printed PLA biodegradable shell coated with a hyper-realistic bark-texture mix
+                                    matched to the target forest. AI-generated textures per deployment region.
+                                    Transmitters shut off immediately after send to prevent scanner detection.
                                 </div>
                             </div>
 
                             <strong
-                                style="font-size: 11px; font-family: 'Space Mono', monospace; color: var(--color-info);">Codice
-                                Sorgente di Riferimento Arduino (Nicla/ESP32):</strong>
+                                style="font-size: 11px; font-family: 'Space Mono', monospace; color: var(--color-info);">Reference firmware (Nicla Vision / ESP32):</strong>
                             <div class="code-snippet">#include &lt;Nicla_System.h&gt;
-                                #include &lt;EloquentTinyML.h&gt; // Wrapper TensorFlow Lite Edge
-                                #include "model_yolo_quantized.h" // Modello quantizzato TinyML a bordo
+                                #include &lt;EloquentTinyML.h&gt;       // TensorFlow Lite edge wrapper
+                                #include "model_yolo_quantized.h"  // quantised TinyML model
 
                                 #define PIR_PIN 13
                                 #define LORA_SS 10
 
                                 void setup() {
-                                nicla::begin();
-                                nicla::leds.begin();
-                                pinMode(PIR_PIN, INPUT_PULLDOWN);
-                                // Configura interrupt sul pin PIR per svegliare la scheda
-                                lowPowerConfigureWakeup(PIR_PIN, RISING);
+                                  nicla::begin();
+                                  nicla::leds.begin();
+                                  pinMode(PIR_PIN, INPUT_PULLDOWN);
+                                  lowPowerConfigureWakeup(PIR_PIN, RISING); // PIR wakes board
                                 }
 
                                 void loop() {
-                                // Entra in modalità Deep Sleep per risparmiare batteria (Consumo: &lt; 50uA)
-                                nicla::deepSleep();
+                                  nicla::deepSleep(); // &lt;50 µA until PIR fires
 
-                                // Al risveglio (Trigger PIR rilevato)
-                                Camera.captureFrame();
+                                  Camera.captureFrame();
 
-                                // Esegui inferenza a bordo della scheda Nicla Vision
-                                float predictions[3]; // Umano, Animale, Sfondo
-                                ml.predict(Camera.frameBuffer, predictions);
+                                  float predictions[3]; // Human | Animal | Background
+                                  ml.predict(Camera.frameBuffer, predictions);
 
-                                if (predictions[0] > 0.80) { // Se confidenza Bracconiere/Umano > 80%
-                                // Invia pacchetto stringa LoRa compresso
-                                LoRa.sendTacticalEvent("CAM_EDGE_42", "poacher", predictions[0]);
-                                }
+                                  if (predictions[0] &gt; 0.80) { // human confidence &gt;80%
+                                    LoRa.sendTacticalEvent("CAM_EDGE_42", "poacher", predictions[0]);
+                                  }
                                 }</div>
                         </div>
 
@@ -1328,74 +1368,99 @@
                         </div>
                     </div>
 
-                    <!-- TAB 3: REPOS INTEGRATION DOCS -->
+                    <!-- TAB 3: OPEN-SOURCE REPOS -->
                     <div id="tab-repos" class="tab-pane" role="tabpanel" aria-labelledby="tab-lbl-repos">
-                        <div class="docs-block">
-                            <h3 id="doc-title-repos">Integrazione dei Sotto-Repository nel Codice Unificato</h3>
-                            <p id="doc-desc-repos">Il framework <code>open-wildguard-hub</code> agisce come
-                                orchestratore centrale integrando e riutilizzando il codice specifico proveniente dai
-                                repository selezionati. Sotto trovi le aree di riferimento e le modalità con cui i
-                                codici si integrano per implementare le funzionalità previste:</p>
+                        <p style="font-size:11px;color:var(--text-muted);margin:0 0 12px;line-height:1.6;">
+                            WildGuard integrates existing best-in-class open-source tools rather than rebuilding from scratch.
+                            Each cluster below maps repos to the module they power.
+                            Full integration notes and code references live in
+                            <a href="https://github.com/Arbogaste/open-wildguard-hub/tree/main/docs" target="_blank" rel="noopener" style="color:var(--color-primary)">docs/</a>.
+                        </p>
 
-                            <div
-                                style="font-size: 11px; display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
-                                <div
-                                    style="background: rgba(255,255,255,0.02); padding: 8px; border: 1px solid rgba(255,255,255,0.05); border-radius: 4px;">
-                                    <strong style="color: var(--color-primary);">Rilevamento CV ed Evidence Management
-                                        (Edge)</strong><br>
-                                    - *Sorgente:* `/repos/wildlife-poaching-detection/` & `/repos/Ecosentinel/`<br>
-                                    - *Integrazione:* Riutilizziamo lo script di cattura ed allertamento in streaming
-                                    `app.py` integrato nel nostro daemon di acquisizione video edge
-                                    (`scripts/edge_vision.py`), che gestisce il trigger YOLOv8 e salva lo snapshot
-                                    locale calcolando l'hash.
+                        <div class="docs-block">
+                            <h3 style="color:var(--color-primary);font-size:11px;margin-bottom:8px;">Computer Vision &amp; Detection — M2</h3>
+                            <div class="repo-list">
+                                <div class="repo-item">
+                                    <div class="repo-name">microsoft/CameraTraps <span class="repo-tag">MegaDetector v5</span></div>
+                                    <div class="repo-what">State-of-the-art human/animal/vehicle detector. Base model for M2 — triggers an alert when a human appears at &gt;80% confidence.</div>
                                 </div>
-                                <div
-                                    style="background: rgba(255,255,255,0.02); padding: 8px; border: 1px solid rgba(255,255,255,0.05); border-radius: 4px;">
-                                    <strong style="color: var(--color-warning);">Bioacustica & Triangolazione Spari
-                                        (Acoustic)</strong><br>
-                                    - *Sorgente:* `/repos/greenwood/` & `/repos/Forest-Conservation-System/`<br>
-                                    - *Integrazione:* Porting dei modelli Keras audio (`audio_forest_69.keras`) nel
-                                    nostro `backend/services/audio_dsp.py`. La pipeline converte i flussi audio live
-                                    catturati in spettrogrammi e calcola le coordinate spaziali dello sparo tramite
-                                    algoritmo Time Difference of Arrival (TDoA).
+                                <div class="repo-item">
+                                    <div class="repo-name">microsoft/pytorch-wildlife</div>
+                                    <div class="repo-what">Wildlife classifier hub. Used to load and fine-tune species-specific detectors for M2 and M5 without rewriting the training pipeline.</div>
                                 </div>
-                                <div
-                                    style="background: rgba(255,255,255,0.02); padding: 8px; border: 1px solid rgba(255,255,255,0.05); border-radius: 4px;">
-                                    <strong style="color: var(--color-info);">Motore Predittivo e Teoria dei Giochi (AI
-                                        Engine)</strong><br>
-                                    - *Sorgente:* `/repos/PAWS-public/` & `/repos/wildlifeRL/`<br>
-                                    - *Integrazione:* Wrap in Python 3 della libreria predittiva PAWS (`iware/` e
-                                    `planning/`) integrata come microservizio all'interno di
-                                    `backend/services/prediction.py`. Permette di calcolare in background le rotte di
-                                    pattuglia del giorno incrociando i dati geografici e le posizioni degli allarmi.
+                                <div class="repo-item">
+                                    <div class="repo-name">conservationxlabs/animl-frontend</div>
+                                    <div class="repo-what">ML-assisted camera trap review UI. UI pattern adopted for M2's triage interface — rangers review only high-confidence flagged images.</div>
                                 </div>
-                                <div
-                                    style="background: rgba(255,255,255,0.02); padding: 8px; border: 1px solid rgba(255,255,255,0.05); border-radius: 4px;">
-                                    <strong style="color: var(--color-primary);">Model Hub, Dataset e Generalizzazione
-                                        (Ecosystem)</strong><br>
-                                    - *Sorgente:* `Pytorch-Wildlife`, `Biodiversity`, `MammAlps` e dataset camera-trap
-                                    collegati<br>
-                                    - *Integrazione:* Il catalogo modelli e i dataset multi-view diventano la base
-                                    comune per addestrare, testare e riadattare i moduli M2, M3, M5 e M10 su nuove
-                                    regioni, specie e condizioni operative senza duplicare la logica di pipeline.
+                            </div>
+                        </div>
+
+                        <div class="docs-block">
+                            <h3 style="color:var(--color-warning);font-size:11px;margin-bottom:8px;">Bioacoustics — M3</h3>
+                            <div class="repo-list">
+                                <div class="repo-item">
+                                    <div class="repo-name">rfcx/arbimon <span class="repo-tag">production</span></div>
+                                    <div class="repo-what">Rainforest Connection's audio monitoring platform. Architecture reference for M3's microphone node format and audio stream ingestion schema.</div>
                                 </div>
-                                <div
-                                    style="background: rgba(255,255,255,0.02); padding: 8px; border: 1px solid rgba(255,255,255,0.05); border-radius: 4px;">
-                                    <strong style="color: var(--color-warning);">API Geospaziali e Arricchimento
-                                        Dati</strong><br>
-                                    - *Sorgente:* GBIF, IUCN Red List, NOAA, Copernicus Sentinel-1, SoilGrids,
-                                    Nominatim, Open-Meteo<br>
-                                    - *Integrazione:* Queste fonti vengono usate come layer di arricchimento trasversale
-                                    per normalizzare specie, habitat, meteo e contesto territoriale in M4, M5, M7 e M8.
+                                <div class="repo-item">
+                                    <div class="repo-name">bioacoustics-open-source/opensoundscape</div>
+                                    <div class="repo-what">Python audio ML toolkit. Powers M3's spectrogram pipeline and Keras model runner for gunshot/chainsaw classification in <code>audio_dsp.py</code>.</div>
                                 </div>
-                                <div
-                                    style="background: rgba(255,255,255,0.02); padding: 8px; border: 1px solid rgba(255,255,255,0.05); border-radius: 4px;">
-                                    <strong style="color: var(--color-info);">Workflow Operativi e Ingestion</strong><br>
-                                    - *Sorgente:* `animl-frontend`, `audtheia-environmental-monitoring` e i servizi di
-                                    automazione associati<br>
-                                    - *Integrazione:* Gli schemi, le UI e le automazioni diventano pattern riusabili per
-                                    M1, M6 e M7, con priorità a ingestion pulita, sincronizzazione e reporting
-                                    operativo.
+                            </div>
+                        </div>
+
+                        <div class="docs-block">
+                            <h3 style="color:var(--color-info);font-size:11px;margin-bottom:8px;">Aerial &amp; Geospatial — M4</h3>
+                            <div class="repo-list">
+                                <div class="repo-item">
+                                    <div class="repo-name">OpenDroneMap/WebODM</div>
+                                    <div class="repo-what">Drone photogrammetry to ortophoto pipeline. Generates updated terrain maps for M4 patrol commanders before each mission.</div>
+                                </div>
+                                <div class="repo-item">
+                                    <div class="repo-name">GBIF · IUCN Red List · Copernicus Sentinel-1 · Open-Meteo</div>
+                                    <div class="repo-what">Free data APIs used as enrichment layers across M4, M5, M7, M8: species range, habitat type, SAR imagery, hourly weather.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="docs-block">
+                            <h3 style="color:var(--color-primary);font-size:11px;margin-bottom:8px;">Species Intelligence — M5</h3>
+                            <div class="repo-list">
+                                <div class="repo-item">
+                                    <div class="repo-name">WildMeOrg/Wildbook</div>
+                                    <div class="repo-what">Photo-ID platform for individual animal recognition without physical collars. M5 uses it to build population models from camera trap images.</div>
+                                </div>
+                                <div class="repo-item">
+                                    <div class="repo-name">MammAlps / MEWC (zaandahl)</div>
+                                    <div class="repo-what">Alpine mammals dataset and classification benchmark. Used to validate M2 and M5 models on European mountain species (ibex, wolf, bear).</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="docs-block">
+                            <h3 style="color:var(--color-warning);font-size:11px;margin-bottom:8px;">Prediction &amp; Patrol Routing — M8</h3>
+                            <div class="repo-list">
+                                <div class="repo-item">
+                                    <div class="repo-name">lily-x/PAWS-public <span class="repo-tag">deployed Uganda</span></div>
+                                    <div class="repo-what">Game-theoretic anti-poaching patrol scheduler. M8 wraps PAWS's <code>iware/</code> + <code>planning/</code> modules as a FastAPI microservice generating daily routes from historical incident data.</div>
+                                </div>
+                                <div class="repo-item">
+                                    <div class="repo-name">iamlab-cmu/wildlifeRL</div>
+                                    <div class="repo-what">DDPG reinforcement learning for patrol unpredictability. Combined with PAWS in M8 so rangers don't follow routes that poachers have memorised.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="docs-block">
+                            <h3 style="color:var(--color-info);font-size:11px;margin-bottom:8px;">Evidence &amp; Legal Chain — M9</h3>
+                            <div class="repo-list">
+                                <div class="repo-item">
+                                    <div class="repo-name">SHA-256 Hash Chain (built-in)</div>
+                                    <div class="repo-what">Every media file hashed at capture time. Chain stored locally. M9 auto-generates chargesheet PDFs citing the correct CITES schedule articles for the seized species.</div>
+                                </div>
+                                <div class="repo-item">
+                                    <div class="repo-name">audtheia/audtheia-environmental-monitoring</div>
+                                    <div class="repo-what">Environmental event auditing schemas. Provides the evidence format and field report structure M9 uses to reconstruct incident timelines for prosecution.</div>
                                 </div>
                             </div>
                         </div>
@@ -1577,10 +1642,11 @@
                 btn_txt_route: "Calcola Rotta (MST)",
                 btn_txt_clear: "Resetta",
                 map_toggle_label: "Mappa Tattica",
-                tab_lbl_roadmap: "Piani di Integrazione (10 Idee)",
-                tab_lbl_docs: "Manuale Sviluppatori & Arduino",
-                tab_lbl_repos: "Integrazione Sotto-Repository",
-                tab_lbl_proposal: "Proposta Istituzionale (WWF)",
+                tab_lbl_roadmap: "10 Moduli",
+                tab_lbl_docs: "Playbook & Toolkit",
+                tab_lbl_repos: "Repo Open-Source",
+                tab_lbl_proposal: "Proposta per NGO",
+                ideas_intro: `Ogni modulo risolve un problema di campo in modo indipendente — puoi deploiare uno, tutti, o qualsiasi combinazione. Il livello Essential di ogni modulo funziona con uno smartphone e un'app gratuita. Playbook completi con codice, lista hardware e prompt AI in <a href="https://github.com/Arbogaste/open-wildguard-hub/tree/main/docs" target="_blank" rel="noopener" style="color:var(--color-primary)">docs/</a>.`,
                 doc_title_proposal: "Proposta Istituzionale per WWF, Riserve & Guardie Forestali",
                 doc_desc_proposal: "WildGuard AI è concepito per essere presentato a ONG ed enti governativi come soluzione sostenibile a basso costo. Fornisce un ecosistema che garantisce la catena di custodia legale delle prove, ottimizza il coordinamento con logica di gioco stocastico e riduce del 90% i falsi allarmi sul campo.",
                 prop_lbl_1: "1. Sostenibilità Economica e Zero Licenze",
@@ -1621,16 +1687,16 @@
 
                 // 10 Ideas detail
                 ideas: [
-                    { title: "M1: Hub Modulare & API", status: "In Corso", statusClass: "status-progress", desc: "API centrale in FastAPI e SQLite per l'orchestra di nodi fisici e OSINT. Implementa store-and-forward per scenari offline." },
-                    { title: "M2: Visione Edge (CV)", status: "Prototipo", statusClass: "status-prototype", desc: "Riconoscimento su fototrappole e droni tramite YOLOv8. Include filtri OpenCV antirumore (vento su rami) su microcamere." },
-                    { title: "M3: Bioacustica & Triangolazione", status: "Pianificato", statusClass: "status-planned", desc: "Rete microfonica low-power per tracciare spari e motoseghe. Triangolazione TDoA in tempo reale per trovare coordinate." },
-                    { title: "M4: Sorveglianza Geo 3D", status: "Prototipo", statusClass: "status-prototype", desc: "Mappa 3D georeferenziata basata su dati GIS, GeoJSON e PyDeck per evidenziare sentieri e corridoi migratori della fauna." },
-                    { title: "M5: Intelligence Specie", status: "In Corso", statusClass: "status-progress", desc: "Tracciamento biometrico e IoT dei collari degli animali protetti, con allarmi di geo-fencing in tempo reale." },
-                    { title: "M6: Raccolta Field Offline", status: "Pianificato", statusClass: "status-planned", desc: "Applicazione mobile offline-first per ranger e comunità locali per segnalare orme e piste tramite sincronizzazione periodica." },
-                    { title: "M7: OSINT & Cyber-Intelligence", status: "Prototipo", statusClass: "status-prototype", desc: "Scraping di marketplace criminali, Telegram e news in 7 lingue. Estrazione automatica entità con mDeBERTa NLP." },
-                    { title: "M8: Predizione & Teoria dei Giochi", status: "Prototipo", statusClass: "status-prototype", desc: "Integrazione dell'algoritmo predittivo PAWS e DDPG Reinforcement Learning per generare rotte di pattugliamento imprevedibili." },
-                    { title: "M9: Catena del Dato Forense", status: "In Corso", statusClass: "status-progress", desc: "Certificazione delle prove fotografiche tramite hash chain immutabili e generazione automatica verbali (WPA schedules)." },
-                    { title: "M10: Federated AI & Flower", status: "Pianificato", statusClass: "status-planned", desc: "Addestramento collaborativo di YOLOv8 tra parchi diversi senza condividere le immagini reali a salvaguardia della privacy." }
+                    { title: "M1 · Configura la piattaforma", status: "In Corso", statusClass: "status-progress", problem: "Team diversi usano app incompatibili, fogli Excel e WhatsApp. Nessuna visione condivisa in tempo reale.", gets: "Hub centrale che raccoglie tutti gli eventi (fototrappole, audio, collari, segnalazioni) in un'unica mappa condivisa.", link: "docs/modules/M01-hub-architecture.md" },
+                    { title: "M2 · Rileva umani sulle fototrappole", status: "Prototipo", statusClass: "status-prototype", problem: "Un ranger deve rivedere migliaia di immagini a settimana. I bracconieri vengono mancati perché nessun essere umano può guardare ogni feed.", gets: "AI che gira direttamente sulla fototrappola: allerta in 30 secondi quando appare un umano, veicolo o arma. Foto auto-archiviate come prove.", link: "docs/modules/M02-edge-vision.md" },
+                    { title: "M3 · Rileva spari e motoseghe 24/7", status: "Pianificato", statusClass: "status-planned", problem: "Un ranger sente uno sparo a 3 km. Arriva troppo tardi. Le motoseghe in zone remote non vengono sentite affatto.", gets: "Rete di microfoni a basso costo che triangola la posizione di uno sparo in meno di 30 secondi e invia le coordinate GPS.", link: "docs/modules/M03-bioacoustics.md" },
+                    { title: "M4 · Sorveglianza aerea e satellitare", status: "Prototipo", statusClass: "status-prototype", problem: "I bracconieri si muovono in terreni impraticabili a piedi. Le intrusioni notturne sono invisibili senza termico.", gets: "Rotte drone schedulate per le zone ad alto rischio. Immagine termica per rilevare calore umano di notte. Mappe terreno aggiornate con WebODM.", link: "docs/modules/M04-aerial-geo.md" },
+                    { title: "M5 · Monitora gli animali, non solo i bracconieri", status: "In Corso", statusClass: "status-progress", problem: "Un elefante con collare smette di muoversi. Morto? Ferito? Il ranger percorre 40 km per controllare, dati alla mano.", gets: "Alert automatici quando un animale non si muove da X ore o esce dalla zona sicura. Photo-ID via Wildbook senza collare fisico.", link: "docs/modules/M05-species-intel.md" },
+                    { title: "M6 · Pattuglie offline e segnalazioni comunità", status: "Pianificato", statusClass: "status-planned", problem: "I ranger registrano le pattuglie su carta. Le comunità locali non hanno un canale anonimo per segnalare.", gets: "App Android offline-first per ranger + portale segnalazioni anonime. Sincronizzazione automatica al rientro in area di rete.", link: "docs/modules/M06-field-community.md" },
+                    { title: "M7 · Monitora i mercati illegali online", status: "Prototipo", statusClass: "status-prototype", problem: "Il commercio di avorio e corni si è spostato su Facebook, Telegram e marketplace locali. I ranger non sono formati a monitorarli.", gets: "Scraper automatici che estraggono specie, prezzo, posizione e contatto del venditore. Alert su picchi di prezzo che precedono grandi sequestri.", link: "docs/modules/M07-osint.md" },
+                    { title: "M8 · Prevedi dove colpiranno i bracconieri", status: "Prototipo", statusClass: "status-prototype", problem: "I ranger pattugliamo sempre le stesse rotte. I bracconieri lo sanno e aspettano. Le zone ad alto rischio reale rimangono scoperte.", gets: "Mappa di rischio aggiornata quotidianamente. Rotte di pattuglia imprevedibili ma ottimizzate, generate da AI e fase lunare.", link: "docs/modules/M08-prediction-rl.md" },
+                    { title: "M9 · Prove ammissibili in tribunale", status: "In Corso", statusClass: "status-progress", problem: "Un bracconiere viene catturato. Le foto esistono. Ma il caso viene archiviato perché la catena di custodia è rotta.", gets: "Ogni file viene hashato al momento della cattura. Generatore automatico di verbali con gli articoli di legge corretti per la giurisdizione.", link: "docs/modules/M09-forensics-legal.md" },
+                    { title: "M10 · Mantieni il sistema operativo", status: "Pianificato", statusClass: "status-planned", problem: "Un sistema che si rompe in silenzio è peggio di nessun sistema. Batterie scariche. Schede SD piene. Modelli AI degradati.", gets: "Dashboard salute nodi in tempo reale. Alert predittivi 7 giorni prima che una batteria muoia. Training federato tra riserve senza condividere immagini.", link: "docs/modules/M10-resilience-maint.md" }
                 ],
 
                 // OSINT News Feed
@@ -1662,10 +1728,11 @@
                 btn_txt_route: "Calculate Route (MST)",
                 btn_txt_clear: "Reset Map",
                 map_toggle_label: "Tactical Map",
-                tab_lbl_roadmap: "Integration Plans (10 Ideas)",
-                tab_lbl_docs: "Developer Manual & Arduino",
-                tab_lbl_repos: "Sub-Repository Integration",
-                tab_lbl_proposal: "Institutional Pitch (WWF)",
+                tab_lbl_roadmap: "10 Modules",
+                tab_lbl_docs: "Playbooks & Toolkit",
+                tab_lbl_repos: "Open-Source Repos",
+                tab_lbl_proposal: "NGO Pitch",
+                ideas_intro: `Each module solves one field problem independently — deploy one, all, or any combination. The Essential tier of every module works with a phone and a free app. Full playbooks with code, hardware lists, and agent prompts are in <a href="https://github.com/Arbogaste/open-wildguard-hub/tree/main/docs" target="_blank" rel="noopener" style="color:var(--color-primary)">docs/</a>.`,
                 doc_title_proposal: "Institutional Pitch for WWF, Reserves & Forestry Guards",
                 doc_desc_proposal: "WildGuard AI is designed as a low-cost, sustainable ecosystem for NGOs and government agencies. It ensures legal custody of evidence, optimizes patrol coordination with stochastic game theory, and reduces edge camera false alarms by 90%.",
                 prop_lbl_1: "1. Economic Sustainability & Zero Licenses",
@@ -1706,16 +1773,16 @@
 
                 // 10 Ideas detail
                 ideas: [
-                    { title: "M1: Modular Hub & API", status: "In Progress", statusClass: "status-progress", desc: "Central FastAPI & SQLite API orchestrating physical nodes and OSINT data. Implements store-and-forward logic for offline scenarios." },
-                    { title: "M2: Edge Vision (CV)", status: "Prototype", statusClass: "status-prototype", desc: "Image classification on camera traps and drones via YOLOv8. Uses OpenCV edge filters to drop wind/leaf alerts on the microcamera." },
-                    { title: "M3: Bioacoustics & Triangulation", status: "Planned", statusClass: "status-planned", desc: "Low-power microphone network tracking gunshots and chainsaws. Uses Time Difference of Arrival (TDoA) to calculate shooter coordinates." },
-                    { title: "M4: 3D Geo-Surveillance", status: "Prototype", statusClass: "status-prototype", desc: "Georeferenced 3D maps based on GIS, GeoJSON, and PyDeck to highlight patrol pathways and wildlife migration corridors." },
-                    { title: "M5: Species Intelligence", status: "In Progress", statusClass: "status-progress", desc: "Biometric and IoT tracking of collar devices on protected wildlife, triggering real-time geo-fencing alerts." },
-                    { title: "M6: Offline Field Reporting", status: "Planned", statusClass: "status-planned", desc: "Offline-first mobile application for rangers and communities to log tracks and sightings via periodic base syncs." },
-                    { title: "M7: OSINT & Cyber-Intelligence", status: "Prototype", statusClass: "status-prototype", desc: "Ethical scraping of illicit black markets, Telegram, and news across 7 languages. Automatic entities extraction using mDeBERTa NLP." },
-                    { title: "M8: Prediction & Game Theory", status: "Prototype", statusClass: "status-prototype", desc: "Integrating PAWS predictive engine and DDPG Reinforcement Learning to generate unpredictable, optimal patrol routes." },
-                    { title: "M9: Forensic Evidence Vault", status: "In Progress", statusClass: "status-progress", desc: "Certifying media evidence using immutable SHA-256 hash chains and auto-generating court chargesheets linked to legal schedules." },
-                    { title: "M10: Federated AI & Flower", status: "Planned", statusClass: "status-planned", desc: "Collaboratively train YOLOv8 across sanctuaries without sharing raw geolocated images, protecting wildlife data sovereignty." }
+                    { title: "M1 · Set up the platform", status: "In Progress", statusClass: "status-progress", problem: "Ranger teams use incompatible apps, spreadsheets, and WhatsApp. No shared real-time picture.", gets: "A central hub collecting all events — cameras, audio, collars, tips — onto one shared map.", link: "docs/modules/M01-hub-architecture.md" },
+                    { title: "M2 · Detect humans on camera traps", status: "Prototype", statusClass: "status-prototype", problem: "A ranger reviews thousands of images per week manually. Poachers are missed. Night footage is nearly blind.", gets: "AI running on the camera itself: alert in 30 seconds when a human, vehicle, or weapon appears. Photos auto-tagged as evidence.", link: "docs/modules/M02-edge-vision.md" },
+                    { title: "M3 · Detect gunshots & chainsaws 24/7", status: "Planned", statusClass: "status-planned", problem: "A ranger hears a shot 3 km away. By the time they find the direction, poachers are gone. Chainsaws are never heard.", gets: "A cheap microphone network that triangulates a gunshot location in under 30 seconds and sends GPS coordinates.", link: "docs/modules/M03-bioacoustics.md" },
+                    { title: "M4 · Aerial & satellite overwatch", status: "Prototype", statusClass: "status-prototype", problem: "Poachers move through terrain rangers can't patrol on foot. Night intrusions are invisible without thermal.", gets: "Scheduled drone patrols over high-risk zones. Thermal imaging for human heat detection at night. Updated terrain maps via WebODM.", link: "docs/modules/M04-aerial-geo.md" },
+                    { title: "M5 · Track animals, not just poachers", status: "In Progress", statusClass: "status-progress", problem: "A collared elephant stops moving. Dead? Injured? A ranger drives 40 km to check — the data was there.", gets: "Automatic alerts when an animal hasn't moved for X hours or exits a safe zone. Photo-ID via Wildbook without physical collars.", link: "docs/modules/M05-species-intel.md" },
+                    { title: "M6 · Offline patrols & community tips", status: "Planned", statusClass: "status-planned", problem: "Rangers log patrols on paper. Communities have no anonymous reporting channel. Managers don't know where rangers actually went.", gets: "Offline Android patrol logging + anonymous tip portal. Auto-syncs when rangers return to connectivity.", link: "docs/modules/M06-field-community.md" },
+                    { title: "M7 · Monitor illegal wildlife markets", status: "Prototype", statusClass: "status-prototype", problem: "Ivory and horn trading has moved to Facebook, Telegram, and local classifieds. Rangers aren't trained to monitor them.", gets: "Automated scrapers extracting species, price, location, and seller contact. Price spike alerts flag market surges that precede large seizures.", link: "docs/modules/M07-osint.md" },
+                    { title: "M8 · Predict where poachers strike next", status: "Prototype", statusClass: "status-prototype", problem: "Rangers patrol the same routes every day. Poachers know this and wait. Real high-risk zones are under-patrolled.", gets: "Daily updated risk map. Unpredictable patrol routes optimised for coverage, generated from AI risk scores and lunar phase.", link: "docs/modules/M08-prediction-rl.md" },
+                    { title: "M9 · Build court-ready evidence", status: "In Progress", statusClass: "status-progress", problem: "A poacher is caught. The photos exist. The case is thrown out because the chain of custody is broken.", gets: "Every file hashed at capture. Automatic chargesheet generator citing the correct wildlife law articles for your jurisdiction.", link: "docs/modules/M09-forensics-legal.md" },
+                    { title: "M10 · Keep the system running", status: "Planned", statusClass: "status-planned", problem: "A system that breaks silently is worse than no system. Dead batteries. Full SD cards. Degraded AI models.", gets: "Real-time node health dashboard. Predictive battery alerts 7 days early. Federated model training across reserves — no raw images shared.", link: "docs/modules/M10-resilience-maint.md" }
                 ],
 
                 // OSINT News Feed
@@ -1769,6 +1836,7 @@
             document.getElementById('tab-lbl-docs').innerText = lang.tab_lbl_docs;
             document.getElementById('tab-lbl-repos').innerText = lang.tab_lbl_repos;
             document.getElementById('tab-lbl-proposal').innerText = lang.tab_lbl_proposal;
+            if (lang.ideas_intro) document.getElementById('ideas-intro-text').innerHTML = lang.ideas_intro;
 
             // Docs tab texts
             document.getElementById('doc-title-arduino').innerText = lang.doc_title_arduino;
@@ -1841,7 +1909,10 @@
                             <span class="idea-title">${idea.title}</span>
                             <span class="idea-status ${idea.statusClass}">${idea.status}</span>
                         </div>
-                        <div class="idea-desc">${idea.desc}</div>
+                        ${idea.problem ? `<div class="idea-problem"><span class="idea-field-label">${currentLanguage === 'it' ? 'Problema' : 'Problem'}:</span> ${idea.problem}</div>` : ''}
+                        ${idea.gets   ? `<div class="idea-gets"><span class="idea-field-label">${currentLanguage === 'it' ? 'Cosa ottieni' : 'What you get'}:</span> ${idea.gets}</div>` : ''}
+                        ${idea.desc && !idea.problem ? `<div class="idea-desc">${idea.desc}</div>` : ''}
+                        ${idea.link   ? `<a class="idea-link" href="${idea.link}" target="_blank" rel="noopener">→ playbook</a>` : ''}
                     </div>
                 `;
                 ideasContainer.insertAdjacentHTML('beforeend', card);
