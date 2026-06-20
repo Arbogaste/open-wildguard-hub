@@ -14,6 +14,7 @@
   "btn_txt_sim": "Simulate Edge Alert",
   "btn_txt_route": "Calculate Route (MST)",
   "btn_txt_clear": "Reset Map",
+  "map_toggle_label": "Tactical Map",
   "tab_lbl_roadmap": "Integration Plans (10 Ideas)",
   "tab_lbl_docs": "Developer Manual & Arduino",
   "tab_lbl_repos": "Sub-Repository Integration",

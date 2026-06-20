@@ -417,7 +417,35 @@
             border-radius: 12px;
             border: 1px solid var(--border-glow);
             overflow: hidden;
+            max-height: 1200px;
+            transition: max-height var(--transition-speed) ease, margin var(--transition-speed), border-width var(--transition-speed);
         }
+        .map-wrapper.collapsed {
+            max-height: 0;
+            border-width: 0;
+            margin: 0;
+        }
+
+        .map-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-glow);
+            border-radius: 8px;
+            color: var(--text-light, #fff);
+            font-family: 'Space Mono', monospace;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 8px 12px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: border-color var(--transition-speed);
+        }
+        .map-toggle:hover { border-color: var(--color-primary, #00ff66); }
+        .map-toggle .map-chevron { transition: transform var(--transition-speed); }
+        .map-toggle.collapsed .map-chevron { transform: rotate(180deg); }
 
         #map {
             width: 100%;
@@ -960,8 +988,12 @@
 
         <!-- CENTER COLUMN: Map View & Tabbed Roadmaps -->
         <div class="column center-column" style="grid-column: 2;">
-            <!-- Map Top -->
-            <div class="map-wrapper">
+            <!-- Map Top (collapsible for readability) -->
+            <button class="map-toggle" id="map-toggle" onclick="toggleMap()" aria-expanded="true">
+                <span><i class="fa-solid fa-map-location-dot"></i> <span id="map-toggle-label">Mappa Tattica</span></span>
+                <i class="fa-solid fa-chevron-up map-chevron"></i>
+            </button>
+            <div class="map-wrapper" id="map-wrapper">
                 <div id="map"></div>
                 <div class="map-overlay-controls">
                     <button class="btn" onclick="triggerSimAlert()"><i class="fa-solid fa-crosshairs"></i> <span
@@ -1380,6 +1412,7 @@
                 btn_txt_sim: "Simula Allerta Edge",
                 btn_txt_route: "Calcola Rotta (MST)",
                 btn_txt_clear: "Resetta",
+                map_toggle_label: "Mappa Tattica",
                 tab_lbl_roadmap: "Piani di Integrazione (10 Idee)",
                 tab_lbl_docs: "Manuale Sviluppatori & Arduino",
                 tab_lbl_repos: "Integrazione Sotto-Repository",
@@ -1464,6 +1497,7 @@
                 btn_txt_sim: "Simulate Edge Alert",
                 btn_txt_route: "Calculate Route (MST)",
                 btn_txt_clear: "Reset Map",
+                map_toggle_label: "Tactical Map",
                 tab_lbl_roadmap: "Integration Plans (10 Ideas)",
                 tab_lbl_docs: "Developer Manual & Arduino",
                 tab_lbl_repos: "Sub-Repository Integration",
@@ -1563,6 +1597,8 @@
             document.getElementById('btn-txt-sim').innerText = lang.btn_txt_sim;
             document.getElementById('btn-txt-route').innerText = lang.btn_txt_route;
             document.getElementById('btn-txt-clear').innerText = lang.btn_txt_clear;
+            const mtl = document.getElementById('map-toggle-label');
+            if (mtl && lang.map_toggle_label) mtl.innerText = lang.map_toggle_label;
 
             // Tab Labels
             document.getElementById('tab-lbl-roadmap').innerText = lang.tab_lbl_roadmap;
@@ -1895,6 +1931,19 @@ Forest Officer Authorized Signature
             routeLayer.clearLayers();
         }
 
+        // Collapse/expand the tactical map so the tabs (Integration Plans etc) read better.
+        function toggleMap(force) {
+            const w = document.getElementById('map-wrapper');
+            const t = document.getElementById('map-toggle');
+            const collapsed = (typeof force === 'boolean') ? force : !w.classList.contains('collapsed');
+            w.classList.toggle('collapsed', collapsed);
+            t.classList.toggle('collapsed', collapsed);
+            t.setAttribute('aria-expanded', String(!collapsed));
+            try { localStorage.setItem('wildguard_map_collapsed', collapsed ? '1' : '0'); } catch (_) {}
+            // Leaflet needs a resize nudge when the container reopens
+            if (!collapsed && typeof map !== 'undefined') setTimeout(() => map.invalidateSize(), 250);
+        }
+
         // i18n init: restore saved language, build selector, first render
         try {
             const saved = localStorage.getItem('wildguard_lang');
@@ -1902,6 +1951,10 @@ Forest Officer Authorized Signature
         } catch (_) {}
         populateLangSelect();
         setLanguage(currentLanguage);
+        // restore map collapsed state
+        try {
+            if (localStorage.getItem('wildguard_map_collapsed') === '1') toggleMap(true);
+        } catch (_) {}
     </script>
 </body>
 

@@ -14,6 +14,7 @@
   "btn_txt_sim": "Simula Allerta Edge",
   "btn_txt_route": "Calcola Rotta (MST)",
   "btn_txt_clear": "Resetta",
+  "map_toggle_label": "Mappa Tattica",
   "tab_lbl_roadmap": "Piani di Integrazione (10 Idee)",
   "tab_lbl_docs": "Manuale Sviluppatori & Arduino",
   "tab_lbl_repos": "Integrazione Sotto-Repository",
