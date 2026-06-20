@@ -1,0 +1,14 @@
+antirez.md
+proposta_istituzionale.md
+
+.vscode
+.claude
+.docs
+build
+dist
+venv
+.env
+
+__pycache__
+*.pyc
+
