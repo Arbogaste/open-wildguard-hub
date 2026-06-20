@@ -159,6 +159,19 @@
         .lang-select:hover { border-color: var(--color-primary); color: var(--text-light, #fff); }
         .lang-select option { background: var(--bg-base, #07090e); color: #fff; }
 
+        .cap-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 8px;
+            padding: 10px 12px;
+            transition: border-color var(--transition-speed);
+        }
+        .cap-card:hover { border-color: var(--color-primary, #00ff66); }
+        .cap-card strong { color: var(--color-primary, #00ff66); display: block; margin-bottom: 4px; }
+        .cap-card p { margin: 0 0 6px; opacity: .85; }
+        .cap-card a { color: var(--color-primary, #00ff66); font-weight: bold; text-decoration: none; }
+        .cap-card a:hover { text-decoration: underline; }
+
         .system-status {
             display: flex;
             align-items: center;
@@ -853,7 +866,7 @@
             <select id="lang-select" class="lang-select" aria-label="Language"
                     onchange="setLanguage(this.value)"></select>
 
-            <a class="github-pill" href="https://github.com/your-org/open-wildguard-hub" target="_blank" rel="noopener">
+            <a class="github-pill" href="https://github.com/Arbogaste/open-wildguard-hub" target="_blank" rel="noopener">
                 <i class="fa-brands fa-github"></i>
                 open-wildguard-hub
             </a>
@@ -998,6 +1011,77 @@
                             </ul>
                             <p style="font-size:12px;opacity:.8;">Clone the hub → pick your use case → follow the playbook with free tools. Wildlife can't wait.</p>
                         </div>
+
+                        <!-- Capability catalog: the ~100 capabilities, grouped in 10 modules, each linking its playbook -->
+                        <div class="docs-block">
+                            <h3>🧭 Capability Catalog — ~100 capabilities in 10 modules</h3>
+                            <p style="font-size:12px;opacity:.85;">What a full anti-poaching program can do. Each module links to a step-by-step playbook (recommended repos, scripts, hardware, agent prompts, milestones). Browse on GitHub:</p>
+                            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;margin-top:10px;font-size:12px;line-height:1.6;">
+
+                                <div class="cap-card">
+                                    <strong>M1 · Hub, interop &amp; governance</strong>
+                                    <p>Shared data model, roles/permissions, Essential→Advanced tiers, SMART/EarthRanger interop.</p>
+                                    <a href="https://github.com/Arbogaste/open-wildguard-hub/blob/main/docs/modules/M01-hub-architecture.md" target="_blank" rel="noopener">→ playbook</a>
+                                </div>
+
+                                <div class="cap-card">
+                                    <strong>M2 · Edge computer vision</strong>
+                                    <p>Human-vs-animal, weapons, vehicles, snares on camera; wind/bird false-positive filter; night IR; synthetic training data; evidence snapshot.</p>
+                                    <a href="https://github.com/Arbogaste/open-wildguard-hub/blob/main/docs/modules/M02-edge-vision.md" target="_blank" rel="noopener">→ playbook (full)</a>
+                                </div>
+
+                                <div class="cap-card">
+                                    <strong>M3 · Bioacoustics &amp; triangulation</strong>
+                                    <p>24/7 gunshot/chainsaw/vehicle detection, animal distress calls, TDoA source localization, audio denoising.</p>
+                                    <a href="https://github.com/Arbogaste/open-wildguard-hub/blob/main/docs/modules/M03-bioacoustics.md" target="_blank" rel="noopener">→ playbook (full)</a>
+                                </div>
+
+                                <div class="cap-card">
+                                    <strong>M4 · Aerial, thermal &amp; geo</strong>
+                                    <p>Scheduled/triggered drones, thermal night overwatch, 3D photogrammetry of escape routes, satellite habitat layers.</p>
+                                    <a href="https://github.com/Arbogaste/open-wildguard-hub/blob/main/docs/modules/M04-aerial-geo.md" target="_blank" rel="noopener">→ playbook</a>
+                                </div>
+
+                                <div class="cap-card">
+                                    <strong>M5 · Species intelligence</strong>
+                                    <p>GPS collars, geofencing red zones, density estimation, nest/calf protection, behavioral-anomaly alerts.</p>
+                                    <a href="https://github.com/Arbogaste/open-wildguard-hub/blob/main/docs/modules/M05-species-intel.md" target="_blank" rel="noopener">→ playbook</a>
+                                </div>
+
+                                <div class="cap-card">
+                                    <strong>M6 · Field &amp; community intel</strong>
+                                    <p>Fully offline patrol collection, anonymous citizen tips, informant safety/compartmentation, MEL metrics.</p>
+                                    <a href="https://github.com/Arbogaste/open-wildguard-hub/blob/main/docs/modules/M06-field-community.md" target="_blank" rel="noopener">→ playbook</a>
+                                </div>
+
+                                <div class="cap-card">
+                                    <strong>M7 · OSINT &amp; black-market intel</strong>
+                                    <p>Marketplace/forum scraping, slang decoding, EXIF geolocation, smuggling-network graphs, price-mutation early warning, radio opsec.</p>
+                                    <a href="https://github.com/Arbogaste/open-wildguard-hub/blob/main/docs/modules/M07-osint.md" target="_blank" rel="noopener">→ playbook</a>
+                                </div>
+
+                                <div class="cap-card">
+                                    <strong>M8 · Prediction &amp; patrol planning</strong>
+                                    <p>Risk hotspots, PAWS game-theory optimal patrols, RL adversarial sim, lunar-phase windows, de-biased occupancy models.</p>
+                                    <a href="https://github.com/Arbogaste/open-wildguard-hub/blob/main/docs/modules/M08-prediction-rl.md" target="_blank" rel="noopener">→ playbook</a>
+                                </div>
+
+                                <div class="cap-card">
+                                    <strong>M9 · Forensics &amp; legal</strong>
+                                    <p>Court-ready evidence packages, SHA-256 chain-of-custody, auto chargesheet (live demo), DNA-portal trafficking trace, privacy/AI-Act compliance.</p>
+                                    <a href="https://github.com/Arbogaste/open-wildguard-hub/blob/main/docs/modules/M09-forensics-legal.md" target="_blank" rel="noopener">→ playbook</a>
+                                </div>
+
+                                <div class="cap-card">
+                                    <strong>M10 · Resilience &amp; open-source ops</strong>
+                                    <p>System-health dashboards, predictive sensor/battery maintenance, federated learning (data stays local), ranger training, DVC model versioning.</p>
+                                    <a href="https://github.com/Arbogaste/open-wildguard-hub/blob/main/docs/modules/M10-resilience-maint.md" target="_blank" rel="noopener">→ playbook</a>
+                                </div>
+
+                            </div>
+                            <p style="font-size:11px;opacity:.7;margin-top:10px;">Full repo catalog &amp; use-case matrix: <a href="https://github.com/Arbogaste/open-wildguard-hub/blob/main/docs/README.md" target="_blank" rel="noopener">docs/README.md</a></p>
+                        </div>
+
                         <div class="docs-block">
                             <h3 id="doc-title-arduino">Configurazione Nodo Sensore Periferico Arduino (TinyML)</h3>
                             <p id="doc-desc-arduino">I nodi terrestri mimetizzati e low-cost sono basati su hardware
@@ -1222,7 +1306,7 @@
         <span class="credits-label"><i class="fa-solid fa-heart" style="color:var(--color-danger);"></i>&nbsp;Built
             on</span>
         <div class="credits-repos">
-            <a class="credit-chip our-repo" href="https://github.com/your-org/open-wildguard-hub" target="_blank">⭐
+            <a class="credit-chip our-repo" href="https://github.com/Arbogaste/open-wildguard-hub" target="_blank">⭐
                 open-wildguard-hub (questo repo)</a>
             <a class="credit-chip" href="https://github.com/Kerbal12/Ecosentinel" target="_blank">Ecosentinel</a>
             <a class="credit-chip"
