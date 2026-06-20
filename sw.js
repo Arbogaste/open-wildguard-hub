@@ -3,13 +3,16 @@
    loads with zero network. Map tiles are cached opportunistically (online);
    when offline, Leaflet falls back to vendor/leaflet/tile-offline.png. */
 
-const CACHE = 'wildguard-shell-v1';
+const CACHE = 'wildguard-shell-v2';
 
 const PRECACHE = [
   './',
   './index.html',
-  './locales/en.json',
-  './locales/it.json',
+  './i18n/en.json',
+  './i18n/it.json',
+  './assets/brand/favicon-32.png',
+  './assets/brand/favicon-180.png',
+  './assets/brand/favicon-256.png',
   './vendor/fonts/fonts.css',
   './vendor/leaflet/leaflet.css',
   './vendor/leaflet/leaflet.js',

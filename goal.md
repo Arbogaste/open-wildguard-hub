@@ -48,18 +48,22 @@ The project is considered on track when the repository can provide:
 - `dev.md`
   - Technical master guide for architecture, data contracts, and implementation rules.
 - `index.html`
-  - Interactive guide and command-center style walkthroughs.
-- Future `docs/use-cases/*.md`
+  - Illustrative demo command center; helps understand capabilities and set up use cases (not the runtime).
+- `docs/` and `toolkit/`
+  - The actionable core: capability playbooks (`docs/modules/M01..M10.md`), recommended-repo catalog
+    (`docs/README.md`), agent prompts (`docs/prompts/`), and runnable code (`toolkit/`).
+- Planned `docs/use-cases/*.md`
   - One file per real deployment scenario.
 
 ## Near-Term Delivery Order
 
-1. Stabilize the product narrative and documentation structure.
-2. Expand the HTML guide for field operators and maintainers.
-3. Define the local data model and persistence rules.
-4. Add offline synchronization and evidence handling.
-5. Split recurring workflows into dedicated use-case documents.
-6. Harden the system for deployment on constrained hardware.
+1. Stabilize the product narrative and documentation structure. ✅
+2. Expand the HTML guide for field operators and maintainers. ✅ (demo + Docs callout to playbooks)
+3. Build the capability playbooks (`docs/modules/`) + runnable toolkit. ◐ M2/M3 done; M1,M4–M10 scaffolded.
+4. Define the local data model and persistence rules. ◐ canonical `event_schema.json` defined.
+5. Bring each module scaffold up to full playbook depth + add per-module agent prompts.
+6. Split recurring workflows into dedicated `docs/use-cases/*.md` + deployment guides.
+7. Harden runtime for deployment on constrained hardware.
 
 ## Definition of Done
 

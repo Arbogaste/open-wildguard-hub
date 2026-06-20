@@ -8,6 +8,12 @@
     <meta name="description"
         content="Dashboard di monitoraggio tattico anti-bracconaggio open-source. open-wildguard-hub: edge-first, offline-ready, WWF & Forestry ready.">
 
+    <!-- Brand / favicons (TheRoarWire) -->
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/brand/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="256x256" href="assets/brand/favicon-256.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/brand/favicon-180.png">
+    <meta property="og:image" content="assets/brand/favicon-256.png">
+
     <!-- Fonts (self-hosted, offline-first): Outfit & Space Mono -->
     <link rel="stylesheet" href="vendor/fonts/fonts.css">
 
@@ -137,6 +143,21 @@
             color: var(--bg-base);
             box-shadow: 0 0 8px rgba(0, 255, 102, 0.3);
         }
+
+        .lang-select {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all var(--transition-speed);
+        }
+        .lang-select:hover { border-color: var(--color-primary); color: var(--text-light, #fff); }
+        .lang-select option { background: var(--bg-base, #07090e); color: #fff; }
 
         .system-status {
             display: flex;
@@ -819,7 +840,8 @@
     <!-- Header Section -->
     <header>
         <div class="logo-area">
-            <i class="fa-solid fa-shield-halved logo-icon"></i>
+            <img src="assets/brand/favicon-256.png" class="logo-icon" alt="WildGuard"
+                 style="height:42px;width:42px;border-radius:8px;object-fit:cover;">
             <div class="logo-text">
                 <h1>OPEN-WILDGUARD-HUB</h1>
                 <span id="txt-sub-header">Centro di Comando // Anti-Bracconaggio Open-Source</span>
@@ -827,11 +849,9 @@
         </div>
 
         <div class="header-controls">
-            <!-- Language Selection Toggle -->
-            <div class="language-toggle" onclick="toggleLanguage()">
-                <button class="lang-btn" id="btn-it">IT</button>
-                <button class="lang-btn active" id="btn-en">EN</button>
-            </div>
+            <!-- Language selector (~20 langs; untranslated locales fall back to English) -->
+            <select id="lang-select" class="lang-select" aria-label="Language"
+                    onchange="setLanguage(this.value)"></select>
 
             <a class="github-pill" href="https://github.com/your-org/open-wildguard-hub" target="_blank" rel="noopener">
                 <i class="fa-brands fa-github"></i>
@@ -964,6 +984,20 @@
 
                     <!-- TAB 2: DEVELOPER & ARDUINO TINYML GUIDE -->
                     <div id="tab-docs" class="tab-pane">
+                        <div class="docs-block" style="border:1px solid var(--color-primary,#00ff66);background:rgba(0,255,102,0.05);">
+                            <h3>📚 Operator Playbooks &amp; Toolkit — the real content lives in <code>docs/</code></h3>
+                            <p>This dashboard is an illustrative demo. The actionable material — one playbook per
+                            capability module (recommended repos, runnable Python training/inference scripts, Arduino
+                            node firmware, agent prompts, milestones, international use cases) — is in the repository:</p>
+                            <ul style="font-size:13px;line-height:1.9;">
+                                <li><code>docs/README.md</code> — master index + recommended-repo catalog + use-case matrix</li>
+                                <li><code>docs/modules/M01..M10.md</code> — 10 capability playbooks (M2 vision &amp; M3 audio fully fleshed)</li>
+                                <li><code>toolkit/python/</code> — camera-trap &amp; audio trainers, edge inference, TDoA localizer</li>
+                                <li><code>toolkit/arduino/</code> — PIR camera node + acoustic node firmware</li>
+                                <li><code>docs/prompts/</code> — paste-into-any-agent prompt packs per milestone</li>
+                            </ul>
+                            <p style="font-size:12px;opacity:.8;">Clone the hub → pick your use case → follow the playbook with free tools. Wildlife can't wait.</p>
+                        </div>
                         <div class="docs-block">
                             <h3 id="doc-title-arduino">Configurazione Nodo Sensore Periferico Arduino (TinyML)</h3>
                             <p id="doc-desc-arduino">I nodi terrestri mimetizzati e low-cost sono basati su hardware
@@ -1418,7 +1452,8 @@
 
         // RENDER INTERFACE TEXTS
         function renderTranslations() {
-            const lang = translations[currentLanguage];
+            // merge over English so any missing/untranslated key still shows readable text
+            const lang = Object.assign({}, translations.en, translations[currentLanguage] || {});
 
             // Header & general labels
             document.getElementById('txt-sub-header').innerText = lang.txt_sub_header;
@@ -1548,16 +1583,39 @@
         }
 
         // Toggling Language function
-        function toggleLanguage() {
-            if (currentLanguage === 'it') {
-                currentLanguage = 'en';
-                document.getElementById('btn-it').classList.remove('active');
-                document.getElementById('btn-en').classList.add('active');
-            } else {
-                currentLanguage = 'it';
-                document.getElementById('btn-en').classList.remove('active');
-                document.getElementById('btn-it').classList.add('active');
+        // ── i18n: ~20 languages. en + it are bundled inline (offline first paint).
+        // Others load from i18n/<code>.json on demand; missing keys fall back to English.
+        // To add/translate a language: copy i18n/en.json -> i18n/<code>.json, translate values.
+        const LANGS = [
+            ['en', 'English'], ['it', 'Italiano'], ['es', 'Español'], ['fr', 'Français'],
+            ['de', 'Deutsch'], ['pt', 'Português'], ['ru', 'Русский'], ['zh', '中文'],
+            ['hi', 'हिन्दी'], ['ar', 'العربية'], ['sw', 'Kiswahili'], ['id', 'Bahasa Indonesia'],
+            ['fa', 'فارسی'], ['tr', 'Türkçe'], ['vi', 'Tiếng Việt'], ['th', 'ไทย'],
+            ['bn', 'বাংলা'], ['ja', '日本語'], ['ko', '한국어'], ['uk', 'Українська']
+        ];
+
+        function populateLangSelect() {
+            const sel = document.getElementById('lang-select');
+            if (!sel) return;
+            sel.innerHTML = LANGS.map(([c, n]) => `<option value="${c}">${n}</option>`).join('');
+            sel.value = currentLanguage;
+        }
+
+        async function setLanguage(code) {
+            if (!translations[code]) {
+                try {
+                    const res = await fetch(`i18n/${code}.json`);
+                    if (res.ok) {
+                        // merge over English so any untranslated key still renders
+                        translations[code] = Object.assign({}, translations.en, await res.json());
+                    }
+                } catch (_) { /* offline / missing → fall back below */ }
             }
+            currentLanguage = translations[code] ? code : 'en';
+            try { localStorage.setItem('wildguard_lang', currentLanguage); } catch (_) {}
+            const sel = document.getElementById('lang-select');
+            if (sel) sel.value = currentLanguage;
+            document.documentElement.lang = currentLanguage;
             renderTranslations();
         }
 
@@ -1753,8 +1811,13 @@ Forest Officer Authorized Signature
             routeLayer.clearLayers();
         }
 
-        // First render
-        renderTranslations();
+        // i18n init: restore saved language, build selector, first render
+        try {
+            const saved = localStorage.getItem('wildguard_lang');
+            if (saved) currentLanguage = saved;
+        } catch (_) {}
+        populateLangSelect();
+        setLanguage(currentLanguage);
     </script>
 </body>
 

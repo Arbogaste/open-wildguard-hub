@@ -234,19 +234,29 @@ Requirements:
 
 ## 9. Documentation Strategy
 
-The current `dev.md` is the master technical document.
-As the project matures, recurring topics should be split into smaller files.
+The current `dev.md` is the master technical document. The operator-facing, capability-specific
+content now lives in **`docs/`** — this is the heart of the project (the "repo of repos").
 
-Suggested future structure:
+Current structure (live):
 
-- `docs/use-cases/camera-trap-intrusion.md`
-- `docs/use-cases/gunshot-response.md`
-- `docs/use-cases/offline-field-reporting.md`
-- `docs/use-cases/evidence-handling.md`
-- `docs/use-cases/osint-intake.md`
-- `docs/use-cases/patrol-planning.md`
-- `docs/deployment/edge-node.md`
-- `docs/deployment/command-center.md`
+- `docs/README.md` — master index: recommended-repo catalog (the 16 upstream projects), use-case
+  matrix, and how to use the playbooks.
+- `docs/modules/M01..M10.md` — one **playbook per capability module** (Section 5 here). Each lists
+  recommended repos, hardware, runnable scripts, agent prompts, milestones, and international use
+  cases. M2 (edge vision) and M3 (bioacoustics) are fully fleshed; M1, M4–M10 are scaffolds being
+  filled to the same depth.
+- `docs/modules/_TEMPLATE.md` — the playbook structure every module follows.
+- `docs/prompts/` — paste-into-any-agent prompt packs to drive an LLM agent through each milestone.
+- `toolkit/python/` — runnable training/inference scripts (camera-trap classifier, edge inference,
+  audio classifier, TDoA localizer) + `requirements.txt`.
+- `toolkit/arduino/` — edge node firmware (PIR camera node, acoustic node).
+- `toolkit/data/` — canonical `event_schema.json` (the Tactical Event) + open-dataset pointers.
+
+Still planned (deployment guides, one file per scenario):
+
+- `docs/use-cases/*.md` (camera-trap-intrusion, gunshot-response, offline-field-reporting,
+  evidence-handling, osint-intake, patrol-planning)
+- `docs/deployment/edge-node.md`, `docs/deployment/command-center.md`
 
 The rule is simple:
 

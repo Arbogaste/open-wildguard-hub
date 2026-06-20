@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "WildGuard Tactical Event",
+  "description": "Canonical event record. Every detector (camera, audio, collar, OSINT, ranger report) normalizes to this. Flat, versioned, offline-friendly. See dev.md.",
+  "type": "object",
+  "required": ["event_id", "timestamp", "source_type", "coordinates", "threat_class", "confidence"],
+  "properties": {
+    "event_id": {"type": "string", "description": "uuid4"},
+    "timestamp": {"type": "integer", "description": "unix epoch seconds (UTC)"},
+    "source_type": {"type": "string", "enum": ["camera_trap", "acoustic_node", "gps_collar", "drone", "osint", "ranger_report", "sensor"]},
+    "source_id": {"type": "string"},
+    "coordinates": {
+      "type": "object",
+      "required": ["latitude", "longitude"],
+      "properties": {
+        "latitude": {"type": "number"},
+        "longitude": {"type": "number"},
+        "elevation": {"type": ["number", "null"]}
+      }
+    },
+    "threat_class": {"type": "string", "examples": ["poacher", "vehicle", "weapon", "gunshot", "chainsaw", "snare", "intrusion", "animal_distress"]},
+    "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+    "evidence_hash": {"type": ["string", "null"], "description": "sha256 of evidence file (chain-of-custody, M9)"},
+    "evidence_url": {"type": ["string", "null"]},
+    "metadata": {"type": "object"}
+  }
+}

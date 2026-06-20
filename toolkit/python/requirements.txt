@@ -1,0 +1,11 @@
+# WildGuard toolkit — install only what your module needs.
+# M2 edge vision:
+ultralytics>=8.0
+opencv-python>=4.8
+# M2/M3 training (transfer learning + audio):
+torch>=2.0
+torchvision>=0.15
+torchaudio>=2.0
+# M3 TDoA:
+numpy>=1.24
+# Edge export (optional): onnx, onnxruntime, openvino, onnx2tf
