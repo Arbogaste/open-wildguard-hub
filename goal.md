@@ -26,7 +26,7 @@ index.html                static demo command center (offline HTML, no backend r
 
 ---
 
-## State of the Art (2026-06-21)
+## State of the Art (2026-06-28)
 
 | Layer | Status | Gap |
 |-------|--------|-----|
@@ -44,6 +44,9 @@ index.html                static demo command center (offline HTML, no backend r
 | Dashboard `index.html` | ✅ OSINT Leads tab (masked) + Toolkit Status tab (mock vision); **no external API calls** | reads local sample JSON only |
 | `scriptplay.html` | ✅ YT metadata = real videos.insert body; Google-API setup note + example code; footer with Ollama/OpenRouter config | external calls only to user-configured OpenRouter/Ollama |
 | `docs/INTEGRATION-MAP.md` | ✅ per-module: tool/why/repo-that-uses-it/how-to-start + free public APIs | activist-friendly index |
+| `docs/ACCESSIBILITY.md` | ✅ WCAG 2.1 (W3C) AA checklist + patterns + self-audit | skip-link/reduced-motion applied to index+scriptplay |
+| `readme.html` + footer links | ✅ accessible mission/README page (renders README.md) | linked from index + scriptplay footers |
+| SEO/sitemap | ✅ `sitemap.xml` + `robots.txt`; scriptplay meta/og added | — |
 | M6 toolkit (`tip_intake.py`) | ✅ runnable, stdlib-only, PII-hashed, `--demo` works | No hub POST wiring |
 | M9 toolkit (`case_file.py`) | ✅ runnable, stdlib-only, integrity PASS/FAIL + case file | PDF output optional |
 | M10 toolkit (`node_health.py`) | ✅ runnable, stdlib-only, `--demo` works | No hub POST wiring |

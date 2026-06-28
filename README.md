@@ -46,13 +46,25 @@ The documentation is intentionally split by role:
     `M05` species intelligence, `M06` field intake, `M07` OSINT, `M08` prediction, `M09` evidence,
     `M10` resilience / federated learning.
 - `toolkit/`
-  - Runnable, vendor-free code: `toolkit/python/` (training + edge inference), `toolkit/arduino/`
-    (sensor-node firmware), `toolkit/data/` (canonical event schema + open-dataset pointers).
+  - Runnable, vendor-free code: `toolkit/python/` (edge inference + the M5–M10 module scripts),
+    `toolkit/arduino/` (sensor-node firmware), `toolkit/data/` (event schema, OSINT site list + slang
+    dictionary, sample leads, open-dataset pointers).
+- `docs/INTEGRATION-MAP.md`
+  - Activist-friendly: per module, *what tool · why · which repo already uses it · how to start* +
+    a copy-paste list of free public APIs (GBIF, IUCN, Nominatim, Open-Meteo…).
+- `docs/ACCESSIBILITY.md`
+  - The accessibility standard for all pages — WCAG 2.1 (W3C), AA target, checklist + patterns + tests.
+- `docs/modules/M11-M20-pollution-tier.md`
+  - **Design only.** Optional environmental-crime tier (water/air/waste/marine) that reuses the core.
+- `skills/wildlife-osint/`
+  - A Claude Code skill that drives the M7 OSINT tools with legal guardrails.
 - Planned `docs/use-cases/*.md`
   - One deployment guide per real-world scenario.
-- `index.html`
-  - An **illustrative demo** command center. It helps you understand the capabilities and set up use
-    cases; it is not the runtime. The real, actionable content is in `docs/` and `toolkit/`.
+- `index.html` / `scriptplay.html` / `readme.html`
+  - The **demo command center** (OSINT Leads + Toolkit Status tabs), the YouTube awareness-video
+    generator, and the rendered mission/README. Illustrative UI — the real content is in `docs/` +
+    `toolkit/`. The site makes **no external API calls** (mock data; only user-configured
+    Ollama/OpenRouter in the script generator).
 
 Core external resources already integrated in the docs and toolkit:
 - `MammAlps` for multi-view video/audio behavior data.
@@ -76,19 +88,42 @@ To avoid confusion: this README's **delivery milestones** (M0–M6 below) track 
 hardens. The **capability modules** (M1–M10, in `docs/modules/` and `dev.md` §5) are the *what the
 platform does* — edge vision, bioacoustics, OSINT, forensics, etc. They are independent numbering.
 
+## What runs today (toolkit)
+
+The project is no longer docs-only. These run **offline, stdlib-only, on a Raspberry Pi** — each has a
+`--demo` you can run with zero setup. They all emit the canonical Tactical Event
+(`toolkit/data/event_schema.json`), so they compose.
+
+| Capability | Script | Try it |
+|---|---|---|
+| M5 species/place enrichment (GBIF/IUCN/OSM) | `toolkit/python/species_lookup.py` | `--demo` / `--name "tiger"` |
+| M5 collar geofence | `toolkit/python/gps_geofence.py` | `--demo` |
+| M6 community tip intake (PII-hashed) | `toolkit/python/tip_intake.py` | `--demo` |
+| M7 OSINT wildlife-trade scraper | `toolkit/python/osint_scrape.py` + `ebay_adapter.py` | `--demo` / `--sites ... --query avorio` |
+| M7 target list (104 sites) + slang dict | `toolkit/data/osint_sites.json`, `slang_dict.json` | edit + feed the scraper |
+| M8 risk heatmap + patrol routes | `toolkit/python/risk_model.py` | `--demo` |
+| M9 evidence integrity + case file | `toolkit/python/case_file.py` | `--demo` |
+| M10 node health monitor | `toolkit/python/node_health.py` | `--demo` |
+| M2/M3 edge inference + training | `edge_infer_camera.py`, `tdoa_locate.py`, `train_*` | runnable on Pi/Jetson |
+
+Not yet built: **M0 hub** (FastAPI+SQLite — the critical path that makes the above post live data) and
+**M4** aerial/geo (Sentinel — heavy deps). See `goal.md` for the live status table.
+
 ## Roadmap
 
-The platform is being hardened in milestone order. The current state is documentation-first with an interactive prototype UI, and the next steps are aimed at production-grade foundations.
+Milestone order for hardening the *repository*. State: documentation + a runnable per-module toolkit;
+the next gate is the live hub that wires the tools to the dashboard.
 
 | Milestone | Status | Outcome |
 |---|---|---|
-| M0 | In progress | Canonical mission, documentation map, and delivery contract |
-| M1 | In progress | Production-oriented README, goal file, and technical master guide |
-| M2 | Planned | Stable local runtime, event schema, and persistence layer |
-| M3 | Planned | Offline synchronization, queueing, and evidence integrity |
-| M4 | Planned | Field workflows and use-case specific guides |
-| M5 | Planned | Edge services for vision, audio, telemetry, and mapping |
-| M6 | Planned | Release hardening, testing, and deployment readiness |
+| M0 | ✅ Done | Canonical mission, documentation map, delivery contract |
+| M1 | ✅ Done | Production README, `goal.md`, `dev.md` technical guide |
+| Toolkit | ✅ Done | Runnable per-module scripts (M5–M10 + M7 OSINT), all `--demo` |
+| Dashboard | ✅ Done | `index.html` OSINT Leads + Toolkit Status tabs; `scriptplay.html`; `readme.html`; SEO + WCAG AA pass |
+| Hub (M0 cap.) | 🔴 Next | FastAPI+SQLite hub so tools POST live events to the map — critical path |
+| Sync | Planned | Offline store-and-forward, queueing, evidence integrity over the wire |
+| Use-cases | Planned | One deployment guide per real-world scenario (`docs/use-cases/`) |
+| Release | Planned | Hardening, tests, deployment readiness |
 
 ## Immediate Priorities
 
@@ -109,7 +144,14 @@ The platform is being hardened in milestone order. The current state is document
 
 This repository is still in active development. The current front-end is a static, **offline-first** prototype and should be treated as the command center shell, not the full runtime. All sensor data (camera traps, audio, IoT collars, OSINT) is intentionally mocked to showcase the interface.
 
-**Serve it over HTTP** — do not open `index.html` directly via `file://`. The dashboard registers a service worker and fetches `locales/*.json` for i18n; both are blocked under `file://`.
+**Serve it over HTTP** — do not open `index.html` directly via `file://`. The dashboard registers a service worker and fetches `i18n/*.json` for translations (and `toolkit/data/*.json` for the demo cards); both are blocked under `file://`.
+
+To run the toolkit (no server needed):
+
+```bash
+cd toolkit/python
+python3 risk_model.py --demo      # or osint_scrape.py, case_file.py, node_health.py, ...
+```
 
 ```bash
 cd open-wildguard-hub
