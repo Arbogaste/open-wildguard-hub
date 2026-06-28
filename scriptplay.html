@@ -3,7 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WildGuard — YouTube Script Generator</title>
+  <title>WildGuard — YouTube Script Generator for Wildlife Awareness</title>
+  <meta name="description" content="Turn a wildlife alert into a ready-to-shoot awareness video: script, scenes, image prompts, and an upload-ready YouTube Data API v3 metadata file. Runs offline (Ollama) or via OpenRouter.">
+  <meta name="theme-color" content="#07090e">
+  <link rel="canonical" href="https://arbogaste.github.io/open-wildguard-hub/scriptplay.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="WildGuard — YouTube Script Generator">
+  <meta property="og:description" content="Wildlife alert → awareness video script + YouTube-ready metadata. Free, offline-capable.">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="stylesheet" href="vendor/fonts/fonts.css">
   <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/brand/favicon-32.png">
@@ -20,6 +27,41 @@
       --warn: #ffb300;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    /* a11y: skip link + reduced motion */
+    .skip-link { position: absolute; left: -999px; top: 0; z-index: 9999; background: var(--primary);
+      color: #000; font-weight: 700; padding: 10px 16px; border-radius: 0 0 6px 0; text-decoration: none; }
+    .skip-link:focus { left: 0; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important;
+        transition-duration: .001ms !important; }
+    }
+
+    /* footer */
+    .site-footer { border-top: 1px solid var(--border); background: var(--surface);
+      margin-top: 28px; padding: 26px 22px 0; font-family: 'Outfit', sans-serif; }
+    .footer-grid { max-width: 1180px; margin: 0 auto; display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr; gap: 28px; }
+    @media (max-width: 820px) { .footer-grid { grid-template-columns: 1fr; gap: 22px; } }
+    .footer-brand { font-family: 'Space Mono', monospace; font-size: 16px; font-weight: 700;
+      color: var(--primary); margin-bottom: 8px; }
+    .footer-tag { font-size: 12.5px; line-height: 1.6; color: var(--text); opacity: .82; }
+    .footer-links { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 12px; }
+    .footer-links a { color: var(--cyan); text-decoration: none; font-size: 12px; }
+    .footer-links a:hover { text-decoration: underline; }
+    .footer-h { font-family: 'Space Mono', monospace; font-size: 12.5px; font-weight: 700;
+      color: var(--text); margin-bottom: 10px; letter-spacing: .3px; }
+    .footer-h i { color: var(--primary); margin-right: 6px; }
+    .footer-steps { margin: 0 0 8px 16px; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+    .footer-steps li { font-size: 12px; line-height: 1.55; color: var(--text); opacity: .88; }
+    .site-footer code { font-family: 'Space Mono', monospace; font-size: 11px;
+      background: rgba(0,0,0,.35); border: 1px solid var(--border); border-radius: 4px;
+      padding: 1px 5px; color: var(--cyan); }
+    .footer-note { font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+    .footer-bar { max-width: 1180px; margin: 22px auto 0; padding: 12px 0 18px;
+      border-top: 1px solid var(--border); display: flex; flex-wrap: wrap; gap: 10px;
+      justify-content: space-between; align-items: center; font-size: 11px; color: var(--muted); }
+    .footer-disclaimer { color: var(--warn); opacity: .85; max-width: 560px; }
+    .footer-disclaimer i { margin-right: 5px; }
     :focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; border-radius: 4px; }
 
     body {
@@ -460,6 +502,7 @@
   </style>
 </head>
 <body>
+<a href="#main" class="skip-link">Skip to content</a>
 
 <header>
   <a class="back-link" href="index.html">
@@ -472,7 +515,7 @@
   <span class="mode-badge" id="mode-badge">DEMO</span>
 </header>
 
-<div class="layout">
+<main id="main" class="layout">
 
   <!-- ── LEFT: Config ── -->
   <div class="config-panel">
@@ -610,6 +653,79 @@
             </button>
           </div>
           <div class="script-area" id="meta-text"></div>
+
+          <details style="margin-top:14px;border:1px solid var(--border,#243);border-radius:8px;padding:10px 12px;">
+            <summary style="cursor:pointer;font-weight:600;font-size:13px;">
+              <i class="fa-brands fa-google"></i> Upload via YouTube Data API v3 — key/auth steps + example code
+            </summary>
+            <div style="font-size:12px;line-height:1.6;margin-top:10px;">
+              <strong>Why OAuth, not just an API key:</strong> reading public data (search, video info)
+              works with a simple <em>API key</em>; <em>uploading to your own channel</em> requires an
+              <em>OAuth 2.0</em> client (the key alone cannot write).
+
+              <p style="margin:10px 0 4px;"><strong>Steps (one-time):</strong></p>
+              <ol style="margin:0 0 6px 18px;padding:0;">
+                <li>Google Cloud Console → create a project.</li>
+                <li>APIs &amp; Services → <strong>Enable "YouTube Data API v3"</strong>.</li>
+                <li>Credentials → for read-only OSINT/search: <strong>Create API key</strong> →
+                    put it in env <code>YOUTUBE_API_KEY</code> (never hardcode).</li>
+                <li>For uploading: Credentials → <strong>OAuth client ID</strong> (type "Desktop") →
+                    download <code>client_secrets.json</code>.</li>
+                <li>OAuth consent screen → add scope
+                    <code>https://www.googleapis.com/auth/youtube.upload</code> → add your account as a
+                    test user.</li>
+                <li>First run opens a browser to authorize; the token is cached
+                    (<code>token_YourChannelName.pickle</code>) for reuse.</li>
+              </ol>
+              <p style="margin:6px 0 4px;"><strong>Quota:</strong> default 10,000 units/day. An upload
+                 costs ~1,600 units (~6 uploads/day); a <code>search.list</code> costs 100. Request more
+                 in the Console if needed.</p>
+
+              <p style="margin:10px 0 4px;"><strong>Example — upload using the JSON above</strong>
+                 (<code>pip install google-api-python-client google-auth-oauthlib</code>):</p>
+<pre style="background:#0c1420;border-radius:6px;padding:10px;overflow:auto;font-size:11px;line-height:1.45;"><code>import json, os
+from google_auth_oauthlib.flow import InstalledAppFlow
+from google.auth.transport.requests import Request
+from googleapiclient.discovery import build
+from googleapiclient.http import MediaFileUpload
+import pickle
+
+SCOPES = ["https://www.googleapis.com/auth/youtube.upload"]
+m = json.load(open("metadata.json"))          # the JSON from this tab
+
+# --- OAuth (cache token, refresh when expired) ---
+tok = m["video_config"]["token_file"]
+creds = pickle.load(open(tok, "rb")) if os.path.exists(tok) else None
+if not creds or not creds.valid:
+    if creds and creds.expired and creds.refresh_token:
+        creds.refresh(Request())
+    else:
+        creds = InstalledAppFlow.from_client_secrets_file(
+            "client_secrets.json", SCOPES).run_local_server(port=0)
+    pickle.dump(creds, open(tok, "wb"))
+
+yt = build("youtube", "v3", credentials=creds)
+req = yt.videos().insert(
+    part="snippet,status,recordingDetails",
+    body={"snippet": m["snippet"], "status": m["status"],
+          "recordingDetails": m["recordingDetails"]},
+    media_body=MediaFileUpload(m["video_config"]["video_file"],
+                               chunksize=-1, resumable=True),
+)
+resp = req.execute()
+print("https://youtu.be/" + resp["id"])
+</code></pre>
+
+              <p style="margin:8px 0 0;font-size:11px;color:var(--text-muted,#789);">
+                Read-only OSINT search (no OAuth):
+                <code>GET https://www.googleapis.com/youtube/v3/search?part=snippet&amp;type=video&amp;q=QUERY&amp;key=$YOUTUBE_API_KEY</code><br>
+                Other useful Google APIs: <strong>Cloud Translation</strong> (multilingual slang),
+                <strong>Cloud Vision</strong> (auto thumbnail / species-in-image),
+                <strong>Custom Search JSON API</strong> (web/marketplace OSINT),
+                <strong>Maps Geocoding</strong> (location text → coordinates).
+              </p>
+            </div>
+          </details>
         </div>
       </div>
 
@@ -631,7 +747,7 @@
     <div class="status-bar" id="status-bar">Ready · Demo mode — no LLM calls</div>
   </div>
 
-</div>
+</main>
 
 <!-- ─── Config (no personal data — generic) ───────────────────────────────
      DEMO_MODE = true  → instant mock output, no API needed
@@ -718,6 +834,39 @@
     setTimeout(() => { sb.textContent = prev; }, 2500);
   }
 
+  // ── YouTube Data API v3 metadata builder ─────────────────────────────────
+  // Output is an upload-ready `youtube.videos.insert` request body — same shape the
+  // googleapiclient call below expects. Structure inspired by a generic yt-upload
+  // pipeline config (channel/token/snippet/status/recordingDetails). All values are
+  // placeholders — fill channel + files before upload.
+  const YT_CATEGORY = { 'People & Blogs': '22', 'Education': '27', 'Science & Technology': '28',
+                        'News & Politics': '25', 'Nonprofits & Activism': '29' };
+  function slug(s) { return String(s || '').replace(/[^\w]+/g, ''); }
+  function buildMeta(news, species, topic, format, tone, ctx) {
+    const title = `${(news || '').split('\n')[0].trim().slice(0, 55) || 'Wildlife Conservation Alert'} | Documentary`;
+    const description =
+      `${ctx || ''}\n\nThis video is part of an open-source conservation intelligence initiative.\n` +
+      `🔗 Full toolkit: https://github.com/Arbogaste/open-wildguard-hub\n\n` +
+      `#WildlifeConservation #AntiPoaching #OpenSource #${slug(species) || 'Wildlife'}`;
+    const tags = [species || 'wildlife', 'conservation', 'anti-poaching', 'open source',
+                  topic || 'environment', format, tone].filter(Boolean);
+    return {
+      video_config: {
+        video_file: 'final_video.mp4',
+        thumbnail_file: null,
+        playlist_id: null,
+        channel: 'YourChannelName',
+        token_file: 'token_YourChannelName.pickle'
+      },
+      snippet: { title, description, tags, categoryId: YT_CATEGORY['Nonprofits & Activism'],
+                 defaultLanguage: 'en' },
+      status: { privacyStatus: 'public', license: 'creativeCommon', embeddable: true,
+                publicStatsViewable: true, selfDeclaredMadeForKids: false,
+                notifySubscribers: false, publishAt: null },
+      recordingDetails: { recordingDate: null, locationDescription: null }
+    };
+  }
+
   // ── Mock generation ──────────────────────────────────────────────────────
   function mockGenerate(news, species, topic, format, tone, audience, nScenes) {
     const subj = species || topic || 'this species';
@@ -775,14 +924,7 @@
       prompt: `Cinematic ${format} documentary still frame. Subject: ${subj}. Scene: "${s.title}". Tone: ${tone}. Dramatic natural lighting, 16:9 aspect ratio, photorealistic, no text overlays, National Geographic style.`
     }));
 
-    const meta = {
-      title: `${news.split('\n')[0].trim().slice(0, 55) || 'Wildlife Conservation Alert'} | Documentary`,
-      description: `${ctx}\n\nThis video is part of an open-source conservation intelligence initiative.\n🔗 Full toolkit: https://github.com/Arbogaste/open-wildguard-hub\n\n#WildlifeConservation #AntiPoaching #OpenSource #${(species || 'Wildlife').replace(/\s/g, '')}`,
-      tags: [species || 'wildlife', 'conservation', 'anti-poaching', 'open source', topic || 'environment', format, tone],
-      category: 'People & Blogs',
-      privacy: 'unlisted'
-    };
-
+    const meta = buildMeta(news, species, topic, format, tone, ctx);
     return { script: fullScript, scenes: pool, imagePrompts, meta };
   }
 
@@ -843,9 +985,15 @@ Write the script now. No preamble.`;
     while ((m = re.exec(raw)) !== null) {
       scenes.push({ title: m[2].replace(/\*+/g,'').trim(), narration: m[3].trim() });
     }
-    let meta = { title: news.slice(0,55), description: '', tags: [species, topic].filter(Boolean) };
+    // start from the API-ready body, then overlay any title/description/tags the LLM produced
+    const meta = buildMeta(news, species, topic, format, tone, news);
     const jm = raw.match(/```json\s*([\s\S]*?)```/i);
-    if (jm) try { meta = { ...meta, ...JSON.parse(jm[1]) }; } catch(_) {}
+    if (jm) try {
+      const llm = JSON.parse(jm[1]);
+      if (llm.title) meta.snippet.title = llm.title;
+      if (llm.description) meta.snippet.description = llm.description;
+      if (Array.isArray(llm.tags) && llm.tags.length) meta.snippet.tags = llm.tags;
+    } catch(_) {}
     const fallback = mockGenerate(news, species, topic, format, tone, audience, nScenes);
     return {
       script: raw.replace(/```json[\s\S]*?```/gi,'').trim(),
@@ -854,7 +1002,7 @@ Write the script now. No preamble.`;
         scene: i+1, title: s.title,
         prompt: `Cinematic ${format} still. "${s.title}". ${species || 'Wildlife'} conservation. Dramatic lighting, 16:9, photorealistic, no text.`
       })),
-      meta: { ...meta, privacy:'unlisted' }
+      meta
     };
   }
 
@@ -1045,5 +1193,56 @@ Write the script now. No preamble.`;
     }
   }
 </script>
+
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="footer-col">
+      <div class="footer-brand"><i class="fa-solid fa-shield-halved"></i> OPEN-WILDGUARD-HUB</div>
+      <p class="footer-tag">Open-source anti-poaching intelligence. Runs offline, $0 licenses.
+         This tool turns a wildlife alert into a ready-to-shoot awareness video.</p>
+      <div class="footer-links">
+        <a href="https://github.com/Arbogaste/open-wildguard-hub" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> Repository</a>
+        <a href="readme.html"><i class="fa-solid fa-book-open"></i> README / Mission</a>
+        <a href="index.html"><i class="fa-solid fa-gauge-high"></i> Command Center</a>
+        <a href="https://github.com/Arbogaste/open-wildguard-hub/tree/main/docs#readme" target="_blank" rel="noopener"><i class="fa-solid fa-book"></i> Docs</a>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <div class="footer-h"><i class="fa-solid fa-microchip"></i> Run with a local model — Ollama</div>
+      <ol class="footer-steps">
+        <li>Install: <code>curl -fsSL https://ollama.com/install.sh | sh</code></li>
+        <li>Pull a small model: <code>ollama pull phi3</code> (or <code>llama3</code>)</li>
+        <li>Serve (auto on most installs): <code>ollama serve</code> → <code>http://localhost:11434</code></li>
+        <li>Browser blocks cross-origin by default — allow this page:<br>
+            <code>OLLAMA_ORIGINS='*' ollama serve</code></li>
+        <li>In this page set <code>DEMO_MODE=false</code>, pick <strong>Ollama</strong>. Defaults:
+            <code>OLLAMA_URL</code> / <code>OLLAMA_MODEL</code> in the config block.</li>
+      </ol>
+      <p class="footer-note">100% offline, no key, no data leaves your machine. Best for field laptops / Pi.</p>
+    </div>
+
+    <div class="footer-col">
+      <div class="footer-h"><i class="fa-solid fa-cloud"></i> Run with a hosted model — OpenRouter</div>
+      <ol class="footer-steps">
+        <li>Create a key at <code>openrouter.ai/keys</code>.</li>
+        <li>Set <code>OPENROUTER_KEY</code> in the config block (use a <code>config.js</code> you
+            <code>.gitignore</code> — never commit keys).</li>
+        <li>Pick a model in <code>OPENROUTER_MODEL</code> — free tier e.g.
+            <code>meta-llama/llama-3-8b-instruct:free</code>.</li>
+        <li>Set <code>DEMO_MODE=false</code>, pick <strong>OpenRouter</strong>.</li>
+      </ol>
+      <p class="footer-note">Stronger output, needs internet + a key. Costs depend on the chosen model.</p>
+    </div>
+  </div>
+
+  <div class="footer-bar">
+    <span>© <span id="footer-year"></span> OPEN-WILDGUARD-HUB — MIT License · Demo data is fictitious.</span>
+    <span class="footer-disclaimer"><i class="fa-solid fa-triangle-exclamation"></i>
+      Awareness/educational tool. Verify every fact before publishing; never name a specific
+      individual or shop in connection with a crime.</span>
+  </div>
+</footer>
+<script>document.getElementById('footer-year').textContent = new Date().getFullYear();</script>
 </body>
 </html>

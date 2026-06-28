@@ -1,0 +1,184 @@
+{
+  "txt_sub_header": "open-wildguard-hub // Kommandozentrale",
+  "txt_status": "SYSTEM ONLINE",
+  "txt_title_stats": "Sensortelemetrie",
+  "lbl_cameras": "Kamerafalle",
+  "lbl_audio": "Audio-Knoten",
+  "lbl_collars": "IoT-Halsbänder",
+  "lbl_osint": "OSINT-Agg.",
+  "txt_title_alerts": "Aktive Bedrohungswarnungen",
+  "txt_alert_desc_1": "Bewaffnete Person erkannt (Wilderer)",
+  "txt_alert_desc_2": "Energiespitze erkannt (Schuss)",
+  "btn_dispatch": "Ranger entsenden",
+  "btn_locate": "Position orten",
+  "btn_txt_sim": "Edge-Warnung simulieren",
+  "btn_txt_route": "Route berechnen (MST)",
+  "btn_txt_clear": "Karte zurücksetzen",
+  "map_toggle_label": "Taktische Karte",
+  "tab_lbl_roadmap": "Integrationspläne (10 Ideen)",
+  "tab_lbl_docs": "Entwickler-Handbuch & Arduino",
+  "tab_lbl_repos": "Sub-Repository Integration",
+  "tab_lbl_proposal": "Institutioneller Pitch (WWF)",
+  "doc_title_proposal": "Institutioneller Pitch für WWF, Reservate & Forstbehörden",
+  "doc_desc_proposal": "WildGuard AI wurde als kostengünstiges, nachhaltiges Ökosystem für NGOs und Regierungsbehörden konzipiert. Es stellt die rechtliche Verwahrung von Beweismitteln sicher, optimiert die Patrouchenkoordination mit stochastischer Spieltheorie und reduziert Fehlalarme von Edge-Kameras um 90 %.",
+  "prop_lbl_1": "1. Wirtschaftliche Nachhaltigkeit & Null Lizenzen",
+  "prop_desc_1": "Vollständig quelloffene Codebasis, die auf handelsüblicher Standardhardware (Arduino/ESP32) ausgeführt wird. Keine Abonnements, keine wiederkehrenden Wartungsgebühren oder proprietären Lock-ins.",
+  "prop_lbl_2": "2. Zulässige rechtliche Beweise",
+  "prop_desc_2": "Alle digitalen Beweise werden bei der Erfassung gehasht (SHA-256) und an lokale, unveränderliche Hash-Ketten gebunden. Dies garantiert die Datenintegrität vor Gericht.",
+  "prop_lbl_3": "3. Feldsicherheit & Anti-Tracking-Funktionen",
+  "prop_desc_3": "Edge-Knoten deaktivieren Funkmodule unmittelbar nach der Übertragung eines Ereignisses. Dies verhindert, dass mit Funkgeräten ausgestattete Wilderer Rangers scannen und lokalisieren.",
+  "txt_title_health": "Sub-Repository Status",
+  "txt_title_osint": "OSINT-Newsfeed",
+  "doc_title_arduino": "Arduino Edge-Sensorknoten Konfiguration (TinyML)",
+  "doc_desc_arduino": "Die getarnten, kostengünstigen Bodenknoten basieren auf Arduino Nicla Vision oder ESP32-CAM. Sie nutzen einen PIR-Sensor, um thermische Präsenz zu erkennen, wachen aus dem Deep-Sleep auf, erfassen ein Bild und führen Edge-Inferenz über TinyML durch, wobei Laub-/Windvariationen vor der Übertragung herausgefiltert werden.",
+  "doc_title_repos": "Integration von Sub-Repositories in die Unified Codebase",
+  "doc_desc_repos": "Das Framework open-wildguard-hub fungiert als zentraler Orchestrator und integriert spezifischen Code aus den 16 Repositories. Unten sind die Referenzverzeichnisse aufgeführt:",
+  "doc_title_readiness": "Produktionsbereitschaft",
+  "doc_desc_readiness": "Das Projekt muss nützlich bleiben, bevor jedes Subsystem vollständig ist. Das erste Produktionsziel ist eine zuverlässige Kommandozentrale mit lokaler Persistenz.",
+  "doc_title_playbooks": "Reale operative Playbooks",
+  "doc_desc_playbooks": "Diese Leitfäden beschreiben, wie die Plattform in konkreten Feldszenarien verwendet werden sollte. Sie sind für Ranger, Betreiber und Wartungspersonal geschrieben.",
+  "doc_title_docs_strategy": "Skalierungsplan für Dokumentation",
+  "doc_desc_docs_strategy": "`dev.md` ist die technische Master-Map. Wenn sich Workflows stabilisieren, sollte jeder Anwendungsfall in ein eigenes Dokument verschoben werden.",
+  "readiness_items": [
+    {
+      "title": "Offline first",
+      "desc": "Jeder kritische Workflow muss ohne Netzwerkzugriff fortgesetzt und später synchronisiert werden."
+    },
+    {
+      "title": "Lokaler Status",
+      "desc": "Ereignisse, Warteschlangen und Beweise müssen lokal mit überprüfbaren Exportpfaden leben."
+    },
+    {
+      "title": "Klares Fallback",
+      "desc": "Jede automatisierte Aktion erfordert ein degradiertes Verhalten, dem die Betreiber vertrauen können."
+    },
+    {
+      "title": "Bereit für den Operator",
+      "desc": "Die Benutzeroberfläche muss erklären, was im Feld zu tun ist, und nicht nur Telemetrie anzeigen."
+    }
+  ],
+  "playbooks": [
+    {
+      "title": "Kamerafallen-Einbruch",
+      "trigger": "Mensch oder Fahrzeug durch Edge Vision erkannt.",
+      "action": "Ereignis überprüfen, Standort verifizieren und das nächste Ranger-Team entsenden.",
+      "output": "Vorfall markiert, Reaktion weitergeleitet, Schnappschuss erhalten."
+    },
+    {
+      "title": "Reaktion auf Schüsse",
+      "trigger": "Akustische Spitze, die mit einem Schuss oder einer Kettensäge übereinstimmt.",
+      "action": "Sensor-Cluster abgleichen und schnelle Reaktionsroute aufbauen.",
+      "output": "Lokalisierter Alarm, Routenplan, Beweis-Hash."
+    },
+    {
+      "title": "Offline-Feldbericht",
+      "trigger": "Ranger kehrt ohne Konnektivität von der Patrouille zurück.",
+      "action": "Erfassen Sie den Bericht lokal und synchronisieren Sie ihn später.",
+      "output": "In Warteschlange gestellter Bericht, bewahrte Zeitstempel, kein Datenverlust."
+    }
+  ],
+  "docs_strategy_items": [
+    {
+      "title": "Ein Leitfaden pro Fall",
+      "desc": "Teilen Sie stabile Workflows in dedizierte Dokumente auf."
+    },
+    {
+      "title": "Master-Map kurz halten",
+      "desc": "Verwenden Sie dev.md nur für Architektur und Konventionen."
+    },
+    {
+      "title": "Für Operatoren schreiben",
+      "desc": "Jeder Leitfaden sollte Schritte und erwartete Ausgaben erklären."
+    },
+    {
+      "title": "Dokumenten-Rollout",
+      "desc": "Fügen Sie Bereitstellungshinweise als separate Dateien hinzu."
+    }
+  ],
+  "ideas": [
+    {
+      "title": "M1: Modularer Hub & API",
+      "status": "In Bearbeitung",
+      "statusClass": "status-progress",
+      "desc": "Zentrale FastAPI & SQLite-API, die physische Knoten und OSINT-Daten orchestriert. Implementiert Store-and-Forward für Offline-Szenarien."
+    },
+    {
+      "title": "M2: Edge Vision (CV)",
+      "status": "Prototyp",
+      "statusClass": "status-prototype",
+      "desc": "Bildklassifizierung auf Kamerafallen und Drohnen über YOLOv8. Nutzt OpenCV-Edge-Filter, um Windwarnungen zu verwerfen."
+    },
+    {
+      "title": "M3: Bioakustik & Triangulation",
+      "status": "Geplant",
+      "statusClass": "status-planned",
+      "desc": "Low-Power-Mikrofonnetzwerk zur Verfolgung von Schüssen und Kettensägen. Berechnet Schützenkoordinaten mit TDoA."
+    },
+    {
+      "title": "M4: 3D Geo-Überwachung",
+      "status": "Prototyp",
+      "statusClass": "status-prototype",
+      "desc": "Georeferenzierte 3D-Karten basierend auf GIS, GeoJSON und PyDeck zur Hervorhebung von Wildtier-Migrationskorridoren."
+    },
+    {
+      "title": "M5: Arten-Intelligenz",
+      "status": "In Bearbeitung",
+      "statusClass": "status-progress",
+      "desc": "Biometrisches und IoT-Tracking von Halsbändern an geschützten Wildtieren, das Echtzeit-Geo-Fencing auslöst."
+    },
+    {
+      "title": "M6: Offline-Feldberichterstattung",
+      "status": "Geplant",
+      "statusClass": "status-planned",
+      "desc": "Offline-First-Mobilanwendung für Ranger zur Protokollierung von Spuren und Sichtungen."
+    },
+    {
+      "title": "M7: OSINT & Cyber-Intelligenz",
+      "status": "Prototyp",
+      "statusClass": "status-prototype",
+      "desc": "Ethisches Scraping illegaler Schwarzmärkte, Telegram und Nachrichten in 7 Sprachen. Automatische Extraktion mit mDeBERTa."
+    },
+    {
+      "title": "M8: Vorhersage & Spieltheorie",
+      "status": "Prototyp",
+      "statusClass": "status-prototype",
+      "desc": "Integration von PAWS und DDPG Reinforcement Learning zur Generierung optimaler Patrouillenrouten."
+    },
+    {
+      "title": "M9: Forensischer Beweistresor",
+      "status": "In Bearbeitung",
+      "statusClass": "status-progress",
+      "desc": "Zertifizierung von Medienbeweisen mithilfe unveränderlicher SHA-256-Hash-Ketten und automatische Generierung von Anklageschriften."
+    },
+    {
+      "title": "M10: Föderierte KI & Flower",
+      "status": "Geplant",
+      "statusClass": "status-planned",
+      "desc": "Kollaboratives Training von YOLOv8 über Schutzgebiete hinweg, ohne Rohbilder zu teilen, um Datenhoheit zu schützen."
+    }
+  ],
+  "osint": [
+    {
+      "title": "Elfenbeinstoßzahn-Beschlagnahme",
+      "desc": "Die Forstpolizei stoppte einen Lieferwagen mit 4 rohen Elfenbeinstoßzähnen, die für den Schmuggel vorbereitet waren. Zwei Verhaftungen.",
+      "tag": "Stoßzähne",
+      "schedule": "WPA Schedule I",
+      "specie": "Elephas maximus",
+      "reato": "Elfenbeinbeschlagnahme",
+      "sezioni": "Abschnitt 9, 39, 51"
+    },
+    {
+      "title": "Online-Schwarzmarkt für Exoten",
+      "desc": "Privater Telegram-Kanal entdeckt, der dem Verkauf seltener Reptilien und geschützter Singvögel aus dem Schutzgebiet Chitwan gewidmet ist.",
+      "tag": "Reptilien",
+      "schedule": "WPA Schedule II",
+      "specie": "Reptilia/Aves",
+      "reato": "Telegram-Kanal",
+      "sezioni": "Abschnitt 49-B"
+    }
+  ],
+  "alert_dispatch": "Schnelleingreiftruppe an Sensor entsandt: ",
+  "alert_route_calculated": "Minimaler Spannbaum (Kruskal MST) Patrouillenroute generiert, die alle Forststationen verbindet.",
+  "chargesheet_title": "Automatisierte gerichtliche Anklageschrift (WPA)",
+  "chargesheet_instructions": "Wählen Sie ein OSINT-Ereignis, um die rechtliche Anklageschrift zu entwerfen..."
+}

@@ -1,0 +1,184 @@
+{
+  "txt_sub_header": "open-wildguard-hub // Centre de Commandement",
+  "txt_status": "SYSTÈME EN LIGNE",
+  "txt_title_stats": "Télémétrie des Capteurs",
+  "lbl_cameras": "Piège Photo",
+  "lbl_audio": "Noeuds Audio",
+  "lbl_collars": "Colliers IoT",
+  "lbl_osint": "Agg. OSINT",
+  "txt_title_alerts": "Alertes de Menace Actives",
+  "txt_alert_desc_1": "Humain Armé Détecté (Braconnier)",
+  "txt_alert_desc_2": "Pic d'Énergie Détecté (Coup de feu)",
+  "btn_dispatch": "Déployer Ranger",
+  "btn_locate": "Localiser Position",
+  "btn_txt_sim": "Simuler Alerte Edge",
+  "btn_txt_route": "Calculer Route (MST)",
+  "btn_txt_clear": "Réinitialiser",
+  "map_toggle_label": "Carte Tactique",
+  "tab_lbl_roadmap": "Plans d'Intégration (10 Idées)",
+  "tab_lbl_docs": "Manuel Dev & Arduino",
+  "tab_lbl_repos": "Intégration Sous-Dépôt",
+  "tab_lbl_proposal": "Pitch Institutionnel (WWF)",
+  "doc_title_proposal": "Pitch Institutionnel pour WWF, Réserves & Gardes Forestiers",
+  "doc_desc_proposal": "WildGuard AI est conçu comme un écosystème durable et peu coûteux pour les ONG et les agences gouvernementales. Il garantit la garde légale des preuves, optimise la coordination des patrouilles avec la théorie des jeux stochastiques et réduit les fausses alarmes de 90%.",
+  "prop_lbl_1": "1. Durabilité Économique & Zéro Licence",
+  "prop_desc_1": "Code entièrement open-source fonctionnant sur du matériel standard (Arduino/ESP32). Aucun abonnement, frais de maintenance ou verrouillage technologique.",
+  "prop_lbl_2": "2. Preuves Légales Admissibles",
+  "prop_desc_2": "Toutes les preuves numériques sont hachées (SHA-256) lors de la capture et liées à des chaînes locales immuables. Cela garantit l'intégrité des données en justice.",
+  "prop_lbl_3": "3. Sécurité sur le Terrain & Anti-Pistage",
+  "prop_desc_3": "Les nœuds périphériques désactivent les modules radio immédiatement après la transmission. Cela empêche les braconniers de localiser les escouades de rangers.",
+  "txt_title_health": "État des Sous-Dépôts",
+  "txt_title_osint": "Flux d'Actualités OSINT",
+  "doc_title_arduino": "Configuration du Nœud Capteur Arduino (TinyML)",
+  "doc_desc_arduino": "Les nœuds terrestres sont basés sur Arduino Nicla Vision ou ESP32-CAM. Ils utilisent un capteur PIR pour détecter la présence thermique, capturent une image et exécutent une inférence (TinyML), filtrant le feuillage avant transmission.",
+  "doc_title_repos": "Intégration des Sous-Dépôts dans le Code Unifié",
+  "doc_desc_repos": "Le framework open-wildguard-hub agit comme un orchestrateur central, intégrant le code spécifique de 16 dépôts téléchargés. Voici comment le code s'intègre :",
+  "doc_title_readiness": "Base de Préparation à la Production",
+  "doc_desc_readiness": "Le projet doit rester utile avant que chaque sous-système ne soit complet. Le premier objectif est un centre de commandement fiable avec persistance locale.",
+  "doc_title_playbooks": "Playbooks Opérationnels Réels",
+  "doc_desc_playbooks": "Ces guides décrivent comment la plateforme doit être utilisée dans des scénarios concrets sur le terrain. Ils sont rédigés pour les rangers et opérateurs.",
+  "doc_title_docs_strategy": "Plan de Mise à l'Échelle de la Documentation",
+  "doc_desc_docs_strategy": "`dev.md` est la carte technique principale. Lorsque les flux de travail se stabilisent, chaque cas d'utilisation doit avoir son propre document.",
+  "readiness_items": [
+    {
+      "title": "Hors-ligne d'abord",
+      "desc": "Chaque flux critique doit continuer sans réseau et se synchroniser plus tard."
+    },
+    {
+      "title": "État local",
+      "desc": "Les événements, files d'attente et preuves doivent vivre localement."
+    },
+    {
+      "title": "Solution de repli claire",
+      "desc": "Chaque action automatisée nécessite un comportement en mode dégradé."
+    },
+    {
+      "title": "Prêt pour l'opérateur",
+      "desc": "L'interface doit expliquer quoi faire sur le terrain, pas seulement montrer la télémétrie."
+    }
+  ],
+  "playbooks": [
+    {
+      "title": "Intrusion piège photo",
+      "trigger": "Humain ou véhicule détecté par la vision périphérique.",
+      "action": "Examiner l'événement, vérifier l'emplacement et déployer l'équipe la plus proche.",
+      "output": "Incident marqué, réponse acheminée, cliché conservé."
+    },
+    {
+      "title": "Réponse coup de feu",
+      "trigger": "Pic acoustique correspondant à un coup de feu ou tronçonneuse.",
+      "action": "Vérifier la grappe de capteurs et construire un itinéraire rapide.",
+      "output": "Alerte localisée, plan de route, hachage des preuves."
+    },
+    {
+      "title": "Rapport terrain hors-ligne",
+      "trigger": "Le ranger revient de patrouille sans connectivité.",
+      "action": "Capturer le rapport localement et le synchroniser plus tard.",
+      "output": "Rapport en file d'attente, horodatages préservés, aucune perte."
+    }
+  ],
+  "docs_strategy_items": [
+    {
+      "title": "Un guide par cas",
+      "desc": "Diviser les flux de travail stables en documents dédiés."
+    },
+    {
+      "title": "Carte principale courte",
+      "desc": "Utiliser dev.md pour l'architecture et les conventions uniquement."
+    },
+    {
+      "title": "Écrire pour les opérateurs",
+      "desc": "Chaque guide doit expliquer les étapes et les résultats attendus."
+    },
+    {
+      "title": "Déploiement du document",
+      "desc": "Ajouter des notes de déploiement pour les nœuds comme fichiers séparés."
+    }
+  ],
+  "ideas": [
+    {
+      "title": "M1: Hub Modulaire & API",
+      "status": "En Cours",
+      "statusClass": "status-progress",
+      "desc": "API centrale FastAPI & SQLite orchestrant les nœuds et les données OSINT. Logique de stockage pour les scénarios hors ligne."
+    },
+    {
+      "title": "M2: Vision Périphérique",
+      "status": "Prototype",
+      "statusClass": "status-prototype",
+      "desc": "Classification d'images sur pièges et drones via YOLOv8. Utilise des filtres OpenCV pour ignorer les alertes de vent/feuilles."
+    },
+    {
+      "title": "M3: Bioacoustique",
+      "status": "Planifié",
+      "statusClass": "status-planned",
+      "desc": "Réseau de microphones à faible puissance suivant les coups de feu et tronçonneuses. Utilise TDoA pour calculer les coordonnées."
+    },
+    {
+      "title": "M4: Géo-Surveillance 3D",
+      "status": "Prototype",
+      "statusClass": "status-prototype",
+      "desc": "Cartes 3D géoréférencées basées sur SIG et PyDeck pour mettre en évidence les sentiers de patrouille et les couloirs migratoires."
+    },
+    {
+      "title": "M5: Intelligence des Espèces",
+      "status": "En Cours",
+      "statusClass": "status-progress",
+      "desc": "Suivi biométrique et IoT des colliers sur la faune protégée, déclenchant des alertes de géo-clôture en temps réel."
+    },
+    {
+      "title": "M6: Rapports Terrain Hors-ligne",
+      "status": "Planifié",
+      "statusClass": "status-planned",
+      "desc": "Application mobile pour les rangers afin de consigner les pistes et les observations via des synchronisations périodiques."
+    },
+    {
+      "title": "M7: OSINT & Cyber-Renseignement",
+      "status": "Prototype",
+      "statusClass": "status-prototype",
+      "desc": "Extraction éthique des marchés noirs illicites, Telegram et actualités dans 7 langues. Extraction automatique avec mDeBERTa."
+    },
+    {
+      "title": "M8: Prédiction & Théorie des Jeux",
+      "status": "Prototype",
+      "statusClass": "status-prototype",
+      "desc": "Intégration du moteur prédictif PAWS et de l'apprentissage par renforcement pour générer des itinéraires de patrouille optimaux."
+    },
+    {
+      "title": "M9: Coffre-fort de Preuves",
+      "status": "En Cours",
+      "statusClass": "status-progress",
+      "desc": "Certification des preuves médiatiques à l'aide de chaînes de hachage immuables et génération automatique de feuilles d'accusation."
+    },
+    {
+      "title": "M10: IA Fédérée & Flower",
+      "status": "Planifié",
+      "statusClass": "status-planned",
+      "desc": "Entraîner YOLOv8 de manière collaborative à travers les sanctuaires sans partager d'images brutes pour protéger la faune."
+    }
+  ],
+  "osint": [
+    {
+      "title": "Saisie d'Défenses d'Ivoire",
+      "desc": "La police forestière a arrêté une camionnette transportant 4 défenses d'ivoire brutes prêtes pour la contrebande. Deux arrestations.",
+      "tag": "Défenses",
+      "schedule": "WPA Schedule I",
+      "specie": "Elephas maximus",
+      "reato": "Saisie d'Ivoire",
+      "sezioni": "Section 9, 39, 51"
+    },
+    {
+      "title": "Marché Noir d'Animaux Exotiques",
+      "desc": "Détection d'un canal Telegram privé dédié à la vente de reptiles rares et d'oiseaux chanteurs protégés de Chitwan.",
+      "tag": "Reptiles",
+      "schedule": "WPA Schedule II",
+      "specie": "Reptilia/Aves",
+      "reato": "Canal Telegram",
+      "sezioni": "Section 49-B"
+    }
+  ],
+  "alert_dispatch": "Patrouille d'intervention rapide envoyée au capteur: ",
+  "alert_route_calculated": "Itinéraire de patrouille (Arbre Couvrant Minimum) généré pour relier les stations.",
+  "chargesheet_title": "Feuille d'Accusation (WPA)",
+  "chargesheet_instructions": "Sélectionnez un événement pour rédiger l'acte d'accusation légal..."
+}

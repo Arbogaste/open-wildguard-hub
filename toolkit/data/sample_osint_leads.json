@@ -1,0 +1,97 @@
+[
+  {
+    "event_id": "9f1c2a40-7b3e-4d21-9a18-2c5e0f1a8b44",
+    "timestamp": 1782046931,
+    "source_type": "osint",
+    "source_id": "osint_scrape",
+    "coordinates": {
+      "latitude": null,
+      "longitude": null,
+      "elevation": null
+    },
+    "threat_class": "wildlife_trade_listing",
+    "confidence": 0.95,
+    "evidence_hash": "641ceb529a7e4f10b8d2a9c3e7f04a1b6d8c2e9f30a5b71c8e2f0d4a6b9c1e35",
+    "evidence_url": "marketplace://listing/anon-7731",
+    "metadata": {
+      "title": "Antico avorio lavorato - white gold, no documenti",
+      "score": 9,
+      "species_suspected": "ivory",
+      "price": "1.200,00 EUR",
+      "location_text": "Napoli",
+      "seller_contact": "+39 333 1234567",
+      "slang_terms_found": [
+        "white gold",
+        "avorio",
+        "no documenti"
+      ],
+      "source_site": "MarketPlace A",
+      "scraped_at_iso": "2026-06-21T03:42:11Z",
+      "needs_human_review": true,
+      "image": null
+    }
+  },
+  {
+    "event_id": "c3e8b912-44af-4f7a-8e21-7d9f0c6b1a02",
+    "timestamp": 1782050531,
+    "source_type": "osint",
+    "source_id": "osint_scrape",
+    "coordinates": {
+      "latitude": null,
+      "longitude": null,
+      "elevation": null
+    },
+    "threat_class": "wildlife_trade_listing",
+    "confidence": 0.78,
+    "evidence_hash": "a7b4f2188c0e6d31f95a2b7c4e8d019a3f6b2c8e1d4a709b5c3e6f1a2d8b4c70",
+    "evidence_url": "classifieds://listing/anon-4420",
+    "metadata": {
+      "title": "Richiamo vivo da caccia - cardellino selvatico, senza permesso",
+      "score": 7,
+      "species_suspected": "songbird",
+      "price": "80,00 EUR",
+      "location_text": "Foggia",
+      "seller_contact": "venditore_anon@example.com",
+      "slang_terms_found": [
+        "cardellino",
+        "richiamo vivo",
+        "selvatico",
+        "senza permesso"
+      ],
+      "source_site": "Classifieds B",
+      "scraped_at_iso": "2026-06-21T04:42:11Z",
+      "needs_human_review": true,
+      "image": null
+    }
+  },
+  {
+    "event_id": "e51a7d36-9c2b-4810-bf64-08a3e1d7c905",
+    "timestamp": 1782054131,
+    "source_type": "osint",
+    "source_id": "osint_scrape",
+    "coordinates": {
+      "latitude": null,
+      "longitude": null,
+      "elevation": null
+    },
+    "threat_class": "wildlife_trade_listing",
+    "confidence": 0.5,
+    "evidence_hash": "0d2f9a4c7e1b6835a0c4e8f2d6b9170c3a5e8f1b4d7092a6c8e0f3b5d1a7c920",
+    "evidence_url": "overseas-shop://listing/anon-9015",
+    "metadata": {
+      "title": "Carved pendant - pangolin scale style, traditional",
+      "score": 4,
+      "species_suspected": "pangolin",
+      "price": "$24.90",
+      "location_text": null,
+      "seller_contact": null,
+      "slang_terms_found": [
+        "artichoke"
+      ],
+      "source_site": "Overseas Shop C",
+      "scraped_at_iso": "2026-06-21T05:42:11Z",
+      "needs_human_review": true,
+      "image": null
+    }
+  }
+]

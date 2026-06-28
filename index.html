@@ -1118,10 +1118,51 @@
             .tab-link { font-size: 9px; padding: 8px 6px; }
             .stats-grid { grid-template-columns: 1fr; }
         }
+
+        /* a11y: skip link (WCAG 2.4.1) + reduced motion (2.3.3 / 2.2) */
+        .skip-link { position: absolute; left: -999px; top: 0; z-index: 9999;
+            background: var(--color-primary, #00ff66); color: #000; font-weight: 700;
+            padding: 10px 16px; border-radius: 0 0 6px 0; text-decoration: none; }
+        .skip-link:focus { left: 0; }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration: .001ms !important;
+                animation-iteration-count: 1 !important; transition-duration: .001ms !important;
+                scroll-behavior: auto !important; }
+        }
+
+        /* OSINT lead cards (M7) */
+        .osint-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:12px; }
+        .osint-card { border:1px solid var(--border-color,#243); border-radius:8px; overflow:hidden;
+            background:rgba(255,255,255,0.02); display:flex; flex-direction:column; }
+        .osint-card.sev-high { border-color:rgba(255,51,68,0.45); }
+        .osint-card.sev-med  { border-color:rgba(255,179,0,0.4); }
+        .osint-card.sev-low  { border-color:rgba(120,180,255,0.3); }
+        .osint-thumb { height:120px; background:#0c1420 center/cover no-repeat; display:flex;
+            align-items:center; justify-content:center; color:var(--text-muted,#789); font-size:26px;
+            border-bottom:1px solid var(--border-color,#243); }
+        .osint-body { padding:10px 12px; display:flex; flex-direction:column; gap:6px; }
+        .osint-title { font-size:12px; font-weight:600; line-height:1.35; }
+        .osint-row { font-size:10px; color:var(--text-muted,#9ab); display:flex; justify-content:space-between; gap:8px; }
+        .osint-row b { color:var(--text-main,#dfe); font-weight:600; }
+        .osint-slang { display:flex; flex-wrap:wrap; gap:4px; }
+        .osint-tag { font-size:9px; padding:2px 6px; border-radius:10px; background:rgba(255,179,0,0.12);
+            color:#ffb300; border:1px solid rgba(255,179,0,0.25); }
+        .osint-foot { display:flex; align-items:center; justify-content:space-between; gap:8px;
+            padding:8px 12px; border-top:1px solid var(--border-color,#243); }
+        .osint-score { font-size:10px; font-weight:700; padding:2px 8px; border-radius:4px; }
+        .sev-high .osint-score { color:#ff3344; border:1px solid rgba(255,51,68,0.3); }
+        .sev-med  .osint-score { color:#ffb300; border:1px solid rgba(255,179,0,0.3); }
+        .sev-low  .osint-score { color:#6cb4ff; border:1px solid rgba(120,180,255,0.3); }
+        .osint-hash { font-size:8px; color:var(--text-muted,#678); font-family:monospace; }
+        .osint-ref { font-size:9px; font-family:monospace; color:var(--text-muted,#789);
+            border:1px dashed var(--border-color,#345); border-radius:4px; padding:3px 7px;
+            letter-spacing:.5px; cursor:help; }
+        .osint-review { font-size:8px; color:#ffb300; text-transform:uppercase; letter-spacing:.5px; }
     </style>
 </head>
 
 <body>
+    <a href="#main-content" class="skip-link">Skip to content</a>
 
     <!-- Skip navigation for keyboard/screen reader users -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -1272,6 +1313,10 @@
                             role="tab" aria-selected="false" aria-controls="tab-docs">Playbooks</button>
                     <button class="tab-link" onclick="switchTab(event, 'tab-proposal')" id="tab-lbl-proposal"
                             role="tab" aria-selected="false" aria-controls="tab-proposal">NGO Pitch</button>
+                    <button class="tab-link" onclick="switchTab(event, 'tab-osint')" id="tab-lbl-osint"
+                            role="tab" aria-selected="false" aria-controls="tab-osint">OSINT Leads</button>
+                    <button class="tab-link" onclick="switchTab(event, 'tab-toolkit')" id="tab-lbl-toolkit"
+                            role="tab" aria-selected="false" aria-controls="tab-toolkit">Toolkit Status</button>
                     <button class="tab-link" onclick="switchTab(event, 'tab-repos')" id="tab-lbl-repos"
                             role="tab" aria-selected="false" aria-controls="tab-repos">Repos</button>
                 </div>
@@ -1508,6 +1553,30 @@
                         </div>
                     </div>
 
+                    <!-- TAB: TOOLKIT STATUS — mock vision of what each module produces (static, no API calls) -->
+                    <div id="tab-toolkit" class="tab-pane" role="tabpanel" aria-labelledby="tab-lbl-toolkit">
+                        <p style="font-size:11px;color:var(--text-muted);margin:0 0 12px;line-height:1.6;">
+                            What you actually get when you run each module. Status, the one command to start,
+                            and a sample of the output. <strong>Static preview — this page makes no external
+                            API calls.</strong> See <code>docs/INTEGRATION-MAP.md</code> for what to plug in.
+                        </p>
+                        <div id="toolkit-status-grid" class="osint-grid"></div>
+                    </div>
+
+                    <!-- TAB: OSINT LEADS (M7) — rendered from toolkit/python output (Tactical Events) -->
+                    <div id="tab-osint" class="tab-pane" role="tabpanel" aria-labelledby="tab-lbl-osint">
+                        <p style="font-size:11px;color:var(--text-muted);margin:0 0 6px;line-height:1.6;">
+                            Suspected illegal wildlife-trade listings found by <code>toolkit/python/osint_scrape.py</code>
+                            (M7, rule-based, offline). Each card is built from one Tactical Event
+                            (<code>source_type=osint</code>). <strong>SUSPECTED only — human review required before any report.</strong>
+                        </p>
+                        <div style="font-size:10px;color:var(--text-muted);margin:0 0 12px;">
+                            Load real output: <code>osint_scrape.py --sites ../data/osint_sites.json --query avorio --events leads.json</code>
+                            → drop <code>leads.json</code> over this panel, or it falls back to the bundled sample.
+                        </div>
+                        <div id="osint-leads-grid" class="osint-grid"></div>
+                    </div>
+
                     <!-- TAB 3: OPEN-SOURCE REPOS -->
                     <div id="tab-repos" class="tab-pane" role="tabpanel" aria-labelledby="tab-lbl-repos">
                         <p style="font-size:11px;color:var(--text-muted);margin:0 0 12px;line-height:1.6;">
@@ -1710,8 +1779,9 @@
         <span class="credits-label"><i class="fa-solid fa-heart" style="color:var(--color-danger);"></i>&nbsp;Built
             on</span>
         <div class="credits-repos">
-            <a class="credit-chip our-repo" href="https://github.com/Arbogaste/open-wildguard-hub" target="_blank">⭐
+            <a class="credit-chip our-repo" href="https://github.com/Arbogaste/open-wildguard-hub" target="_blank" rel="noopener">⭐
                 open-wildguard-hub (questo repo)</a>
+            <a class="credit-chip" href="readme.html"><i class="fa-solid fa-book-open" aria-hidden="true"></i> Read README / Mission</a>
             <a class="credit-chip" href="https://github.com/microsoft/Biodiversity" target="_blank">Biodiversity</a>
             <a class="credit-chip" href="https://github.com/microsoft/Pytorch-Wildlife" target="_blank">Pytorch-Wildlife</a>
             <a class="credit-chip" href="https://github.com/microsoft/MegaDetector" target="_blank">MegaDetector</a>
@@ -2354,6 +2424,102 @@ Forest Officer Authorized Signature
             });
             window.open('scriptplay.html?' + params.toString(), '_blank');
         }
+
+        /* ---- M7 OSINT lead cards: render from Tactical Events (toolkit/python output) ---- */
+        // Bundled sample (mirrors toolkit/data/sample_osint_leads.json). Same shape osint_scrape.py emits.
+        // Store names + listing refs are masked on purpose (privacy / no live linking to listings).
+        const OSINT_SAMPLE = [
+            {evidence_url:"marketplace://listing/anon-7731",confidence:0.95,evidence_hash:"641ceb529a7e4f10b8d2a9c3e7f04a1b6d8c2e9f30a5b71c8e2f0d4a6b9c1e35",
+             metadata:{title:"Antico avorio lavorato - white gold, no documenti",score:9,species_suspected:"ivory",price:"1.200,00 EUR",location_text:"Napoli",seller_contact:"+39 333 1234567",slang_terms_found:["white gold","avorio","no documenti"],source_site:"MarketPlace A",scraped_at_iso:"2026-06-21T03:42:11Z",needs_human_review:true,image:null}},
+            {evidence_url:"classifieds://listing/anon-4420",confidence:0.78,evidence_hash:"a7b4f2188c0e6d31f95a2b7c4e8d019a3f6b2c8e1d4a709b5c3e6f1a2d8b4c70",
+             metadata:{title:"Richiamo vivo da caccia - cardellino selvatico, senza permesso",score:7,species_suspected:"songbird",price:"80,00 EUR",location_text:"Foggia",seller_contact:"venditore_anon@example.com",slang_terms_found:["cardellino","richiamo vivo","selvatico","senza permesso"],source_site:"Classifieds B",scraped_at_iso:"2026-06-21T04:42:11Z",needs_human_review:true,image:null}},
+            {evidence_url:"overseas-shop://listing/anon-9015",confidence:0.5,evidence_hash:"0d2f9a4c7e1b6835a0c4e8f2d6b9170c3a5e8f1b4d7092a6c8e0f3b5d1a7c920",
+             metadata:{title:"Carved pendant - pangolin scale style, traditional",score:4,species_suspected:"pangolin",price:"$24.90",location_text:null,seller_contact:null,slang_terms_found:["artichoke"],source_site:"Overseas Shop C",scraped_at_iso:"2026-06-21T05:42:11Z",needs_human_review:true,image:null}}
+        ];
+        function listingRef(u){ const m=String(u||"").match(/anon-[\w]+/); return m?m[0]:"listing-redacted"; }
+        const SPECIES_ICON = {ivory:"🐘",rhino_horn:"🦏",pangolin:"🦔",big_cat:"🐅",parrot:"🦜",songbird:"🐦",shark:"🦈",turtle:"🐢",generic:"⁉️"};
+        function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));}
+        function severity(sc){return sc>=8?"high":sc>=5?"med":"low";}
+        function renderOsintLeads(events){
+            const grid=document.getElementById('osint-leads-grid'); if(!grid)return;
+            const rows=[...events].sort((a,b)=>(b.metadata.score||0)-(a.metadata.score||0));
+            grid.innerHTML=rows.map(ev=>{
+                const m=ev.metadata, sev=severity(m.score||0), ic=SPECIES_ICON[m.species_suspected]||"⁉️";
+                const thumb=m.image?`style="background-image:url('${esc(m.image)}')"`:"";
+                return `<div class="osint-card sev-${sev}">
+                  <div class="osint-thumb" ${thumb}>${m.image?"":ic}</div>
+                  <div class="osint-body">
+                    <div class="osint-title">${esc(m.title)}</div>
+                    <div class="osint-row"><span>Species</span><b>${esc(m.species_suspected||"?")}</b></div>
+                    <div class="osint-row"><span>Price</span><b>${esc(m.price||"—")}</b></div>
+                    <div class="osint-row"><span>Location</span><b>${esc(m.location_text||"—")}</b></div>
+                    <div class="osint-row"><span>Site</span><b>${esc(m.source_site||"")}</b></div>
+                    <div class="osint-slang">${(m.slang_terms_found||[]).map(t=>`<span class="osint-tag">${esc(t)}</span>`).join("")}</div>
+                  </div>
+                  <div class="osint-foot">
+                    <span class="osint-score">SCORE ${m.score} · ${Math.round((ev.confidence||0)*100)}%</span>
+                    <span class="osint-ref" title="Listing reference is masked. Full URL stays in the secure case file (M9), not on the public dashboard — naming a specific shop for a suspected crime is a legal/defamation risk.">ref ${esc(listingRef(ev.evidence_url))} 🔒</span>
+                  </div>
+                  <div class="osint-foot" style="border-top:none;padding-top:0">
+                    <span class="osint-hash" title="SHA-256 evidence hash (chain of custody, M9)">sha256 ${esc((ev.evidence_hash||"").slice(0,18))}…</span>
+                    ${m.needs_human_review?'<span class="osint-review">⚠ review</span>':""}
+                  </div>
+                </div>`;
+            }).join("");
+        }
+        // Try the live file; fall back to the bundled sample (works under file://)
+        (function loadOsint(){
+            fetch('toolkit/data/sample_osint_leads.json').then(r=>r.ok?r.json():Promise.reject())
+                .then(renderOsintLeads).catch(()=>renderOsintLeads(OSINT_SAMPLE));
+        })();
+
+        /* ---- Toolkit Status board: static mock of what each module produces (NO API calls) ---- */
+        // Sample outputs are realistic (e.g. M5 mirrors a real GBIF taxonomy response shape).
+        const TOOLKIT_STATUS = [
+          {m:"M0", name:"Hub server", st:"todo", produces:"Live event store + map feed (FastAPI+SQLite)",
+           cmd:"python hub/main.py", out:"GET /events · WS /ws/alerts · critical path — not built yet"},
+          {m:"M2", name:"Edge vision", st:"part", produces:"Animal/person/vehicle detections from camera traps",
+           cmd:"python edge_infer_camera.py", out:"detection: person conf=0.93 → Tactical Event (camera_trap)"},
+          {m:"M3", name:"Bioacoustics", st:"part", produces:"Gunshot/chainsaw localization (TDoA)",
+           cmd:"python tdoa_locate.py --file event.json", out:"source ≈ (-2.351, 34.819), 3-node solve"},
+          {m:"M5", name:"Species lookup", st:"done", produces:"Clean name + taxonomy + status + coords (GBIF/IUCN/OSM)",
+           cmd:'python species_lookup.py --name "tiger"', out:'Panthera tigris · Felidae · Carnivora · GBIF key 5219416 (conf 99)'},
+          {m:"M5", name:"Collar geofence", st:"done", produces:"Alert when a collared animal leaves the safe zone",
+           cmd:"python gps_geofence.py --demo", out:"[geofence_breach] ele_07 (elephant) outside protected boundary"},
+          {m:"M6", name:"Tip intake", st:"done", produces:"Community tips → events, reporter PII hashed",
+           cmd:"python tip_intake.py --demo", out:"[gunshot] rep_d1f23d2671dc @ -2.34,34.82"},
+          {m:"M7", name:"OSINT scraper", st:"done", produces:"Suspected wildlife-trade listings (104-site list)",
+           cmd:"python osint_scrape.py --sites osint_sites.json --query avorio", out:"score=9 ivory · slang: white gold, no documenti · sha256…"},
+          {m:"M8", name:"Risk model", st:"done", produces:"Daily risk heatmap + unpredictable patrol routes",
+           cmd:"python risk_model.py --demo", out:"top zone c002_002 risk=0.94 · 70% high-risk / 30% random"},
+          {m:"M9", name:"Case file", st:"done", produces:"Evidence integrity PASS/FAIL + signable case file",
+           cmd:"python case_file.py --demo", out:"CAM04.jpg integrity: PASS · custody log: captured→transferred→archived"},
+          {m:"M10", name:"Node health", st:"done", produces:"Battery/offline/weak-signal alerts per node",
+           cmd:"python node_health.py --demo", out:"cam_42 LOW-BAT · aco_07 OFFLINE · cam_19 WEAK-SIG"},
+          {m:"M4", name:"Aerial & geo", st:"design", produces:"NDVI/SAR change → deforestation, water (Sentinel)",
+           cmd:"— design only —", out:"path documented (Sentinel-1/2, OpenDroneMap); heavy deps"},
+          {m:"M11-20", name:"Pollution tier", st:"design", produces:"Water/air/waste/marine crime (legally traceable)",
+           cmd:"— design only —", out:"docs/modules/M11-M20-pollution-tier.md · reuses hub+M9"},
+        ];
+        const ST_META = {done:{t:"RUNNABLE",c:"sev-high",dot:"#00ff66"},part:{t:"PARTIAL",c:"sev-med",dot:"#ffb300"},
+            todo:{t:"CRITICAL PATH",c:"sev-med",dot:"#ff3344"},design:{t:"DESIGN ONLY",c:"sev-low",dot:"#6cb4ff"}};
+        function renderToolkit(){
+            const grid=document.getElementById('toolkit-status-grid'); if(!grid)return;
+            grid.innerHTML=TOOLKIT_STATUS.map(t=>{
+                const s=ST_META[t.st]||ST_META.design;
+                return `<div class="osint-card ${s.c}">
+                  <div class="osint-body">
+                    <div class="osint-row"><b style="font-size:13px">${esc(t.m)} · ${esc(t.name)}</b>
+                      <span style="font-size:9px;color:${s.dot}">● ${s.t}</span></div>
+                    <div style="font-size:11px;line-height:1.4;color:var(--text-main,#dfe)">${esc(t.produces)}</div>
+                    <div class="osint-row" style="margin-top:4px"><span>run</span></div>
+                    <code style="font-size:10px;background:rgba(0,0,0,.35);border:1px solid var(--border-color,#243);border-radius:4px;padding:3px 6px;display:block;color:#6cb4ff;overflow:auto">${esc(t.cmd)}</code>
+                    <div style="font-size:10px;color:var(--text-muted,#9ab);margin-top:6px;line-height:1.4">→ ${esc(t.out)}</div>
+                  </div>
+                </div>`;
+            }).join("");
+        }
+        renderToolkit();
 
         // i18n init: restore saved language, build selector, first render
         try {

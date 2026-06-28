@@ -1,0 +1,35 @@
+{
+  "_comment": "WildGuard M7 — living slang dictionary for illegal wildlife-trade detection. Terms are publicly documented in academic literature and law-enforcement reports. Edit per region/language. 'weight' raises a listing's suspicion score; 'species' is the protected animal the code implies. Maintain this file — traffickers change codes often.",
+  "version": "2026-06-28",
+  "terms": [
+    {"term": "white gold",        "species": "ivory",      "weight": 3, "lang": "en"},
+    {"term": "piano keys",        "species": "ivory",      "weight": 3, "lang": "en"},
+    {"term": "garden furniture",  "species": "ivory",      "weight": 2, "lang": "en"},
+    {"term": "mineral",           "species": "rhino_horn", "weight": 2, "lang": "en"},
+    {"term": "vitamin supplement","species": "rhino_horn", "weight": 2, "lang": "en"},
+    {"term": "artichoke",         "species": "pangolin",   "weight": 3, "lang": "en"},
+    {"term": "pine cone",         "species": "pangolin",   "weight": 2, "lang": "en"},
+    {"term": "fur coat",          "species": "big_cat",    "weight": 2, "lang": "en"},
+    {"term": "rug",               "species": "big_cat",    "weight": 1, "lang": "en"},
+    {"term": "love birds",        "species": "parrot",     "weight": 2, "lang": "en"},
+    {"term": "shark fin",         "species": "shark",      "weight": 3, "lang": "en"},
+    {"term": "avorio",            "species": "ivory",      "weight": 3, "lang": "it"},
+    {"term": "corno",             "species": "rhino_horn", "weight": 2, "lang": "it"},
+    {"term": "tartaruga",         "species": "turtle",     "weight": 2, "lang": "it"},
+    {"term": "pappagallo",        "species": "parrot",     "weight": 2, "lang": "it"},
+    {"term": "cardellino",        "species": "songbird",   "weight": 2, "lang": "it"},
+    {"term": "fringuello",        "species": "songbird",   "weight": 1, "lang": "it"},
+    {"term": "richiamo vivo",     "species": "songbird",   "weight": 3, "lang": "it"},
+    {"term": "trofeo",            "species": "generic",    "weight": 1, "lang": "it"}
+  ],
+  "hard_keywords": [
+    {"term": "cites",        "weight": 2},
+    {"term": "no documenti", "weight": 3},
+    {"term": "no papers",    "weight": 3},
+    {"term": "senza permesso","weight": 3},
+    {"term": "wild caught",  "weight": 2},
+    {"term": "selvatico",    "weight": 2},
+    {"term": "imbalsamato",  "weight": 2},
+    {"term": "taxidermy",    "weight": 2}
+  ]
+}

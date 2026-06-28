@@ -3,6 +3,24 @@
 > Mission: ethical, legal pipeline over public forums, social media and marketplaces to classify
 > wildlife-trafficking ads, decode slang, map smuggling networks, and track price signals.
 
+## 0. Target sites (where to look) — ships as working code
+
+A 104-site target list + rule-based scraper ship in the toolkit. **No LLM, no API key, runs on a Pi.**
+
+- `toolkit/data/osint_sites.json` — 104 public marketplaces/forums with search-URL templates:
+  eBay, Subito.it, Amazon, AliExpress, Temu, Alibaba, DHgate, Wish, Etsy, Facebook Marketplace,
+  Vinted, Leboncoin, Wallapop, Marktplaats, OLX, Allegro, Avito, MercadoLibre, Taobao/Tmall/JD/
+  Xianyu/1688, Shopee, Lazada, Tokopedia, Carousell, Mercari, Yahoo Auctions JP, Rakuten, Flipkart,
+  IndiaMART, Daraz, Jiji, Jumia, Trade Me, Catawiki, Delcampe, LiveAuctioneers, 1stDibs, Reddit,
+  Telegram(web), Instagram tags … Tiers: global / italy / europe / asia / americas / social_forum / auction.
+- `toolkit/data/slang_dict.json` — editable coded-term dictionary (EN + IT seed).
+- `toolkit/python/osint_scrape.py` — fetch → score → SQLite + Tactical Events:
+  `python osint_scrape.py --sites ../data/osint_sites.json --query avorio --tier italy`
+- `toolkit/python/ebay_adapter.py` — worked eBay example (per-item scoring; `--demo` offline).
+- `skills/wildlife-osint/SKILL.md` — Claude Code skill driving the above with legal guardrails.
+
+**Public pages only · honour robots.txt + ToS · prefer saved-page (`--html`) mode · human-review every flag.**
+
 ## 1. Goal
 Poachers and traffickers operate openly on Facebook Marketplace, Telegram groups, classified ad
 sites and dark-web forums. Their ads use coded language, slang and emoji to evade detection.

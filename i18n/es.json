@@ -1,0 +1,184 @@
+{
+  "txt_sub_header": "open-wildguard-hub // Centro de Mando",
+  "txt_status": "SISTEMA EN LÍNEA",
+  "txt_title_stats": "Telemetría de Sensores",
+  "lbl_cameras": "Cámara Trampa",
+  "lbl_audio": "Nodos de Audio",
+  "lbl_collars": "Collares IoT",
+  "lbl_osint": "Agreg. OSINT",
+  "txt_title_alerts": "Alertas de Amenaza Activas",
+  "txt_alert_desc_1": "Humano Armado Detectado (Furtivo)",
+  "txt_alert_desc_2": "Pico de Energía Detectado (Disparo)",
+  "btn_dispatch": "Desplegar Ranger",
+  "btn_locate": "Localizar Posición",
+  "btn_txt_sim": "Simular Alerta Edge",
+  "btn_txt_route": "Calcular Ruta (MST)",
+  "btn_txt_clear": "Restablecer Mapa",
+  "map_toggle_label": "Mapa Táctico",
+  "tab_lbl_roadmap": "Planes de Integración (10 Ideas)",
+  "tab_lbl_docs": "Manual del Dev & Arduino",
+  "tab_lbl_repos": "Integración de Sub-Repos",
+  "tab_lbl_proposal": "Propuesta Institucional (WWF)",
+  "doc_title_proposal": "Propuesta Institucional para WWF, Reservas y Guardas Forestales",
+  "doc_desc_proposal": "WildGuard AI está diseñado como un ecosistema de bajo costo y sostenible para ONG y agencias gubernamentales. Asegura la custodia legal de las pruebas, optimiza la coordinación de patrullas con teoría de juegos estocásticos y reduce las falsas alarmas de las cámaras perimetrales en un 90%.",
+  "prop_lbl_1": "1. Sostenibilidad Económica y Cero Licencias",
+  "prop_desc_1": "Código base completamente de código abierto que se ejecuta en hardware estándar disponible (Arduino/ESP32). Sin planes de suscripción, tarifas recurrentes ni dependencia de proveedores de tecnología patentada.",
+  "prop_lbl_2": "2. Pruebas Legales Admisibles",
+  "prop_desc_2": "Todas las pruebas digitales se codifican con hash (SHA-256) al momento de la captura y se vinculan a cadenas locales inmutables. Esto garantiza la integridad de los datos y refuta los desafíos legales sobre las fotos de cámaras trampa en los tribunales.",
+  "prop_lbl_3": "3. Seguridad en el Terreno y Funciones Anti-Rastreo",
+  "prop_desc_3": "Los nodos perimetrales desactivan los módulos de radio inmediatamente después de transmitir un evento. Esto evita que los furtivos equipados con radios escaneen y localicen los escuadrones de rangers.",
+  "txt_title_health": "Salud de Sub-Repositorios",
+  "txt_title_osint": "Noticias OSINT",
+  "doc_title_arduino": "Configuración de Nodo de Sensor Perimetral Arduino (TinyML)",
+  "doc_desc_arduino": "Los nodos terrestres camuflados y de bajo costo se basan en Arduino Nicla Vision o ESP32-CAM. Utilizan un sensor PIR para detectar presencia/movimiento térmico, despiertan el microcontrolador del sueño profundo, capturan un fotograma y ejecutan inferencia local a través de TinyML (TensorFlow Lite for Microcontrollers), filtrando variaciones del viento antes de la transmisión.",
+  "doc_title_repos": "Integración de Sub-Repositorios en el Código Unificado",
+  "doc_desc_repos": "El marco open-wildguard-hub actúa como orquestador central, integrando y reutilizando código específico de 16 repositorios. A continuación se muestran los directorios de referencia y cómo se integra el código:",
+  "doc_title_readiness": "Línea Base de Preparación para Producción",
+  "doc_desc_readiness": "El proyecto debe seguir siendo útil antes de que cada subsistema esté completo. El primer objetivo de producción es un centro de mando confiable con persistencia local.",
+  "doc_title_playbooks": "Playbooks Operativos del Mundo Real",
+  "doc_desc_playbooks": "Estas guías describen cómo se debe utilizar la plataforma en escenarios concretos sobre el terreno. Están escritas para rangers, operadores y mantenedores.",
+  "doc_title_docs_strategy": "Plan de Escala de Documentación",
+  "doc_desc_docs_strategy": "`dev.md` es el mapa técnico principal. A medida que los flujos de trabajo se estabilizan, cada caso de uso debe moverse a su propio documento.",
+  "readiness_items": [
+    {
+      "title": "Prioridad offline",
+      "desc": "Cada flujo de trabajo crítico debe continuar sin acceso a la red y sincronizarse después."
+    },
+    {
+      "title": "Estado local",
+      "desc": "Eventos, colas y pruebas deben permanecer localmente con rutas de exportación simples."
+    },
+    {
+      "title": "Respaldo claro",
+      "desc": "Cada acción automatizada necesita un comportamiento de modo degradado en el que se pueda confiar."
+    },
+    {
+      "title": "Listo para el operador",
+      "desc": "La interfaz de usuario debe explicar qué hacer en el campo, no solo mostrar telemetría."
+    }
+  ],
+  "playbooks": [
+    {
+      "title": "Intrusión en cámara trampa",
+      "trigger": "Humano o vehículo detectado por visión local.",
+      "action": "Revisar el evento, verificar la ubicación y enviar el equipo de rangers más cercano.",
+      "output": "Incidente marcado, respuesta enrutada, instantánea conservada."
+    },
+    {
+      "title": "Respuesta a disparos",
+      "trigger": "Pico acústico consistente con un disparo o motosierra.",
+      "action": "Verificar de forma cruzada el grupo de sensores y construir una ruta de respuesta rápida.",
+      "output": "Alerta localizada, plan de ruta, hash de pruebas."
+    },
+    {
+      "title": "Informe de campo fuera de línea",
+      "trigger": "El ranger regresa de la patrulla sin conectividad.",
+      "action": "Capturar el informe localmente y sincronizarlo más tarde.",
+      "output": "Informe en cola, marcas de tiempo conservadas, sin pérdida de datos."
+    }
+  ],
+  "docs_strategy_items": [
+    {
+      "title": "Una guía por caso",
+      "desc": "Divida los flujos de trabajo estables en documentos dedicados."
+    },
+    {
+      "title": "Mantenga el mapa principal corto",
+      "desc": "Utilice dev.md solo para la arquitectura y las convenciones."
+    },
+    {
+      "title": "Escribir para operadores",
+      "desc": "Cada guía debe explicar los pasos, los modos de falla y los resultados esperados."
+    },
+    {
+      "title": "Implementación del documento",
+      "desc": "Agregue notas de implementación para nodos perimetrales como archivos separados."
+    }
+  ],
+  "ideas": [
+    {
+      "title": "M1: Hub Modular y API",
+      "status": "En Progreso",
+      "statusClass": "status-progress",
+      "desc": "API central FastAPI y SQLite orquestando nodos físicos y datos OSINT. Implementa lógica de almacenamiento y reenvío para escenarios fuera de línea."
+    },
+    {
+      "title": "M2: Visión Edge (CV)",
+      "status": "Prototipo",
+      "statusClass": "status-prototype",
+      "desc": "Clasificación de imágenes en cámaras trampa y drones mediante YOLOv8. Utiliza filtros OpenCV para descartar alertas de viento/hojas."
+    },
+    {
+      "title": "M3: Bioacústica",
+      "status": "Planeado",
+      "statusClass": "status-planned",
+      "desc": "Red de micrófonos de baja potencia que rastrea disparos y motosierras. Utiliza la diferencia de tiempo de llegada (TDoA) para calcular las coordenadas."
+    },
+    {
+      "title": "M4: Geo-Vigilancia 3D",
+      "status": "Prototipo",
+      "statusClass": "status-prototype",
+      "desc": "Mapas 3D georreferenciados basados en SIG y PyDeck para resaltar senderos de patrullaje y corredores de migración."
+    },
+    {
+      "title": "M5: Inteligencia de Especies",
+      "status": "En Progreso",
+      "statusClass": "status-progress",
+      "desc": "Seguimiento biométrico y de IoT de collares en vida silvestre protegida, lo que desencadena alertas de geovallas en tiempo real."
+    },
+    {
+      "title": "M6: Informes de Campo Fuera de Línea",
+      "status": "Planeado",
+      "statusClass": "status-planned",
+      "desc": "Aplicación móvil para que rangers y comunidades registren huellas y avistamientos a través de sincronizaciones periódicas."
+    },
+    {
+      "title": "M7: OSINT e Inteligencia Cibernética",
+      "status": "Prototipo",
+      "statusClass": "status-prototype",
+      "desc": "Extracción ética de mercados negros ilícitos y noticias en 7 idiomas. Extracción automática de entidades utilizando mDeBERTa."
+    },
+    {
+      "title": "M8: Predicción y Teoría de Juegos",
+      "status": "Prototipo",
+      "statusClass": "status-prototype",
+      "desc": "Integración del motor predictivo PAWS y el aprendizaje por refuerzo DDPG para generar rutas de patrulla óptimas e impredecibles."
+    },
+    {
+      "title": "M9: Bóveda de Pruebas Forenses",
+      "status": "En Progreso",
+      "statusClass": "status-progress",
+      "desc": "Certificación de pruebas multimedia mediante cadenas de hash SHA-256 inmutables y generación automática de cargos judiciales."
+    },
+    {
+      "title": "M10: IA Federada y Flower",
+      "status": "Planeado",
+      "statusClass": "status-planned",
+      "desc": "Entrene de forma colaborativa a YOLOv8 en los santuarios sin compartir imágenes sin procesar para proteger la soberanía de los datos."
+    }
+  ],
+  "osint": [
+    {
+      "title": "Incautación de Colmillos de Marfil",
+      "desc": "La policía forestal detuvo una camioneta que transportaba 4 colmillos de marfil crudos preparados para el contrabando. Dos detenciones.",
+      "tag": "Colmillos",
+      "schedule": "WPA Schedule I",
+      "specie": "Elephas maximus",
+      "reato": "Incautación de Marfil",
+      "sezioni": "Sección 9, 39, 51"
+    },
+    {
+      "title": "Mercado Negro en Línea de Fauna Desmantelado",
+      "desc": "Canal privado de Telegram detectado dedicado a la venta de reptiles raros y aves cantoras protegidas procedentes del santuario de Chitwan.",
+      "tag": "Reptiles",
+      "schedule": "WPA Schedule II",
+      "specie": "Reptilia/Aves",
+      "reato": "Canal de Telegram",
+      "sezioni": "Sección 49-B"
+    }
+  ],
+  "alert_dispatch": "Patrulla de respuesta rápida enviada al sensor: ",
+  "alert_route_calculated": "Ruta de patrulla del árbol de expansión mínima (MST) generada conectando todas las estaciones.",
+  "chargesheet_title": "Hoja de Cargos Judicial Automatizada",
+  "chargesheet_instructions": "Seleccione un evento OSINT para redactar la hoja de cargos legales..."
+}

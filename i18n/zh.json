@@ -1,0 +1,184 @@
+{
+  "txt_sub_header": "open-wildguard-hub // 指挥中心",
+  "txt_status": "系统在线",
+  "txt_title_stats": "传感器遥测",
+  "lbl_cameras": "红外相机",
+  "lbl_audio": "音频节点",
+  "lbl_collars": "物联网项圈",
+  "lbl_osint": "开源情报",
+  "txt_title_alerts": "活跃威胁警报",
+  "txt_alert_desc_1": "检测到武装人员 (盗猎者)",
+  "txt_alert_desc_2": "检测到能量峰值 (枪声)",
+  "btn_dispatch": "派遣巡逻员",
+  "btn_locate": "定位位置",
+  "btn_txt_sim": "模拟边缘警报",
+  "btn_txt_route": "计算路线 (MST)",
+  "btn_txt_clear": "重置地图",
+  "map_toggle_label": "战术地图",
+  "tab_lbl_roadmap": "集成计划 (10个想法)",
+  "tab_lbl_docs": "开发者手册 & Arduino",
+  "tab_lbl_repos": "子仓库集成",
+  "tab_lbl_proposal": "机构推介 (WWF)",
+  "doc_title_proposal": "针对WWF、保护区和森林卫队的机构推介",
+  "doc_desc_proposal": "WildGuard AI 被设计为供非政府组织和政府机构使用的低成本、可持续的生态系统。它确保了证据的合法保管，利用随机博弈论优化巡逻协调，并将边缘相机的误报率降低了90%。",
+  "prop_lbl_1": "1. 经济可持续性与零许可证费",
+  "prop_desc_1": "完全开源的代码库，运行在现成的标准硬件 (Arduino/ESP32) 上。没有订阅计划、经常性维护费用或专有技术供应商锁定。",
+  "prop_lbl_2": "2. 可采纳的合法证据",
+  "prop_desc_2": "所有数字证据在捕获时都会进行哈希处理 (SHA-256)，并绑定到本地不可变的哈希链。这保证了数据的完整性，并可驳回法庭上对红外相机照片的法律质疑。",
+  "prop_lbl_3": "3. 现场安全与反追踪功能",
+  "prop_desc_3": "边缘节点在传输事件后立即禁用无线电模块 (反标记)。这可以防止配备无线电的盗猎者扫描和定位巡逻小队或瞭望塔。",
+  "txt_title_health": "子仓库健康状态",
+  "txt_title_osint": "开源情报新闻动态",
+  "doc_title_arduino": "Arduino 边缘传感器节点配置 (TinyML)",
+  "doc_desc_arduino": "伪装的低成本地面节点基于 Arduino Nicla Vision 或 ESP32-CAM。它们使用 PIR 传感器检测热量/运动，将微控制器从深度睡眠中唤醒，捕获帧并通过 TinyML (TensorFlow Lite for Microcontrollers) 执行边缘推理，在卫星或 LoRa 传输前过滤掉树叶/风的干扰。",
+  "doc_title_repos": "将子仓库集成到统一代码库中",
+  "doc_desc_repos": "open-wildguard-hub 框架充当中央编排器，集成并重用从16个下载仓库中获取的特定代码。以下是参考目录以及代码如何集成以实现计划功能：",
+  "doc_title_readiness": "生产就绪基线",
+  "doc_desc_readiness": "该项目必须在所有子系统完成之前保持可用。首个生产目标是一个可靠的指挥中心终端，具有本地持久性、清晰的回退行为和已记录的操作路径。",
+  "doc_title_playbooks": "真实世界操作手册",
+  "doc_desc_playbooks": "这些指南描述了如何在具体的现场场景中使用该平台。它们是为巡逻员、操作员和维护人员编写的，而不是架构图。",
+  "doc_title_docs_strategy": "文档扩展计划",
+  "doc_desc_docs_strategy": "`dev.md` 是主技术图谱。随着重复工作流的稳定，每个用例都应移入专门的文档，以便项目可以在不丧失清晰度的情况下进行扩展。",
+  "readiness_items": [
+    {
+      "title": "离线优先",
+      "desc": "每个关键工作流必须在没有网络的情况下继续运行，并在可能时同步。"
+    },
+    {
+      "title": "本地状态",
+      "desc": "事件、队列和证据必须本地保留，并提供简单、可审计的导出路径。"
+    },
+    {
+      "title": "清晰回退",
+      "desc": "每个自动化操作都需要操作员可以信任的降级模式行为。"
+    },
+    {
+      "title": "操作员就绪",
+      "desc": "UI 必须解释在现场做什么，而不仅仅是显示遥测数据。"
+    }
+  ],
+  "playbooks": [
+    {
+      "title": "红外相机入侵",
+      "trigger": "边缘视觉检测到人类或车辆。",
+      "action": "审查事件，核实位置，并派遣最近的巡逻队。",
+      "output": "标记事件，规划响应路线，保留快照。"
+    },
+    {
+      "title": "枪声响应",
+      "trigger": "与枪声或电锯声相符的声学峰值。",
+      "action": "交叉检查传感器集群并建立快速响应路线。",
+      "output": "定位警报，路线规划，证据哈希。"
+    },
+    {
+      "title": "离线现场报告",
+      "trigger": "巡逻员在没有网络连接的情况下返回。",
+      "action": "在本地捕获报告，稍后从基地同步。",
+      "output": "排队报告，保留时间戳，无数据丢失。"
+    }
+  ],
+  "docs_strategy_items": [
+    {
+      "title": "每个用例一个指南",
+      "desc": "将稳定的工作流拆分为专用文档，而不是让主指南超载。"
+    },
+    {
+      "title": "保持主图谱简短",
+      "desc": "仅将 dev.md 用于架构和约定。"
+    },
+    {
+      "title": "为操作员编写",
+      "desc": "每个指南应解释步骤、故障模式和预期输出。"
+    },
+    {
+      "title": "部署文档",
+      "desc": "将边缘节点和指挥中心的部署说明添加为单独的文件。"
+    }
+  ],
+  "ideas": [
+    {
+      "title": "M1: 模块化中心 & API",
+      "status": "进行中",
+      "statusClass": "status-progress",
+      "desc": "中央 FastAPI & SQLite API，编排物理节点和 OSINT 数据。为离线场景实现存储转发逻辑。"
+    },
+    {
+      "title": "M2: 边缘视觉 (CV)",
+      "status": "原型",
+      "statusClass": "status-prototype",
+      "desc": "通过 YOLOv8 在红外相机和无人机上进行图像分类。在微型相机上使用 OpenCV 边缘过滤器丢弃风/树叶警报。"
+    },
+    {
+      "title": "M3: 生物声学与三角定位",
+      "status": "计划中",
+      "statusClass": "status-planned",
+      "desc": "低功耗麦克风网络跟踪枪声和电锯声。使用到达时间差 (TDoA) 计算枪手坐标。"
+    },
+    {
+      "title": "M4: 3D 地理监控",
+      "status": "原型",
+      "statusClass": "status-prototype",
+      "desc": "基于 GIS、GeoJSON 和 PyDeck 的地理参考 3D 地图，以突出巡逻路径和野生动物迁徙走廊。"
+    },
+    {
+      "title": "M5: 物种情报",
+      "status": "进行中",
+      "statusClass": "status-progress",
+      "desc": "受保护野生动物项圈设备的生物识别和物联网跟踪，触发实时地理围栏警报。"
+    },
+    {
+      "title": "M6: 离线现场报告",
+      "status": "计划中",
+      "statusClass": "status-planned",
+      "desc": "供巡逻员和社区通过定期基地同步记录足迹和目击事件的离线优先移动应用。"
+    },
+    {
+      "title": "M7: 开源情报与网络情报",
+      "status": "原型",
+      "statusClass": "status-prototype",
+      "desc": "跨7种语言合乎道德地抓取非法黑市、Telegram 和新闻。使用 mDeBERTa NLP 自动提取实体。"
+    },
+    {
+      "title": "M8: 预测与博弈论",
+      "status": "原型",
+      "statusClass": "status-prototype",
+      "desc": "集成 PAWS 预测引擎和 DDPG 强化学习，生成不可预测的最佳巡逻路线。"
+    },
+    {
+      "title": "M9: 取证证据库",
+      "status": "进行中",
+      "statusClass": "status-progress",
+      "desc": "使用不可变的 SHA-256 哈希链证明媒体证据，并自动生成与法律附表关联的法庭指控书。"
+    },
+    {
+      "title": "M10: 联邦 AI 与 Flower",
+      "status": "计划中",
+      "statusClass": "status-planned",
+      "desc": "跨保护区协作训练 YOLOv8 而不共享原始地理定位图像，保护野生动物数据主权。"
+    }
+  ],
+  "osint": [
+    {
+      "title": "公园边界象牙走私扣押",
+      "desc": "森林警察拦截了一辆载有4根准备用于跨境走私的未加工象牙的货车。逮捕两人。",
+      "tag": "象牙",
+      "schedule": "WPA 附表 I",
+      "specie": "Elephas maximus",
+      "reato": "象牙扣押",
+      "sezioni": "第 9, 39, 51 条"
+    },
+    {
+      "title": "在线外来野生动物黑市被捣毁",
+      "desc": "发现了一个私有 Telegram 频道，专门出售来自奇旺保护区的稀有爬行动物和受保护的鸣禽。",
+      "tag": "爬行动物",
+      "schedule": "WPA 附表 II",
+      "specie": "Reptilia/Aves",
+      "reato": "Telegram 频道",
+      "sezioni": "第 49-B 条"
+    }
+  ],
+  "alert_dispatch": "快速响应巡逻队已派遣至传感器：",
+  "alert_route_calculated": "已生成连接所有森林站点的最小生成树 (Kruskal MST) 巡逻路线。",
+  "chargesheet_title": "自动法庭指控书 (WPA)",
+  "chargesheet_instructions": "选择一个 OSINT 事件以起草法律指控书..."
+}

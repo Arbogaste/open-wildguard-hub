@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://arbogaste.github.io/open-wildguard-hub/sitemap.xml

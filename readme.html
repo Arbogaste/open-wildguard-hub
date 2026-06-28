@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mission &amp; README — WildGuard AI</title>
+  <meta name="description" content="WildGuard AI mission and project README: an open-source, offline-first anti-poaching platform for conservation teams.">
+  <meta name="theme-color" content="#07090e">
+  <link rel="canonical" href="https://arbogaste.github.io/open-wildguard-hub/readme.html">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/brand/favicon-32.png">
+  <style>
+    :root { --bg:#07090e; --surface:#0d111a; --border:rgba(255,255,255,.1);
+            --text:#e8f0f4; --muted:#9aabb5; --link:#5ad1ff; --accent:#00ff66; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; background:var(--bg); color:var(--text);
+      font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif; line-height:1.65;
+      font-size:16px; }
+    /* WCAG 2.4.1 — skip link */
+    .skip { position:absolute; left:-999px; top:0; background:var(--accent); color:#000;
+      padding:10px 16px; z-index:100; border-radius:0 0 6px 0; font-weight:700; }
+    .skip:focus { left:0; }
+    /* WCAG 2.4.7 — visible focus */
+    a:focus-visible, button:focus-visible { outline:3px solid var(--accent); outline-offset:2px;
+      border-radius:3px; }
+    header.top { border-bottom:1px solid var(--border); background:var(--surface);
+      padding:14px 20px; display:flex; gap:16px; align-items:center; flex-wrap:wrap; }
+    header.top a { color:var(--link); text-decoration:none; font-size:14px; }
+    header.top a:hover { text-decoration:underline; }
+    .brand { font-weight:800; color:var(--accent); margin-right:auto; font-size:16px; }
+    main { max-width:780px; margin:0 auto; padding:28px 20px 80px; }
+    h1 { font-size:1.9rem; line-height:1.25; margin:1.6rem 0 .8rem; }
+    h2 { font-size:1.4rem; margin:1.8rem 0 .7rem; border-bottom:1px solid var(--border); padding-bottom:.3rem; }
+    h3 { font-size:1.15rem; margin:1.4rem 0 .5rem; }
+    p, li { color:var(--text); }
+    a { color:var(--link); }
+    code { background:rgba(255,255,255,.07); border:1px solid var(--border); border-radius:4px;
+      padding:.1em .4em; font-family:ui-monospace,'SFMono-Regular',Menlo,monospace; font-size:.9em; }
+    pre { background:#0b0f17; border:1px solid var(--border); border-radius:8px; padding:14px;
+      overflow:auto; } pre code { background:none; border:none; padding:0; }
+    ul, ol { padding-left:1.4rem; }
+    hr { border:none; border-top:1px solid var(--border); margin:2rem 0; }
+    .note { color:var(--muted); font-size:.9rem; }
+    @media (max-width:600px){ body{font-size:15px;} main{padding:20px 16px 60px;} h1{font-size:1.6rem;} }
+    @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#content">Skip to content</a>
+  <header class="top">
+    <span class="brand">WildGuard AI</span>
+    <a href="index.html">← Command Center</a>
+    <a href="scriptplay.html">Script Generator</a>
+    <a href="https://github.com/Arbogaste/open-wildguard-hub" rel="noopener">GitHub ↗</a>
+  </header>
+  <main id="content">
+    <article id="readme" aria-busy="true">
+      <p class="note">Loading mission &amp; README…</p>
+    </article>
+    <noscript>
+      <p>Enable JavaScript to read the rendered README, or
+         <a href="https://github.com/Arbogaste/open-wildguard-hub#readme" rel="noopener">read it on GitHub</a>.</p>
+    </noscript>
+  </main>
+
+  <script>
+  // Tiny, safe Markdown renderer (escape first, then format). No external libraries, no API calls.
+  function esc(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+  function inline(s){
+    return s
+      .replace(/`([^`]+)`/g,(_,c)=>'<code>'+c+'</code>')
+      .replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')
+      .replace(/\[([^\]]+)\]\(([^)]+)\)/g,(_,t,u)=>'<a href="'+u+'" rel="noopener">'+t+'</a>')
+      .replace(/(^|[^"\w])(https?:\/\/[^\s<)]+)/g,'$1<a href="$2" rel="noopener">$2</a>');
+  }
+  function mdToHtml(md){
+    const lines = md.replace(/\r/g,'').split('\n'); let out=[], inCode=false, listType=null;
+    const closeList=()=>{ if(listType){ out.push('</'+listType+'>'); listType=null; } };
+    for(let raw of lines){
+      if(raw.trim().startsWith('```')){ if(inCode){out.push('</code></pre>');inCode=false;}
+        else{closeList();out.push('<pre><code>');inCode=true;} continue; }
+      if(inCode){ out.push(esc(raw)); continue; }
+      const line=esc(raw);
+      let m;
+      if((m=line.match(/^(#{1,4})\s+(.*)$/))){ closeList(); const n=m[1].length;
+        out.push('<h'+n+'>'+inline(m[2])+'</h'+n+'>'); continue; }
+      if(/^---+$/.test(raw.trim())){ closeList(); out.push('<hr>'); continue; }
+      if((m=line.match(/^\s*[-*]\s+(.*)$/))){ if(listType!=='ul'){closeList();out.push('<ul>');listType='ul';}
+        out.push('<li>'+inline(m[1])+'</li>'); continue; }
+      if((m=line.match(/^\s*\d+\.\s+(.*)$/))){ if(listType!=='ol'){closeList();out.push('<ol>');listType='ol';}
+        out.push('<li>'+inline(m[1])+'</li>'); continue; }
+      if(raw.trim()===''){ closeList(); continue; }
+      closeList(); out.push('<p>'+inline(line)+'</p>');
+    }
+    closeList(); if(inCode) out.push('</code></pre>');
+    return out.join('\n');
+  }
+  const art=document.getElementById('readme');
+  fetch('README.md').then(r=>{ if(!r.ok) throw new Error(); return r.text(); })
+    .then(md=>{ art.innerHTML=mdToHtml(md); art.setAttribute('aria-busy','false'); })
+    .catch(()=>{ art.setAttribute('aria-busy','false');
+      art.innerHTML='<h1>Mission &amp; README</h1><p>Could not load <code>README.md</code> locally '+
+        '(this happens when opening the file directly). '+
+        '<a href="https://github.com/Arbogaste/open-wildguard-hub#readme" rel="noopener">Read it on GitHub ↗</a></p>'; });
+  </script>
+</body>
+</html>

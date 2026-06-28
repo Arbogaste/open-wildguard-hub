@@ -8,4 +8,5 @@ torchvision>=0.15
 torchaudio>=2.0
 # M3 TDoA:
 numpy>=1.24
+# M8 risk model + patrol planner: stdlib only — no extra install.
 # Edge export (optional): onnx, onnxruntime, openvino, onnx2tf
