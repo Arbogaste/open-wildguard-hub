@@ -14,3 +14,7 @@ __pycache__
 
 .vercel
 node_modules/
+
+# evidence / scrape DBs — never commit real data
+*.db
+toolkit/python/osint.db

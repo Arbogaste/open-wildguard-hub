@@ -54,6 +54,10 @@ index.html                static demo command center (offline HTML, no backend r
 | M11–M20 pollution tier | ◐ design only (`docs/modules/M11-M20-pollution-tier.md`) | Optional separate tier; no code; reuses core (hub, schema, M9) |
 | `docs/use-cases/` | ❌ empty | Needed for operator onboarding |
 | Per-module agent prompts | ◐ partial | M2/M3 done; rest missing |
+| Pubblicazione Sbloccata | ✅ LICENSE MIT, CONTRIBUTING.md, osint.db rimosso da git, Slang dict 19->74 termini | — |
+| `wildguard.py` offline runner | ✅ ties all modules without a server: ingest `events/*.json` → **enforce event_schema.json** (rejects.json) → M5 enrich (opt) → M8 risk grid+routes → M9 case files+integrity → bundle (SUMMARY.txt, manifest.json). stdlib, `--demo` works, exit≠0 on tamper | Replaces the M0 hub for offline field teams — no backend to expose |
+| `toolkit/tests/test_wildguard.py` | ✅ 13 tests, offline/stdlib: schema enforcement, ingest single+array, tamper→exit1, **real-module flow** (tip_intake+gps_geofence+node_health `--events` → runner, 0 rejects). `cd toolkit && python3 -m pytest tests/ -q` | Cloner can trust the pipeline |
+| `QUICKSTART.md` (repo root) | ✅ operational: clone → `--demo` → real detector chain → `report/SUMMARY.txt`. Commands only, no pip for core | Offline entry point for field teams |
 
 ---
 
@@ -374,3 +378,25 @@ Platform is done when:
 - The dashboard at `index.html` shows those detections live.
 - Every detection produces a SHA-256-verified evidence package downloadable as a zip.
 - A new reserve can be onboarded in one day using a UC doc.
+
+### open-wildguard-hub — sessione 2026-07-05 (offline runner)
+- **Deciso: NIENTE backend esposto.** Il sito resta statico/offline; la gente clona il repo per usarlo. Il ruolo del "hub M0" (collegare i moduli) è fatto **offline, file-based, stdlib** da `wildguard.py`.
+- **`toolkit/python/wildguard.py`** — runner: `events/*.json` → valida schema (rejects.json) → M5 enrich (opt, rete) → M8 risk grid+rotte → M9 case file+integrità SHA-256 → bundle (`SUMMARY.txt`, `manifest.json`). Trasforma 10 script-isola in 1 workflow. Exit≠0 su manomissione prove.
+- **Integrazione reale provata:** `tip_intake`/`gps_geofence`/`node_health` `--demo --events` emettono eventi canonici che passano il runner (8 eventi, 0 scarti, 5 case file).
+- **`toolkit/tests/test_wildguard.py`** — 13 test, tutti verdi, offline/stdlib.
+- **`QUICKSTART.md`** — entry point operativo per chi clona.
+- **Prossimo muro adozione:** M2/M3 non spediscono pesi modello → `fetch_models.py` + fallback no-model (da fare).
+
+### open-wildguard-hub — milestone plan 2026-06-21
+- **✅ `goal.md` riscritto con milestone tecniche** (M0–M6): FastAPI hub server, dashboard live binding, toolkit wiring (M2+M3), evidence viewer, risk heatmap, node monitor, use-cases docs. Ogni milestone ha: file esatti, schema SQL, API routes, test da scrivere, **dashboard expansion points** per agenti futuri. Priorità: M0→M2→M1→M3→M4→M5→M6.
+
+## TRADER — test dYdX pendenti
+> Storico backtest 2026-06-13 (bug perpetualMarket fix, momentum/meanrev no-edge, P1 FAIL) → `_backups/goal_changelog.md`.
+> Verità architettura/edge: `trader/CLAUDE.md`. Stato + gate: `trader/goal.md`.
+
+### Prossimi test da fare
+- [ ] BB Squeeze breakout signal (backtester pronto, manca signal)
+- [ ] Multi-TF: 4h trend confirm + 15m pullback entry
+- [ ] Monitorare paper bot → quando primo trade entra con fix URL
+
+> Log sessioni completate 2026-05-24 / 2026-05-25 → `_backups/goal_changelog.md`.

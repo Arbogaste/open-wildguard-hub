@@ -1,35 +1,532 @@
 {
-  "_comment": "WildGuard M7 — living slang dictionary for illegal wildlife-trade detection. Terms are publicly documented in academic literature and law-enforcement reports. Edit per region/language. 'weight' raises a listing's suspicion score; 'species' is the protected animal the code implies. Maintain this file — traffickers change codes often.",
-  "version": "2026-06-28",
+  "_comment": "WildGuard M7 — living slang dictionary for illegal wildlife-trade detection. Terms are publicly documented in academic literature and law-enforcement reports. Edit per region/language. 'weight' raises a listing's suspicion score; 'species' is the protected animal the code implies. Maintain this file — traffickers change codes often. | Expanded 2026-07-03: multi-species/lang (ivory,rhino,pangolin,tiger,bear,turtle,reptile,birds,eel,marine,CITES-flora). Sources: TRAFFIC/CITES seizure reports + wildlife-cybercrime literature; add per-term citations via PR.",
+  "version": "2026-07-03",
   "terms": [
-    {"term": "white gold",        "species": "ivory",      "weight": 3, "lang": "en"},
-    {"term": "piano keys",        "species": "ivory",      "weight": 3, "lang": "en"},
-    {"term": "garden furniture",  "species": "ivory",      "weight": 2, "lang": "en"},
-    {"term": "mineral",           "species": "rhino_horn", "weight": 2, "lang": "en"},
-    {"term": "vitamin supplement","species": "rhino_horn", "weight": 2, "lang": "en"},
-    {"term": "artichoke",         "species": "pangolin",   "weight": 3, "lang": "en"},
-    {"term": "pine cone",         "species": "pangolin",   "weight": 2, "lang": "en"},
-    {"term": "fur coat",          "species": "big_cat",    "weight": 2, "lang": "en"},
-    {"term": "rug",               "species": "big_cat",    "weight": 1, "lang": "en"},
-    {"term": "love birds",        "species": "parrot",     "weight": 2, "lang": "en"},
-    {"term": "shark fin",         "species": "shark",      "weight": 3, "lang": "en"},
-    {"term": "avorio",            "species": "ivory",      "weight": 3, "lang": "it"},
-    {"term": "corno",             "species": "rhino_horn", "weight": 2, "lang": "it"},
-    {"term": "tartaruga",         "species": "turtle",     "weight": 2, "lang": "it"},
-    {"term": "pappagallo",        "species": "parrot",     "weight": 2, "lang": "it"},
-    {"term": "cardellino",        "species": "songbird",   "weight": 2, "lang": "it"},
-    {"term": "fringuello",        "species": "songbird",   "weight": 1, "lang": "it"},
-    {"term": "richiamo vivo",     "species": "songbird",   "weight": 3, "lang": "it"},
-    {"term": "trofeo",            "species": "generic",    "weight": 1, "lang": "it"}
+    {
+      "term": "white gold",
+      "species": "ivory",
+      "weight": 3,
+      "lang": "en"
+    },
+    {
+      "term": "piano keys",
+      "species": "ivory",
+      "weight": 3,
+      "lang": "en"
+    },
+    {
+      "term": "garden furniture",
+      "species": "ivory",
+      "weight": 2,
+      "lang": "en"
+    },
+    {
+      "term": "mineral",
+      "species": "rhino_horn",
+      "weight": 2,
+      "lang": "en"
+    },
+    {
+      "term": "vitamin supplement",
+      "species": "rhino_horn",
+      "weight": 2,
+      "lang": "en"
+    },
+    {
+      "term": "artichoke",
+      "species": "pangolin",
+      "weight": 3,
+      "lang": "en"
+    },
+    {
+      "term": "pine cone",
+      "species": "pangolin",
+      "weight": 2,
+      "lang": "en"
+    },
+    {
+      "term": "fur coat",
+      "species": "big_cat",
+      "weight": 2,
+      "lang": "en"
+    },
+    {
+      "term": "rug",
+      "species": "big_cat",
+      "weight": 1,
+      "lang": "en"
+    },
+    {
+      "term": "love birds",
+      "species": "parrot",
+      "weight": 2,
+      "lang": "en"
+    },
+    {
+      "term": "shark fin",
+      "species": "shark",
+      "weight": 3,
+      "lang": "en"
+    },
+    {
+      "term": "avorio",
+      "species": "ivory",
+      "weight": 3,
+      "lang": "it"
+    },
+    {
+      "term": "corno",
+      "species": "rhino_horn",
+      "weight": 2,
+      "lang": "it"
+    },
+    {
+      "term": "tartaruga",
+      "species": "turtle",
+      "weight": 2,
+      "lang": "it"
+    },
+    {
+      "term": "pappagallo",
+      "species": "parrot",
+      "weight": 2,
+      "lang": "it"
+    },
+    {
+      "term": "cardellino",
+      "species": "songbird",
+      "weight": 2,
+      "lang": "it"
+    },
+    {
+      "term": "fringuello",
+      "species": "songbird",
+      "weight": 1,
+      "lang": "it"
+    },
+    {
+      "term": "richiamo vivo",
+      "species": "songbird",
+      "weight": 3,
+      "lang": "it"
+    },
+    {
+      "term": "trofeo",
+      "species": "generic",
+      "weight": 1,
+      "lang": "it"
+    },
+    {
+      "term": "mammoth ivory",
+      "species": "ivory",
+      "weight": 2,
+      "lang": "en",
+      "note": "cover for illegal elephant ivory"
+    },
+    {
+      "term": "pre-ban ivory",
+      "species": "ivory",
+      "weight": 3,
+      "lang": "en"
+    },
+    {
+      "term": "ox bone",
+      "species": "ivory",
+      "weight": 2,
+      "lang": "en",
+      "note": "mislabel for ivory carvings"
+    },
+    {
+      "term": "avorio antico",
+      "species": "ivory",
+      "weight": 3,
+      "lang": "it"
+    },
+    {
+      "term": "osso di bue",
+      "species": "ivory",
+      "weight": 2,
+      "lang": "it"
+    },
+    {
+      "term": "marfil",
+      "species": "ivory",
+      "weight": 3,
+      "lang": "es"
+    },
+    {
+      "term": "xiangya",
+      "species": "ivory",
+      "weight": 3,
+      "lang": "zh",
+      "note": "象牙 pinyin"
+    },
+    {
+      "term": "rhino horn",
+      "species": "rhino_horn",
+      "weight": 3,
+      "lang": "en"
+    },
+    {
+      "term": "black gold",
+      "species": "rhino_horn",
+      "weight": 2,
+      "lang": "en"
+    },
+    {
+      "term": "fire horn",
+      "species": "rhino_horn",
+      "weight": 2,
+      "lang": "en"
+    },
+    {
+      "term": "corno di rinoceronte",
+      "species": "rhino_horn",
+      "weight": 3,
+      "lang": "it"
+    },
+    {
+      "term": "xijiao",
+      "species": "rhino_horn",
+      "weight": 3,
+      "lang": "zh",
+      "note": "犀角 pinyin"
+    },
+    {
+      "term": "sung te giac",
+      "species": "rhino_horn",
+      "weight": 3,
+      "lang": "vi",
+      "note": "Vietnamese market"
+    },
+    {
+      "term": "pangolin scales",
+      "species": "pangolin",
+      "weight": 3,
+      "lang": "en"
+    },
+    {
+      "term": "chuan shan jia",
+      "species": "pangolin",
+      "weight": 3,
+      "lang": "zh",
+      "note": "穿山甲 pinyin"
+    },
+    {
+      "term": "squame di pangolino",
+      "species": "pangolin",
+      "weight": 3,
+      "lang": "it"
+    },
+    {
+      "term": "anteater scale",
+      "species": "pangolin",
+      "weight": 2,
+      "lang": "en"
+    },
+    {
+      "term": "tiger bone",
+      "species": "tiger",
+      "weight": 3,
+      "lang": "en"
+    },
+    {
+      "term": "tiger wine",
+      "species": "tiger",
+      "weight": 3,
+      "lang": "en"
+    },
+    {
+      "term": "bone glue",
+      "species": "tiger",
+      "weight": 2,
+      "lang": "en",
+      "note": "tiger-bone cake 'gao'"
+    },
+    {
+      "term": "osso di tigre",
+      "species": "tiger",
+      "weight": 3,
+      "lang": "it"
+    },
+    {
+      "term": "hu gu",
+      "species": "tiger",
+      "weight": 3,
+      "lang": "zh",
+      "note": "虎骨 pinyin"
+    },
+    {
+      "term": "cat claw pendant",
+      "species": "big_cat",
+      "weight": 2,
+      "lang": "en"
+    },
+    {
+      "term": "leopard skin",
+      "species": "leopard",
+      "weight": 3,
+      "lang": "en"
+    },
+    {
+      "term": "bear bile",
+      "species": "bear",
+      "weight": 3,
+      "lang": "en"
+    },
+    {
+      "term": "bear paw",
+      "species": "bear",
+      "weight": 3,
+      "lang": "en"
+    },
+    {
+      "term": "xiong dan",
+      "species": "bear",
+      "weight": 3,
+      "lang": "zh",
+      "note": "熊胆 pinyin"
+    },
+    {
+      "term": "tortoiseshell",
+      "species": "sea_turtle",
+      "weight": 3,
+      "lang": "en",
+      "note": "hawksbill 'bekko'"
+    },
+    {
+      "term": "bekko",
+      "species": "sea_turtle",
+      "weight": 3,
+      "lang": "en"
+    },
+    {
+      "term": "real tortoiseshell",
+      "species": "sea_turtle",
+      "weight": 3,
+      "lang": "en"
+    },
+    {
+      "term": "tartaruga vera",
+      "species": "sea_turtle",
+      "weight": 2,
+      "lang": "it"
+    },
+    {
+      "term": "python skin",
+      "species": "reptile",
+      "weight": 2,
+      "lang": "en"
+    },
+    {
+      "term": "genuine croc",
+      "species": "reptile",
+      "weight": 2,
+      "lang": "en"
+    },
+    {
+      "term": "live tortoise",
+      "species": "tortoise",
+      "weight": 2,
+      "lang": "en",
+      "note": "CITES pet trade"
+    },
+    {
+      "term": "wild parrot",
+      "species": "parrot",
+      "weight": 2,
+      "lang": "en"
+    },
+    {
+      "term": "grey parrot",
+      "species": "parrot",
+      "weight": 3,
+      "lang": "en",
+      "note": "African grey CITES I"
+    },
+    {
+      "term": "falcon for sale",
+      "species": "raptor",
+      "weight": 2,
+      "lang": "en"
+    },
+    {
+      "term": "gyr hybrid",
+      "species": "raptor",
+      "weight": 2,
+      "lang": "en",
+      "note": "falconry trade"
+    },
+    {
+      "term": "songbird wild",
+      "species": "songbird",
+      "weight": 2,
+      "lang": "en"
+    },
+    {
+      "term": "helmeted hornbill",
+      "species": "hornbill",
+      "weight": 3,
+      "lang": "en",
+      "note": "'red ivory' casque"
+    },
+    {
+      "term": "red ivory",
+      "species": "hornbill",
+      "weight": 3,
+      "lang": "en"
+    },
+    {
+      "term": "glass eel",
+      "species": "european_eel",
+      "weight": 2,
+      "lang": "en",
+      "note": "Anguilla anguilla CITES II"
+    },
+    {
+      "term": "elver",
+      "species": "european_eel",
+      "weight": 2,
+      "lang": "en"
+    },
+    {
+      "term": "totoaba bladder",
+      "species": "totoaba",
+      "weight": 3,
+      "lang": "en",
+      "note": "'aquatic cocaine'"
+    },
+    {
+      "term": "fish maw",
+      "species": "totoaba",
+      "weight": 2,
+      "lang": "en"
+    },
+    {
+      "term": "seahorse dried",
+      "species": "seahorse",
+      "weight": 2,
+      "lang": "en"
+    },
+    {
+      "term": "rosewood",
+      "species": "rosewood",
+      "weight": 2,
+      "lang": "en",
+      "note": "Dalbergia CITES II"
+    },
+    {
+      "term": "hongmu",
+      "species": "rosewood",
+      "weight": 2,
+      "lang": "zh",
+      "note": "红木 pinyin"
+    },
+    {
+      "term": "agarwood oud",
+      "species": "agarwood",
+      "weight": 2,
+      "lang": "en",
+      "note": "Aquilaria CITES II"
+    },
+    {
+      "term": "live orchid wild",
+      "species": "orchid",
+      "weight": 2,
+      "lang": "en"
+    },
+    {
+      "term": "succulent wild collected",
+      "species": "succulent",
+      "weight": 2,
+      "lang": "en",
+      "note": "Conophytum poaching"
+    },
+    {
+      "term": "wild ginseng",
+      "species": "ginseng",
+      "weight": 1,
+      "lang": "en"
+    },
+    {
+      "term": "antique no cites",
+      "species": "generic",
+      "weight": 3,
+      "lang": "en"
+    },
+    {
+      "term": "private collection only",
+      "species": "generic",
+      "weight": 1,
+      "lang": "en"
+    },
+    {
+      "term": "museum grade",
+      "species": "generic",
+      "weight": 1,
+      "lang": "en"
+    }
   ],
   "hard_keywords": [
-    {"term": "cites",        "weight": 2},
-    {"term": "no documenti", "weight": 3},
-    {"term": "no papers",    "weight": 3},
-    {"term": "senza permesso","weight": 3},
-    {"term": "wild caught",  "weight": 2},
-    {"term": "selvatico",    "weight": 2},
-    {"term": "imbalsamato",  "weight": 2},
-    {"term": "taxidermy",    "weight": 2}
+    {
+      "term": "cites",
+      "weight": 2
+    },
+    {
+      "term": "no documenti",
+      "weight": 3
+    },
+    {
+      "term": "no papers",
+      "weight": 3
+    },
+    {
+      "term": "senza permesso",
+      "weight": 3
+    },
+    {
+      "term": "wild caught",
+      "weight": 2
+    },
+    {
+      "term": "selvatico",
+      "weight": 2
+    },
+    {
+      "term": "imbalsamato",
+      "weight": 2
+    },
+    {
+      "term": "taxidermy",
+      "weight": 2
+    },
+    {
+      "term": "discreet shipping",
+      "weight": 2
+    },
+    {
+      "term": "spedizione discreta",
+      "weight": 2
+    },
+    {
+      "term": "no questions asked",
+      "weight": 3
+    },
+    {
+      "term": "cash only meet",
+      "weight": 2
+    },
+    {
+      "term": "cites exempt",
+      "weight": 2
+    },
+    {
+      "term": "sin papeles",
+      "weight": 3
+    },
+    {
+      "term": "ship worldwide no customs",
+      "weight": 3
+    }
   ]
 }
