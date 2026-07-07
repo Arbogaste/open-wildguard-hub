@@ -67,7 +67,7 @@ def build_case(ev, files_dir):
     for it in items:
         stored = it.get("sha256")
         fn = it.get("filename", "?")
-        status = "NO FILE"
+        status = "NOT VERIFIED (no --files-dir)"  # verification not attempted — neutral
         if files_dir:
             path = os.path.join(files_dir, os.path.basename(fn))
             if os.path.isfile(path):
@@ -76,7 +76,9 @@ def build_case(ev, files_dir):
                 all_pass = all_pass and ok
                 status = "PASS" if ok else "FAIL (hash mismatch — possible tampering)"
             else:
-                status = "MISSING FILE (cannot verify)"
+                # evidence is referenced but absent from the vault → cannot certify → not a PASS
+                all_pass = False
+                status = "MISSING FILE (cannot verify — evidence lost or not transferred)"
         lines.append(f"  - {fn}")
         lines.append(f"      sha256(stored): {stored}")
         lines.append(f"      integrity     : {status}")

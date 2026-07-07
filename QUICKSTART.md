@@ -30,6 +30,8 @@ mkdir events
 python3 tip_intake.py   --demo --events events/tips.json
 # collar geofence (alert when a tracked animal leaves the safe zone)
 python3 gps_geofence.py --demo --events events/geo.json
+# gunshot triangulation from >=3 synced acoustic nodes (TDoA)
+python3 tdoa_locate.py  --demo --events events/gunshot.json
 # node health     (which sensor died before a poacher walks the gap)
 python3 node_health.py  --demo --events events/nodes.json
 # camera edge inference writes events/<id>.json itself. Zero-training start:
@@ -68,6 +70,24 @@ events/*.json  →  VALIDATE (schema)  →  ENRICH (opt)  →  RISK  →  CASE F
 | `cases/*.txt` | Court-ready, signable, hash-verified. |
 | `rejects.json` | Malformed detector output — fix the sensor. |
 | `manifest.json` | Machine-readable run record. |
+
+## 3. Query history + hand data to a researcher
+
+The runner also writes a single **SQLite file** (`report/wildguard.sqlite`) — no server, opens in
+QGIS / DB Browser / R / pandas. Ask it questions, or export standard formats:
+
+```bash
+# every gunshot in the last 30 days within 2 km of the north gate
+python3 wg_store.py query --db report/wildguard.sqlite \
+    --type gunshot --since 2026-06-01 --near -2.34 34.82 --radius-km 2
+
+# exports a researcher already knows how to open
+python3 wg_store.py export --db report/wildguard.sqlite --format geojson    --out events.geojson  # QGIS/Leaflet
+python3 wg_store.py export --db report/wildguard.sqlite --format csv        --out events.csv      # R/pandas/Excel
+python3 wg_store.py export --db report/wildguard.sqlite --format darwincore --out occurrence.csv  # GBIF standard
+```
+
+Ingest is idempotent — re-run detectors and re-ingest; the same incident never duplicates.
 
 ## Verify it works on your machine
 

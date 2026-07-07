@@ -89,3 +89,35 @@ def test_no_numpy_needed():
     # field Pis clone and run with zero pip installs — keep it that way
     src = open(os.path.join(PY, "tdoa_locate.py")).read()
     assert "import numpy" not in src
+
+
+# --------------------------------------------------------------------------- event emission
+def test_make_event_is_schema_valid():
+    import wildguard
+    nodes = make_nodes(SRC, GEO4[:3])
+    lat, lon, rms = T.localize(nodes, C)
+    ev = T.make_event(lat, lon, rms, nodes)
+    assert wildguard.validate_event(ev, wildguard.load_schema()) == []
+    assert ev["threat_class"] == "gunshot" and ev["source_type"] == "acoustic_node"
+    assert ev["metadata"]["residual_rms_m"] == round(rms, 1)
+
+
+def test_confidence_degrades_with_residual():
+    # clean solve trusted, garbage solve flagged low — a ranger shouldn't chase a bad fix
+    clean = T.make_event(0, 0, 0.0, make_nodes(SRC, GEO4))["confidence"]
+    noisy = T.make_event(0, 0, 200.0, make_nodes(SRC, GEO4))["confidence"]
+    assert clean > 0.9 and noisy < 0.3 and clean > noisy
+
+
+def test_demo_events_flow_into_pipeline(tmp_path):
+    src = tmp_path / "in"
+    src.mkdir()
+    r = subprocess.run([sys.executable, os.path.join(PY, "tdoa_locate.py"), "--demo",
+                        "--events", str(src / "gunshot.json")], capture_output=True, text=True)
+    assert r.returncode == 0, r.stderr
+    rr = subprocess.run([sys.executable, os.path.join(PY, "wildguard.py"),
+                         "--events-dir", str(src), "--out", str(tmp_path / "out"), "--seed", "1"],
+                        capture_output=True, text=True)
+    assert rr.returncode == 0
+    m = json.load(open(tmp_path / "out" / "manifest.json"))
+    assert m["events_valid"] == 1 and m["events_rejected"] == 0

@@ -23,3 +23,8 @@ toolkit/python/osint.db
 report/
 toolkit/python/events/
 toolkit/python/evidence/
+*.sqlite
+*.sqlite3
+
+# internal working notes — not for public repo
+goal.md

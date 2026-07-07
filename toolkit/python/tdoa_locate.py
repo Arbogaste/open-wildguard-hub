@@ -26,6 +26,8 @@ import argparse
 import json
 import math
 import sys
+import time
+import uuid
 
 
 def geo_to_enu(lat, lon, lat0, lon0):
@@ -124,18 +126,60 @@ def localize(nodes, c):
     return lat, lon, rms
 
 
+def make_event(lat, lon, rms, nodes, threat="gunshot"):
+    """Localization result → canonical Tactical Event (event_schema.json), so a gunshot fix
+    flows into the same pipeline as every other detector. Confidence degrades with the residual:
+    a clean solve (rms≈0) is trusted, a noisy/bad-sync one is flagged low."""
+    conf = round(1.0 / (1.0 + rms / 50.0), 3)  # rms 0→1.0, 50 m→0.5, 200 m→0.2
+    return {
+        "event_id": str(uuid.uuid4()),
+        "timestamp": int(time.time()),
+        "source_type": "acoustic_node",
+        "source_id": "+".join(n["id"] for n in nodes),
+        "coordinates": {"latitude": round(lat, 6), "longitude": round(lon, 6), "elevation": None},
+        "threat_class": threat,
+        "confidence": conf,
+        "evidence_hash": None, "evidence_url": None,
+        "metadata": {"module": "M3", "method": "tdoa", "residual_rms_m": round(rms, 1),
+                     "nodes_used": [n["id"] for n in nodes], "node_count": len(nodes)},
+    }
+
+
+# 3 nodes, exact arrival times from a source at (-2.351, 34.819) — runs offline, no network.
+DEMO = {"speed_of_sound": 343.0, "nodes": [
+    {"id": "aco_01", "lat": -2.312, "lon": 34.821, "t": 1782046800.000},
+    {"id": "aco_02", "lat": -2.385, "lon": 34.851, "t": 1782046800.145},
+    {"id": "aco_03", "lat": -2.348, "lon": 34.789, "t": 1782046800.117},
+]}
+
+
 def main():
-    p = argparse.ArgumentParser(description="WildGuard M3 TDoA localizer")
+    p = argparse.ArgumentParser(description="WildGuard M3 TDoA gunshot localizer")
     p.add_argument("--file", help="event JSON (default: stdin)")
+    p.add_argument("--demo", action="store_true", help="offline sample, 3 synced nodes")
+    p.add_argument("--events", help="write the result as a canonical Tactical Event here "
+                                    "(feeds wildguard.py / wg_store.py)")
+    p.add_argument("--threat", default="gunshot", help="threat_class for the event")
     args = p.parse_args()
-    raw = open(args.file).read() if args.file else sys.stdin.read()
-    data = json.loads(raw)
+
+    if args.demo:
+        data = DEMO
+        print("[demo] 3 synced acoustic nodes, synthetic gunshot\n", file=sys.stderr)
+    else:
+        raw = open(args.file).read() if args.file else sys.stdin.read()
+        data = json.loads(raw)
     nodes = data["nodes"]
     if len(nodes) < 3:
         sys.exit("Need >=3 nodes for 2D TDoA.")
     c = float(data.get("speed_of_sound", 343.0))
     lat, lon, rms = localize(nodes, c)
-    print(json.dumps({"source": {"latitude": round(lat, 6), "longitude": round(lon, 6)},
+    event = make_event(lat, lon, rms, nodes, args.threat)
+
+    if args.events:
+        with open(args.events, "w", encoding="utf-8") as f:
+            json.dump([event], f, indent=2, ensure_ascii=False)
+        print(f"[ok] event -> {args.events}", file=sys.stderr)
+    print(json.dumps({"source": event["coordinates"], "confidence": event["confidence"],
                       "residual_rms_m": round(rms, 1),
                       "nodes_used": [n["id"] for n in nodes]}, indent=2))
 

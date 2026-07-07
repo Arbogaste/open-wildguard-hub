@@ -250,8 +250,19 @@ def run(args):
             species_lookup.enrich_events(valid, token)
 
     # persist validated events (the merged store the killed hub would have held)
-    with open(os.path.join(args.out, "events.json"), "w", encoding="utf-8") as f:
+    events_json = os.path.join(args.out, "events.json")
+    with open(events_json, "w", encoding="utf-8") as f:
         json.dump(valid, f, indent=2, ensure_ascii=False)
+
+    # optional durable single-file store: query history + researcher exports (see wg_store.py)
+    db_path = args.db or os.path.join(args.out, "wildguard.sqlite")
+    try:
+        import wg_store
+        wg_store.ingest(db_path, events_json)
+        log(f"[store] {len(valid)} events -> {db_path}"
+            + "  (query/export: wg_store.py)")
+    except Exception as e:  # store is a convenience, never fail the run over it
+        log(f"[store] skipped ({e})")
 
     # 4. RISK
     risk_summary = stage_risk(valid, args.out, args)
@@ -316,6 +327,7 @@ def main():
     ap.add_argument("--events-dir", help="folder your detectors write Tactical Event JSON into")
     ap.add_argument("--out", default="report", help="output bundle folder (default: report/)")
     ap.add_argument("--files-dir", help="folder holding evidence files, for M9 integrity checks")
+    ap.add_argument("--db", help="SQLite store path (default: <out>/wildguard.sqlite)")
     ap.add_argument("--enrich", action="store_true", help="run M5 taxonomy/geocode (needs network)")
     ap.add_argument("--min-conf", type=float, default=0.5, help="min confidence for a case file")
     ap.add_argument("--cell-m", type=float, default=500.0, help="risk grid cell size (meters)")
