@@ -18,3 +18,8 @@ node_modules/
 # evidence / scrape DBs — never commit real data
 *.db
 toolkit/python/osint.db
+
+# pipeline outputs — never commit field data
+report/
+toolkit/python/events/
+toolkit/python/evidence/

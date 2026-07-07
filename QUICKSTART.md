@@ -32,7 +32,11 @@ python3 tip_intake.py   --demo --events events/tips.json
 python3 gps_geofence.py --demo --events events/geo.json
 # node health     (which sensor died before a poacher walks the gap)
 python3 node_health.py  --demo --events events/nodes.json
-# camera edge inference writes events/<id>.json itself (needs a model — see toolkit/python/requirements.txt)
+# camera edge inference writes events/<id>.json itself. Zero-training start:
+#   pip install ultralytics opencv-python   (one-time, needs network)
+#   python3 edge_infer_camera.py --source 0 --lat -2.33 --lon 34.83
+# default weights (yolov8n, COCO) auto-download once, then run offline forever;
+# person/car/truck detections map to canonical threat classes automatically
 
 python3 wildguard.py --events-dir events/ --files-dir evidence/ --out report/
 cat report/SUMMARY.txt

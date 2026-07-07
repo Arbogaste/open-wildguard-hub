@@ -8,8 +8,11 @@ Source can be a webcam index (0), an RTSP URL, or a video file.
 Run
 ---
     pip install ultralytics opencv-python
-    python edge_infer_camera.py --weights camera_trap.onnx --source 0 \
-        --classes human vehicle --conf 0.5 --lat -2.33 --lon 34.83 --node node_edge_42
+    # zero-training start: default weights yolov8n.pt auto-download once (COCO pretrained:
+    # person/car/truck/...), then everything runs offline from the local cache
+    python edge_infer_camera.py --source 0 --lat -2.33 --lon 34.83 --node node_edge_42
+    # custom-trained model (train_camera_trap_classifier.py):
+    python edge_infer_camera.py --weights camera_trap.onnx --source 0 --classes human vehicle
 
 On detection it writes:
     evidence/<event_id>.jpg          # the frame
@@ -34,7 +37,19 @@ def sha256_file(path):
     return h.hexdigest()
 
 
-def make_event(node, lat, lon, threat, conf, evidence_path):
+# Detector label → canonical threat_class (event_schema.json). Covers both COCO pretrained
+# names (person, car, ...) and custom camera-trap labels (human, vehicle). Anything a person
+# or vehicle maps to is CASE_WORTHY downstream (wildguard.py), so the whole chain works with
+# the zero-training default weights.
+THREAT_MAP = {
+    "person": "intrusion", "human": "intrusion",
+    "car": "vehicle", "truck": "vehicle", "bus": "vehicle",
+    "motorcycle": "vehicle", "bicycle": "vehicle", "boat": "vehicle",
+    "vehicle": "vehicle", "weapon": "weapon", "gun": "weapon",
+}
+
+
+def make_event(node, lat, lon, threat, conf, evidence_path, label=None):
     return {
         "event_id": str(uuid.uuid4()),
         "timestamp": int(time.time()),
@@ -45,15 +60,20 @@ def make_event(node, lat, lon, threat, conf, evidence_path):
         "confidence": round(float(conf), 3),
         "evidence_hash": sha256_file(evidence_path),  # chain-of-custody (M9)
         "evidence_url": str(evidence_path),
-        "metadata": {"detector": "yolov8", "module": "M2"},
+        # raw detector label kept for the audit trail (court: what the model actually said)
+        "metadata": {"detector": "yolov8", "module": "M2", "detected_label": label or threat},
     }
 
 
 def main():
     p = argparse.ArgumentParser(description="WildGuard M2 edge inference")
-    p.add_argument("--weights", required=True, help=".pt/.onnx/.tflite model")
+    p.add_argument("--weights", default="yolov8n.pt",
+                   help=".pt/.onnx/.tflite model (default: COCO-pretrained yolov8n, "
+                        "auto-downloaded once by ultralytics, then cached offline)")
     p.add_argument("--source", default="0", help="webcam idx, RTSP url, or file")
-    p.add_argument("--classes", nargs="*", default=["human", "vehicle"], help="alert on these")
+    p.add_argument("--classes", nargs="*",
+                   default=["person", "human", "car", "truck", "motorcycle", "vehicle"],
+                   help="alert on these detector labels (default covers COCO + custom names)")
     p.add_argument("--conf", type=float, default=0.5)
     p.add_argument("--lat", type=float, default=0.0)
     p.add_argument("--lon", type=float, default=0.0)
@@ -88,11 +108,12 @@ def main():
         now = time.time()
         if hits and (now - last_save) >= args.cooldown:
             last_save = now
-            threat, conf = max(hits, key=lambda t: t[1])
+            label, conf = max(hits, key=lambda t: t[1])
+            threat = THREAT_MAP.get(label, label)  # canonical threat_class for the pipeline
             eid = uuid.uuid4().hex[:12]
             ev_img = Path("evidence") / f"{eid}.jpg"
             cv2.imwrite(str(ev_img), res.plot())  # annotated frame = evidence
-            event = make_event(args.node, args.lat, args.lon, threat, conf, ev_img)
+            event = make_event(args.node, args.lat, args.lon, threat, conf, ev_img, label=label)
             with open(Path("events") / f"{event['event_id']}.json", "w") as f:
                 json.dump(event, f, indent=2)
             print(f"[ALERT] {threat} conf={conf:.2f} -> {ev_img}  event={event['event_id']}")

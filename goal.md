@@ -33,7 +33,7 @@ index.html                static demo command center (offline HTML, no backend r
 | Static dashboard (`index.html`) | ✅ demo works offline | No live data — reads hardcoded JSON |
 | Event schema (`event_schema.json`) | ✅ canonical | Not enforced at ingestion yet |
 | M2 toolkit (`edge_infer_camera.py`) | ✅ runnable on Pi/Jetson | No hub POST wiring |
-| M3 toolkit (`tdoa_locate.py`, `train_audio_classifier.py`) | ✅ runnable | No hub POST wiring |
+| M3 toolkit (`tdoa_locate.py`, `train_audio_classifier.py`) | ✅ runnable; **tdoa stdlib-only (numpy rimosso), sign-bug fix (era ~6.5km off), Gauss-Newton 3+ nodi sub-metro, residual_rms_m output** | 7 regression test |
 | M1 hub server (FastAPI + SQLite) | ❌ documented, not built | Core blocker for live data |
 | M1 sync queue (store-and-forward) | ❌ schema only | Needed for offline-first |
 | M1 WebSocket `/ws/alerts` | ❌ not built | Needed for real-time dashboard |
@@ -379,6 +379,14 @@ Platform is done when:
 - Every detection produces a SHA-256-verified evidence package downloadable as a zip.
 - A new reserve can be onboarded in one day using a UC doc.
 
+### open-wildguard-hub — sessione 2026-07-07 (quality audit / production-ready)
+- **BUG CRITICO FIXATO — `tdoa_locate.py`:** segno invertito nella linearizzazione Fang → fix del colpo di fucile ~6.5 km fuori posizione anche con input perfetto (verificato numericamente). Ora: 0 m esatto, 1 m con 2 ms di clock noise.
+- **tdoa numpy rimosso** (era l'unica dipendenza del percorso field-critical): least-squares 3 incognite in stdlib (equazioni normali + eliminazione Gauss). Clone su Pi = zero pip.
+- **tdoa 3-nodi funzionante:** sistema lineare sottodeterminato con 3 nodi → aggiunto raffinamento Gauss-Newton sulle equazioni nonlineari (2 incognite). Sub-metro da 3 nodi in su. Output `residual_rms_m` = spia di sync/coordinate sbagliate.
+- **BUG FIXATO — `edge_infer_camera.py` zero-detection silenzioso:** default `--classes human vehicle` non matchava mai i nomi COCO (`person`, `car`...) → girava per sempre senza rilevare nulla. Ora: default weights `yolov8n.pt` (auto-download una volta, poi offline), `THREAT_MAP` label→threat_class canonico (person→intrusion, car/truck→vehicle = CASE_WORTHY), label grezza in metadata per audit court.
+- **Test: 13 → 23, tutti verdi** (`test_tdoa_locate.py` 7, `test_edge_infer_camera.py` 3). Igiene: `report/`, `events/`, `evidence/` in .gitignore; requirements.txt aggiornato (M3 stdlib).
+- **Prossimo:** firmware arduino ha TODO onesti (GPS timestamp, TFLite); M4 aerial resta design-only.
+
 ### open-wildguard-hub — sessione 2026-07-05 (offline runner)
 - **Deciso: NIENTE backend esposto.** Il sito resta statico/offline; la gente clona il repo per usarlo. Il ruolo del "hub M0" (collegare i moduli) è fatto **offline, file-based, stdlib** da `wildguard.py`.
 - **`toolkit/python/wildguard.py`** — runner: `events/*.json` → valida schema (rejects.json) → M5 enrich (opt, rete) → M8 risk grid+rotte → M9 case file+integrità SHA-256 → bundle (`SUMMARY.txt`, `manifest.json`). Trasforma 10 script-isola in 1 workflow. Exit≠0 su manomissione prove.
@@ -390,13 +398,3 @@ Platform is done when:
 ### open-wildguard-hub — milestone plan 2026-06-21
 - **✅ `goal.md` riscritto con milestone tecniche** (M0–M6): FastAPI hub server, dashboard live binding, toolkit wiring (M2+M3), evidence viewer, risk heatmap, node monitor, use-cases docs. Ogni milestone ha: file esatti, schema SQL, API routes, test da scrivere, **dashboard expansion points** per agenti futuri. Priorità: M0→M2→M1→M3→M4→M5→M6.
 
-## TRADER — test dYdX pendenti
-> Storico backtest 2026-06-13 (bug perpetualMarket fix, momentum/meanrev no-edge, P1 FAIL) → `_backups/goal_changelog.md`.
-> Verità architettura/edge: `trader/CLAUDE.md`. Stato + gate: `trader/goal.md`.
-
-### Prossimi test da fare
-- [ ] BB Squeeze breakout signal (backtester pronto, manca signal)
-- [ ] Multi-TF: 4h trend confirm + 15m pullback entry
-- [ ] Monitorare paper bot → quando primo trade entra con fix URL
-
-> Log sessioni completate 2026-05-24 / 2026-05-25 → `_backups/goal_changelog.md`.
