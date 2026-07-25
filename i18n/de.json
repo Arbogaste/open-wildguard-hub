@@ -180,5 +180,7 @@
   "alert_dispatch": "Schnelleingreiftruppe an Sensor entsandt: ",
   "alert_route_calculated": "Minimaler Spannbaum (Kruskal MST) Patrouillenroute generiert, die alle Forststationen verbindet.",
   "chargesheet_title": "Automatisierte gerichtliche Anklageschrift (WPA)",
-  "chargesheet_instructions": "Wählen Sie ein OSINT-Ereignis, um die rechtliche Anklageschrift zu entwerfen..."
+  "chargesheet_instructions": "Wählen Sie ein OSINT-Ereignis, um die rechtliche Anklageschrift zu entwerfen...",
+  "tab_lbl_overview": "Überblick",
+  "ideas_intro": "Jedes Modul löst unabhängig ein Feldproblem – setzen Sie eines, alle oder eine beliebige Kombination ein. Die Essential-Stufe jedes Moduls funktioniert mit einem Telefon und einer kostenlosen App. Vollständige Playbooks mit Code, Hardwarelisten und Agent-Eingabeaufforderungen finden Sie in <a href=\"https://github.com/Arbogaste/open-wildguard-hub/tree/main/docs\" target=\"_blank\" rel=\"noopener\" style=\"color:var(--color-primary)\">docs/</a>."
 }

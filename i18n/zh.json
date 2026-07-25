@@ -180,5 +180,7 @@
   "alert_dispatch": "快速响应巡逻队已派遣至传感器：",
   "alert_route_calculated": "已生成连接所有森林站点的最小生成树 (Kruskal MST) 巡逻路线。",
   "chargesheet_title": "自动法庭指控书 (WPA)",
-  "chargesheet_instructions": "选择一个 OSINT 事件以起草法律指控书..."
+  "chargesheet_instructions": "选择一个 OSINT 事件以起草法律指控书...",
+  "tab_lbl_overview": "概述",
+  "ideas_intro": "每个模块独立解决一个现场问题——部署一个、全部或任意组合。每个模块的基本层都可与手机和免费应用程序配合使用。包含代码、硬件列表和代理提示的完整剧本位于 <a href=\"https://github.com/Arbogaste/open-wildguard-hub/tree/main/docs\" target=\"_blank\" rel=\"noopener\" style=\"color:var(--color-primary)\">docs/</a> 中。"
 }

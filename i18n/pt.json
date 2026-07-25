@@ -180,5 +180,7 @@
   "alert_dispatch": "Patrulha de resposta rápida despachada para o sensor: ",
   "alert_route_calculated": "Rota de patrulha (Árvore Geradora Mínima) gerada conectando todas as estações florestais.",
   "chargesheet_title": "Folha de Acusação Judicial",
-  "chargesheet_instructions": "Selecione um evento OSINT para redigir a folha de acusações legais..."
+  "chargesheet_instructions": "Selecione um evento OSINT para redigir a folha de acusações legais...",
+  "tab_lbl_overview": "Visão geral",
+  "ideas_intro": "Cada módulo resolve um problema de campo de forma independente – implemente uma, todas ou qualquer combinação. A camada Essential de cada módulo funciona com um telefone e um aplicativo gratuito. Manuais completos com código, listas de hardware e prompts de agentes estão em <a href=\"https://github.com/Arbogaste/open-wildguard-hub/tree/main/docs\" target=\"_blank\" rel=\"noopener\" style=\"color:var(--color-primary)\">docs/</a>."
 }

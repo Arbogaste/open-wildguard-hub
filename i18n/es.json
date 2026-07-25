@@ -180,5 +180,7 @@
   "alert_dispatch": "Patrulla de respuesta rápida enviada al sensor: ",
   "alert_route_calculated": "Ruta de patrulla del árbol de expansión mínima (MST) generada conectando todas las estaciones.",
   "chargesheet_title": "Hoja de Cargos Judicial Automatizada",
-  "chargesheet_instructions": "Seleccione un evento OSINT para redactar la hoja de cargos legales..."
+  "chargesheet_instructions": "Seleccione un evento OSINT para redactar la hoja de cargos legales...",
+  "tab_lbl_overview": "Descripción general",
+  "ideas_intro": "Cada módulo resuelve un problema de campo de forma independiente: implemente uno, todos o cualquier combinación. El nivel Esencial de cada módulo funciona con un teléfono y una aplicación gratuita. Los manuales completos con código, listas de hardware y mensajes de agente se encuentran en <a href=\"https://github.com/Arbogaste/open-wildguard-hub/tree/main/docs\" target=\"_blank\" rel=\"noopener\" style=\"color:var(--color-primary)\">docs/</a>."
 }

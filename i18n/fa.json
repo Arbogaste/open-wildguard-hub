@@ -180,5 +180,7 @@
   "alert_dispatch": "گشت واکنش سریع اعزام شد به سنسور: ",
   "alert_route_calculated": "مسیر گشت حداقل درخت فراگیر (MST) برای اتصال تمام ایستگاه‌های جنگلی تولید شد.",
   "chargesheet_title": "برگه اتهام خودکار دادگاه",
-  "chargesheet_instructions": "یک رویداد OSINT را برای تهیه پیش‌نویس برگه اتهامات قانونی انتخاب کنید..."
+  "chargesheet_instructions": "یک رویداد OSINT را برای تهیه پیش‌نویس برگه اتهامات قانونی انتخاب کنید...",
+  "tab_lbl_overview": "نمای کلی",
+  "ideas_intro": "هر ماژول یک مشکل فیلد را به طور مستقل حل می کند - یک، همه یا هر ترکیبی را مستقر کنید. لایه اساسی هر ماژول با یک تلفن و یک برنامه رایگان کار می کند. کتاب‌های پخش کامل با کد، فهرست‌های سخت‌افزار، و درخواست‌های عامل در <a href=\"https://github.com/Arbogaste/open-wildguard-hub/tree/main/docs\" target=\"_blank\" rel=\"noopener\" style=\"color:var(--color-primary)\">اسناد/</a> هستند."
 }

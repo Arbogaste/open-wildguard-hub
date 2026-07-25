@@ -180,5 +180,7 @@
   "alert_dispatch": "Quick response patrol dispatched to sensor: ",
   "alert_route_calculated": "Minimum Spanning Tree (Kruskal MST) patrol route generated connecting all forest stations.",
   "chargesheet_title": "Automated Court Chargesheet (WPA)",
-  "chargesheet_instructions": "Select an OSINT event to draft the legal chargesheet..."
+  "chargesheet_instructions": "Select an OSINT event to draft the legal chargesheet...",
+  "tab_lbl_overview": "Overview",
+  "ideas_intro": "Each module solves one field problem independently — deploy one, all, or any combination. The Essential tier of every module works with a phone and a free app. Full playbooks with code, hardware lists, and agent prompts are in <a href=\"https://github.com/Arbogaste/open-wildguard-hub/tree/main/docs\" target=\"_blank\" rel=\"noopener\" style=\"color:var(--color-primary)\">docs/</a>."
 }

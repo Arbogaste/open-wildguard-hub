@@ -180,5 +180,7 @@
   "alert_dispatch": "Patrouille d'intervention rapide envoyée au capteur: ",
   "alert_route_calculated": "Itinéraire de patrouille (Arbre Couvrant Minimum) généré pour relier les stations.",
   "chargesheet_title": "Feuille d'Accusation (WPA)",
-  "chargesheet_instructions": "Sélectionnez un événement pour rédiger l'acte d'accusation légal..."
+  "chargesheet_instructions": "Sélectionnez un événement pour rédiger l'acte d'accusation légal...",
+  "tab_lbl_overview": "Aperçu",
+  "ideas_intro": "Chaque module résout un problème de terrain indépendamment : déployez-en un, tous ou n'importe quelle combinaison. Le niveau Essentiel de chaque module fonctionne avec un téléphone et une application gratuite. Les playbooks complets avec le code, les listes de matériel et les invites des agents se trouvent dans <a href=\"https://github.com/Arbogaste/open-wildguard-hub/tree/main/docs\" target=\"_blank\" rel=\"noopener\" style=\"color:var(--color-primary)\">docs/</a>."
 }

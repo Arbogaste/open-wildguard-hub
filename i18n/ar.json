@@ -180,5 +180,7 @@
   "alert_dispatch": "تم إرسال دورية الاستجابة السريعة إلى المستشعر: ",
   "alert_route_calculated": "تم إنشاء مسار دورية يربط جميع محطات الغابات.",
   "chargesheet_title": "صحيفة اتهام المحكمة (WPA)",
-  "chargesheet_instructions": "حدد حدث OSINT لصياغة صحيفة الاتهام القانونية..."
+  "chargesheet_instructions": "حدد حدث OSINT لصياغة صحيفة الاتهام القانونية...",
+  "tab_lbl_overview": "ملخص",
+  "ideas_intro": "تحل كل وحدة مشكلة ميدانية واحدة بشكل مستقل — قم بنشر واحدة أو الكل أو أي مجموعة. تعمل الطبقة الأساسية لكل وحدة مع هاتف وتطبيق مجاني. تتوفر أدلة التشغيل الكاملة التي تحتوي على التعليمات البرمجية وقوائم الأجهزة ومطالبات الوكيل في <a href=\"https://github.com/Arbogaste/open-wildguard-hub/tree/main/docs\" target=\"_blank\" rel=\"noopener\" style=\"color:var(-color-primary)\">docs/</a>."
 }

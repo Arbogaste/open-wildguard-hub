@@ -180,5 +180,7 @@
   "alert_dispatch": "Pattuglia di risposta rapida dispiegata verso il sensore: ",
   "alert_route_calculated": "Rotta di Pattuglia Minima (Kruskal MST) calcolata per connettere tutte le stazioni forestali.",
   "chargesheet_title": "Verbale di Denuncia Automatica (WPA)",
-  "chargesheet_instructions": "Seleziona un evento per redigere il verbale legale..."
+  "chargesheet_instructions": "Seleziona un evento per redigere il verbale legale...",
+  "tab_lbl_overview": "Panoramica",
+  "ideas_intro": "Ogni modulo risolve un problema di campo in modo indipendente — puoi deploiare uno, tutti, o qualsiasi combinazione. Il livello Essential di ogni modulo funziona con uno smartphone e un'app gratuita. Playbook completi con codice, lista hardware e prompt AI in <a href=\"https://github.com/Arbogaste/open-wildguard-hub/tree/main/docs\" target=\"_blank\" rel=\"noopener\" style=\"color:var(--color-primary)\">docs/</a>."
 }
