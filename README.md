@@ -75,6 +75,17 @@ Core external resources already integrated in the docs and toolkit:
 - `OpenSoundscape`, `RFCx`, `xeno-canto`, `ESC-50` for audio.
 - `DVC`, `Flower`, `OpenVINO` for resilience, versioning, and federation.
 
+## Privacy
+
+The public hub (`privacy.html`) sets no cookies, runs no analytics and calls no AI service:
+the Script Generator ships in demo mode with no API key, so nothing you type leaves your
+browser unless you point it at your own Ollama instance or your own OpenRouter key. Hosting
+logs and the CARTO map-tile CDN are the only third parties, and both are declared.
+
+The software itself ships **no telemetry**: a deployed instance sends nothing back to us.
+A real field deployment handles camera images, GPS positions, tip submissions and evidence
+on suspects — that processing belongs to the deploying organisation and needs its own DPIA.
+
 ## Who Can Reuse This
 
 - WWF / reserve teams: start with M1, M2, M3, M5, M6 and the datasets in `toolkit/data/`.

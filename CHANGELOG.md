@@ -2,6 +2,16 @@
 
 > Storico tecnico. Obiettivo e prossimi passi → `goal.md`. Piano milestone → `PLAN.md`.
 
+### open-wildguard-hub — sessione 2026-08-03 (privacy notice del sito pubblico)
+- **`privacy.html`** (EN, standalone, palette del hub): titolare = maintainer del progetto, log hosting Vercel,
+  `localStorage` (`wildguard_lang`), tiles CARTO come terza parte, nessun cookie/analytics/ads, diritti + Garante.
+  Linkata da `index.html` (footer credits), `readme.html` (header), `scriptplay.html` (header).
+- **Verifica sul codice, non sulle intenzioni**: il commento in `index.html` dice "Leaflet self-hosted", ma
+  `L.tileLayer` punta a `basemaps.cartocdn.com` → l'IP del visitatore esce comunque. Scritto com'è, non com'era
+  comodo. Idem per `scriptplay.html`: `DEMO_MODE = true` e `OPENROUTER_KEY = ''` → nessuna chiamata AI in
+  produzione, ma la nota spiega cosa cambia se l'operatore collega Ollama o una propria key.
+- Aperto: tiles self-hosted, traduzione della notice (oggi solo EN su ~20 lingue), DPIA per i deployment reali → `goal.md`.
+
 ### open-wildguard-hub — sessione 2026-07-07c (chiusura buchi moduli + test critici)
 - **M3 `tdoa_locate.py` chiude il loop:** aggiunto `--demo` + `--events`. Ora il fix del colpo di fucile emette **evento canonico** (`gunshot`, source acoustic) → entra in `wildguard.py`/`wg_store.py` come ogni altro detector. Confidence scala col residual (rms 0→1.0, 200 m→0.2): fix sporco = flaggato basso, ranger non insegue posizione sbagliata.
 - **BUG M9 fixato (`case_file.py`):** evidence referenziata ma file **mancante** dal vault → prima `all_pass` restava True (PASS bugiardo in tribunale). Ora: file mancante con `--files-dir` = `all_pass=False`. Senza `--files-dir` = "NOT VERIFIED" neutro (non rompe uso offline). Semantica corretta per magistrato.

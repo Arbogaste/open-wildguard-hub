@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Notice — WildGuard AI</title>
+    <meta name="description" content="Privacy notice for the WildGuard AI hub: no accounts, no cookies, no analytics, no AI processing in the browser. What the host logs and how to contact us.">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="TheRoarWire / Arbogaste">
+    <link rel="canonical" href="https://open-wildguard-hub.vercel.app/privacy.html">
+
+    <!-- i18n: this page ships English only. Keys are already tagged with data-i18n so it can be
+         wired to the same i18n/<code>.json bundles as index.html without touching the markup. -->
+    <style>
+        :root {
+            --bg-base: #07090e;
+            --bg-panel: rgba(13, 17, 26, 0.75);
+            --border-glow: rgba(0, 255, 102, 0.12);
+            --color-primary: #00ff66;
+            --text-main: #f0f4f8;
+            --text-muted: #7e8f9b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: var(--bg-base);
+            color: var(--text-main);
+            font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+            line-height: 1.7;
+        }
+
+        .legal { max-width: 760px; margin: 0 auto; padding: 3rem 1.5rem 4rem; }
+        .legal a { color: var(--color-primary); }
+        .back { display: inline-block; margin-bottom: 2rem; font-size: 0.85rem; text-decoration: none; }
+        h1 { font-size: 1.9rem; letter-spacing: -0.02em; margin-bottom: 0.3rem; }
+        .meta { color: var(--text-muted); font-size: 0.8rem; font-family: ui-monospace, monospace; }
+        .intro { margin: 1.4rem 0 2rem; color: var(--text-muted); }
+        h2 { font-size: 1.05rem; margin: 2rem 0 0.5rem; color: var(--color-primary); }
+        p, li { color: var(--text-muted); font-size: 0.94rem; }
+        p + p { margin-top: 0.7rem; }
+        ul { margin: 0.6rem 0 0 1.2rem; }
+        li { margin-bottom: 0.5rem; }
+        strong { color: var(--text-main); }
+        .panel {
+            border: 1px solid var(--border-glow);
+            background: var(--bg-panel);
+            border-radius: 10px;
+            padding: 1rem 1.2rem;
+            margin: 1.5rem 0;
+        }
+    </style>
+</head>
+
+<body>
+    <main class="legal">
+        <a class="back" href="index.html" data-i18n="pv_back">&larr; Back to the hub</a>
+
+        <h1 data-i18n="pv_title">Privacy Notice</h1>
+        <p class="meta" data-i18n="pv_updated">Last updated: 2026-08-03</p>
+
+        <p class="intro" data-i18n="pv_short">Static pages. No account, no forms, no cookies, no analytics,
+            no advertising, no trackers.</p>
+
+        <h2 data-i18n="pv_h_controller">Controller</h2>
+        <p data-i18n="pv_controller">The maintainers of the open-source project <strong>WildGuard AI /
+            open-wildguard-hub</strong>. Privacy requests: open an issue on
+            <a href="https://github.com/Arbogaste/open-wildguard-hub" target="_blank" rel="noopener">the repository</a>.</p>
+
+        <h2 data-i18n="pv_h_data">What is processed</h2>
+        <ul>
+            <li data-i18n="pv_data_1"><strong>Hosting logs</strong> (Vercel Inc.): IP address, timestamp,
+                requested page, user agent — to deliver the pages and block abuse. Kept briefly, never used to
+                profile anyone.</li>
+            <li data-i18n="pv_data_2"><strong>Browser storage:</strong> your language and interface state
+                (e.g. <code>wildguard_lang</code>). Not cookies, never leaves your device.</li>
+            <li data-i18n="pv_data_3"><strong>Map tiles:</strong> the Leaflet library is self-hosted, but the map
+                background is served by CARTO's CDN, which receives your IP when the map is shown
+                (<a href="https://carto.com/privacy/" target="_blank" rel="noopener">CARTO privacy policy</a>).</li>
+        </ul>
+
+        <div class="panel">
+            <p data-i18n="pv_noai"><strong>No AI service is called by default.</strong> As published, the Script
+                Generator runs in demo mode with mock output and no API key — nothing you type leaves your
+                browser. If you point it at your own local Ollama model or your own OpenRouter key, your browser
+                sends the text there directly, under your account. We never see it.</p>
+        </div>
+
+        <h2 data-i18n="pv_h_field">Field deployments</h2>
+        <p data-i18n="pv_field">This notice covers <strong>the website only</strong>. A live deployment handles
+            camera images, GPS positions, tip submissions and evidence on suspects: that processing belongs to the
+            deploying organisation, which needs its own DPIA, retention rules and legal review. The software ships
+            with no telemetry and sends nothing back to us.</p>
+
+        <h2 data-i18n="pv_h_rights">Rights</h2>
+        <p data-i18n="pv_rights">Access, rectification, erasure, restriction, portability and objection — though
+            with no accounts and no user records there is nothing here to retrieve beyond the short-lived host
+            logs. You may lodge a complaint with your data protection authority; in Italy, the
+            <a href="https://www.garanteprivacy.it" target="_blank" rel="noopener">Garante per la protezione dei
+            dati personali</a>.</p>
+    </main>
+</body>
+
+</html>
