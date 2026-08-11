@@ -2167,15 +2167,18 @@
         }
 
         // Toggling Language function
-        // ── i18n: ~20 languages. en + it are bundled inline (offline first paint).
+        // ── i18n: en + it are bundled inline (offline first paint).
         // Others load from i18n/<code>.json on demand; missing keys fall back to English.
-        // To add/translate a language: copy i18n/en.json -> i18n/<code>.json, translate values.
+        // LANGS lists ONLY the languages that have a bundle in i18n/. Offering a
+        // language with no file means the selector silently snaps back to English:
+        // the fetch 404s, translations[code] stays undefined, setLanguage() falls
+        // back to 'en'. A menu entry is a promise — keep it in sync with i18n/.
+        // To add a language: copy i18n/en.json -> i18n/<code>.json, translate the
+        // values, then add the [code, name] pair here. Both steps, never just one.
         const LANGS = [
             ['en', 'English'], ['it', 'Italiano'], ['es', 'Español'], ['fr', 'Français'],
             ['de', 'Deutsch'], ['pt', 'Português'], ['ru', 'Русский'], ['zh', '中文'],
-            ['hi', 'हिन्दी'], ['ar', 'العربية'], ['sw', 'Kiswahili'], ['id', 'Bahasa Indonesia'],
-            ['fa', 'فارسی'], ['tr', 'Türkçe'], ['vi', 'Tiếng Việt'], ['th', 'ไทย'],
-            ['bn', 'বাংলা'], ['ja', '日本語'], ['ko', '한국어'], ['uk', 'Українська']
+            ['hi', 'हिन्दी'], ['ar', 'العربية'], ['fa', 'فارسی']
         ];
 
         function populateLangSelect() {
