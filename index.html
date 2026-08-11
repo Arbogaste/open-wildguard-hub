@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -15,14 +15,22 @@
     <meta property="og:title" content="WildGuard AI — Open Anti-Poaching Command Center">
     <meta property="og:description" content="Offline-first, edge-AI anti-poaching platform. 10 capability modules, runnable toolkit, field playbooks. Free for any conservation team.">
     <meta property="og:url" content="https://arbogaste.github.io/open-wildguard-hub/">
-    <meta property="og:image" content="assets/brand/favicon-256.png">
+    <!-- og:image MUST be an absolute URL: crawlers fetch it out of page context and
+         cannot resolve a relative path, so a relative one means no preview at all. -->
+    <meta property="og:image" content="https://arbogaste.github.io/open-wildguard-hub/assets/brand/favicon-256.png">
+    <meta property="og:image:width" content="256">
+    <meta property="og:image:height" content="256">
+    <meta property="og:image:alt" content="WildGuard AI logo">
     <meta property="og:site_name" content="WildGuard AI">
 
     <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
+    <!-- "summary" and not "summary_large_image": the only brand image is a 256x256
+         square. summary_large_image expects ~1200x630 and centre-crops anything else,
+         which turns the logo into a smear. Switch back once a real 1200x630 exists. -->
+    <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="WildGuard AI — Open Anti-Poaching Command Center">
     <meta name="twitter:description" content="Offline-first, edge-AI anti-poaching platform. 10 capability modules, runnable toolkit, field playbooks. Free for any conservation team.">
-    <meta name="twitter:image" content="assets/brand/favicon-256.png">
+    <meta name="twitter:image" content="https://arbogaste.github.io/open-wildguard-hub/assets/brand/favicon-256.png">
 
     <!-- Brand / favicons (TheRoarWire) -->
     <link rel="icon" type="image/png" sizes="32x32" href="assets/brand/favicon-32.png">
