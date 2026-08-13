@@ -2133,43 +2133,48 @@ All flags are SUSPECTED and require human review before any action.
         };
 
         // RENDER INTERFACE TEXTS
+        // Set text only if both element and string exist. A single removed panel used to throw here
+        // and abort the whole pass, which looked exactly like "the language selector is broken".
+        function setText(id, val) {
+            const el = document.getElementById(id);
+            if (el && typeof val === 'string') el.innerText = val;
+        }
+
         function renderTranslations() {
             // merge over English so any missing/untranslated key still shows readable text
             const lang = Object.assign({}, translations.en, translations[currentLanguage] || {});
 
             // Header & general labels
-            document.getElementById('txt-sub-header').innerText = lang.txt_sub_header;
-            document.getElementById('txt-status').innerText = lang.txt_status;
-            document.getElementById('txt-title-stats').innerText = lang.txt_title_stats;
-            document.getElementById('lbl-cameras').innerText = lang.lbl_cameras;
-            document.getElementById('lbl-audio').innerText = lang.lbl_audio;
-            document.getElementById('lbl-collars').innerText = lang.lbl_collars;
-            document.getElementById('lbl-osint').innerText = lang.lbl_osint;
-            document.getElementById('txt-title-alerts').innerText = lang.txt_title_alerts;
+            setText('txt-sub-header', lang.txt_sub_header);
+            setText('txt-status', lang.txt_status);
+            setText('txt-title-stats', lang.txt_title_stats);
+            setText('lbl-cameras', lang.lbl_cameras);
+            setText('lbl-audio', lang.lbl_audio);
+            setText('lbl-collars', lang.lbl_collars);
+            setText('lbl-osint', lang.lbl_osint);
+            setText('txt-title-alerts', lang.txt_title_alerts);
 
 
             // Tab Labels
-            if (lang.tab_lbl_overview) document.getElementById('tab-lbl-overview').innerText = lang.tab_lbl_overview;
-            document.getElementById('tab-lbl-roadmap').innerText = lang.tab_lbl_roadmap;
-            document.getElementById('tab-lbl-docs').innerText = lang.tab_lbl_docs;
-            document.getElementById('tab-lbl-repos').innerText = lang.tab_lbl_repos;
-            document.getElementById('tab-lbl-proposal').innerText = lang.tab_lbl_proposal;
+            setText('tab-lbl-overview', lang.tab_lbl_overview);
+            setText('tab-lbl-roadmap', lang.tab_lbl_roadmap);
+            setText('tab-lbl-repos', lang.tab_lbl_repos);
             if (lang.ideas_intro) document.getElementById('ideas-intro-text').innerHTML = lang.ideas_intro;
 
             // Docs tab texts
-            document.getElementById('doc-title-arduino').innerText = lang.doc_title_arduino;
-            document.getElementById('doc-desc-arduino').innerText = lang.doc_desc_arduino;
+            setText('doc-title-arduino', lang.doc_title_arduino);
+            setText('doc-desc-arduino', lang.doc_desc_arduino);
             // doc-title-repos / doc-desc-repos removed — tab-repos now hardcoded in EN
-            document.getElementById('doc-title-readiness').innerText = lang.doc_title_readiness;
-            document.getElementById('doc-desc-readiness').innerText = lang.doc_desc_readiness;
-            document.getElementById('doc-title-playbooks').innerText = lang.doc_title_playbooks;
-            document.getElementById('doc-desc-playbooks').innerText = lang.doc_desc_playbooks;
-            document.getElementById('doc-title-docs-strategy').innerText = lang.doc_title_docs_strategy;
-            document.getElementById('doc-desc-docs-strategy').innerText = lang.doc_desc_docs_strategy;
+            setText('doc-title-readiness', lang.doc_title_readiness);
+            setText('doc-desc-readiness', lang.doc_desc_readiness);
+            setText('doc-title-playbooks', lang.doc_title_playbooks);
+            setText('doc-desc-playbooks', lang.doc_desc_playbooks);
+            setText('doc-title-docs-strategy', lang.doc_title_docs_strategy);
+            setText('doc-desc-docs-strategy', lang.doc_desc_docs_strategy);
 
             const readinessContainer = document.getElementById('doc-readiness-list');
             readinessContainer.innerHTML = '';
-            lang.readiness_items.forEach(item => {
+            (lang.readiness_items || []).forEach(item => {
                 readinessContainer.insertAdjacentHTML('beforeend', `
                     <div class="idea-card">
                         <div class="idea-card-header">
@@ -2182,7 +2187,7 @@ All flags are SUSPECTED and require human review before any action.
 
             const playbooksContainer = document.getElementById('doc-playbooks-list');
             playbooksContainer.innerHTML = '';
-            lang.playbooks.forEach(item => {
+            (lang.playbooks || []).forEach(item => {
                 playbooksContainer.insertAdjacentHTML('beforeend', `
                     <div class="docs-block" style="margin:0; border-color: rgba(255,255,255,0.06);">
                         <h3 style="margin-bottom:6px;">${item.title}</h3>
@@ -2195,7 +2200,7 @@ All flags are SUSPECTED and require human review before any action.
 
             const docsStrategyContainer = document.getElementById('doc-docs-strategy-list');
             docsStrategyContainer.innerHTML = '';
-            lang.docs_strategy_items.forEach(item => {
+            (lang.docs_strategy_items || []).forEach(item => {
                 docsStrategyContainer.insertAdjacentHTML('beforeend', `
                     <div class="idea-card">
                         <div class="idea-card-header">
@@ -2215,19 +2220,19 @@ All flags are SUSPECTED and require human review before any action.
             });
 
             // Proposal tab texts
-            document.getElementById('doc-title-proposal').innerText = lang.doc_title_proposal;
-            document.getElementById('doc-desc-proposal').innerText = lang.doc_desc_proposal;
-            document.getElementById('prop-lbl-1').innerText = lang.prop_lbl_1;
-            document.getElementById('prop-desc-1').innerText = lang.prop_desc_1;
-            document.getElementById('prop-lbl-2').innerText = lang.prop_lbl_2;
-            document.getElementById('prop-desc-2').innerText = lang.prop_desc_2;
-            document.getElementById('prop-lbl-3').innerText = lang.prop_lbl_3;
-            document.getElementById('prop-desc-3').innerText = lang.prop_desc_3;
+            setText('doc-title-proposal', lang.doc_title_proposal);
+            setText('doc-desc-proposal', lang.doc_desc_proposal);
+            setText('prop-lbl-1', lang.prop_lbl_1);
+            setText('prop-desc-1', lang.prop_desc_1);
+            setText('prop-lbl-2', lang.prop_lbl_2);
+            setText('prop-desc-2', lang.prop_desc_2);
+            setText('prop-lbl-3', lang.prop_lbl_3);
+            setText('prop-desc-3', lang.prop_desc_3);
 
             // Render 10 Ideas in Tab 1
             const ideasContainer = document.getElementById('roadmap-ideas-container');
             ideasContainer.innerHTML = '';
-            lang.ideas.forEach(idea => {
+            (lang.ideas || []).forEach(idea => {
                 const card = `
                     <div class="idea-card">
                         <div class="idea-card-header">
