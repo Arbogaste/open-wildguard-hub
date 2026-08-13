@@ -1,6 +1,46 @@
 # WildGuard AI — changelog sessioni
 
-> Storico tecnico. Obiettivo e prossimi passi → `goal.md`. Piano milestone → `PLAN.md`.
+> Storico tecnico, una voce per sessione. Cosa manca e perché → `README.md` e `docs/FIELD-NEEDS.md`.
+> Piano milestone → `PLAN.md`. 
+
+### open-wildguard-hub — sessione 2026-08-13b (onestà del sito: via i numeri finti)
+- **Header**: "SYSTEM ONLINE" era una bugia (nessun sensore collegato) → `DEMO — SAMPLE DATA`. Sottotitolo:
+  "documentation site, not a live system".
+- **Colonna sinistra rifatta**: "Telemetria Sensori" con 12 cam trap / 8 nodi audio / 34 collari / 1.4K OSINT
+  (numeri inventati) → **"What you get when you clone"** con numeri verificabili nel repo (14 script, 54 test,
+  0 server, €0/anno). I due allarmi mock ("Rilevamento Umano Armato, CONF 94%") → pannello **"Run it yourself"**
+  con il comando e **l'output reale** di `wildguard.py --demo`, copiato da un'esecuzione vera.
+- **Bug di onestà**: `triggerSimAlert()` incrementava il contatore camera trap ad ogni click. Ora scrive in un
+  `#sim-log` etichettato sotto la mappa e non tocca i contatori — che descrivono il repo, non una rete di sensori.
+- **Mappa**: nota esplicita che scenario, stazioni e allarmi sono sintetici, generati nel browser.
+- **Claim gonfiati rimossi**: "riduce del 90% i falsi allarmi" (mai misurato), "Alert in 30s", "TDoA in <30s",
+  "20+ repos integrated" → affermazioni verificabili (14 script, 54 test, 30 repo esaminati, residual_rms_m).
+- **Tab Toolkit**: ogni riga `out` ora è output reale di `--demo`, non scritto a mano (M8 era 0.94, reale 0.89;
+  species_lookup mostrava una GBIF key non verificata). Aggiunte righe runner + event store; M2 dichiara di non
+  spedire pesi invece di dirsi pronto.
+- **Tab OSINT**: da vetrina di card a spiegazione concreta — cosa fa la regola, output reale del `--demo`, e il
+  limite dichiarato (74 termini contro 4.000 del benchmark) con link alla pagina organizzazioni.
+
+- Nuovi target interni: duplicazione stringhe i18n (inline + JSON), mappa che carichi `events.json` vero.
+
+### open-wildguard-hub — sessione 2026-08-13 (field needs, pagina organizzazioni, pulizia docs)
+- **`docs/FIELD-NEEDS.md`** (nuovo, fonte unica): 13 organizzazioni anti-bracconaggio reali censite dalle loro
+  pagine pubbliche (Patrol, Protrack, Big Life, Panthera, Thula Thula, GCF, Global Guardians, ADI, IWC, IFAW,
+  LIFE WolfAlps, Sea Shepherd, BMUKN) + cosa dichiarano di servirgli + sezione **Where to donate** (indice
+  verificato: unità ranger, famiglie dei ranger, wildlife crime, specie, marino, Europa). Il progetto non
+  accetta donazioni: dichiarato esplicitamente.
+- **`organizations.html`** (nuovo): vista sul markdown con lo stesso renderer di `readme.html` — zero copia del
+  contenuto. Linkata da index (footer + nav strip + start-here), readme, scriptplay, privacy, sitemap, `sw.js`.
+- **`README.md` sgrassato**: rimosse Roadmap / Immediate Priorities / Current Build Focus / Production Readiness. 
+Sostituite
+  da un puntatore unico. Aggiunte righe `wildguard.py` + `wg_store.py` in "What runs today".
+- **`index.html`**: blocco "Start here" con 5 percorsi lettore, cluster repo "Training data & pretrained weights"
+  (dataset con classe `Poacher`, elefanti aerei ~4.9k, TFLite per MCU, anomalie collari), passata i18n generica
+  `[data-i18n]` con innerHTML.
+- **`repo_index.md`** (workspace): schede 26–30 per i 5 repo nuovi + righe nella matrice moduli.
+- Fix: `scriptplay.html` aveva un `</div>` in eccesso dentro `<main>`; rimosso senza cambiare il DOM renderizzato.
+  `sw.js` v2 → v3, precache di `readme.html`, `README.md`, `organizations.html`, `docs/FIELD-NEEDS.md`.
+- 54 test verdi, 5 pagine con tag bilanciati, sitemap valida.
 
 ### open-wildguard-hub — sessione 2026-08-03 (privacy notice del sito pubblico)
 - **`privacy.html`** (EN, standalone, palette del hub): titolare = maintainer del progetto, log hosting Vercel,
@@ -10,7 +50,7 @@
   `L.tileLayer` punta a `basemaps.cartocdn.com` → l'IP del visitatore esce comunque. Scritto com'è, non com'era
   comodo. Idem per `scriptplay.html`: `DEMO_MODE = true` e `OPENROUTER_KEY = ''` → nessuna chiamata AI in
   produzione, ma la nota spiega cosa cambia se l'operatore collega Ollama o una propria key.
-- Aperto: tiles self-hosted, traduzione della notice (oggi solo EN su ~20 lingue), DPIA per i deployment reali → `goal.md`.
+- Aperto: tiles self-hosted, traduzione della notice (oggi solo EN su ~20 lingue), DPIA per i deployment reali.
 
 ### open-wildguard-hub — sessione 2026-07-07c (chiusura buchi moduli + test critici)
 - **M3 `tdoa_locate.py` chiude il loop:** aggiunto `--demo` + `--events`. Ora il fix del colpo di fucile emette **evento canonico** (`gunshot`, source acoustic) → entra in `wildguard.py`/`wg_store.py` come ogni altro detector. Confidence scala col residual (rms 0→1.0, 200 m→0.2): fix sporco = flaggato basso, ranger non insegue posizione sbagliata.
@@ -23,7 +63,7 @@
 - **Export ricercatori:** `--format csv|geojson|darwincore`. Darwin Core Occurrence = standard GBIF → una detection entra in un dataset di ricerca senza rework. GeoJSON per QGIS/Leaflet. CSV per R/pandas.
 - **Wired nel runner:** `wildguard.py` popola auto `<out>/wildguard.sqlite` (fail-safe, non blocca il run). Flag `--db`.
 - **Test 23 → 34** (`test_wg_store.py` +11: idempotenza, filtri spaziali/temporali, ordine lon,lat GeoJSON, termini DwC). `*.sqlite` in .gitignore.
-- **goal.md ripulito (no entropy):** rimosso framing "M1 hub server = critical path/core blocker" (deprecato, deciso NO backend); event_schema ora "enforced"; Definition of Done riscritto offline-first.
+- **Obiettivi ripuliti (no entropy):** rimosso framing "M1 hub server = critical path/core blocker" (deprecato, deciso NO backend); event_schema ora "enforced"; Definition of Done riscritto offline-first.
 - **Verdetto antirez:** core = stdlib single-clone, sempre-funziona, no dipendenze field-critical. ✅
 
 ### open-wildguard-hub — sessione 2026-07-07 (quality audit / production-ready)
@@ -43,6 +83,6 @@
 - **Prossimo muro adozione:** M2/M3 non spediscono pesi modello → `fetch_models.py` + fallback no-model (da fare).
 
 ### open-wildguard-hub — milestone plan 2026-06-21
-- **✅ `goal.md` riscritto con milestone tecniche** (M0–M6): FastAPI hub server, dashboard live binding, toolkit wiring (M2+M3), evidence viewer, risk heatmap, node monitor, use-cases docs. Ogni milestone ha: file esatti, schema SQL, API routes, test da scrivere, **dashboard expansion points** per agenti futuri. Priorità: M0→M2→M1→M3→M4→M5→M6.
+- **✅ Milestone tecniche riscritte** (M0–M6): FastAPI hub server, dashboard live binding, toolkit wiring (M2+M3), evidence viewer, risk heatmap, node monitor, use-cases docs. Ogni milestone ha: file esatti, schema SQL, API routes, test da scrivere, **dashboard expansion points** per agenti futuri. Priorità: M0→M2→M1→M3→M4→M5→M6.
 
 

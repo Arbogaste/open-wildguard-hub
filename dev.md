@@ -126,9 +126,8 @@ open-wildguard-hub/
 ├── scripts/
 │   ├── edge_vision.py
 │   └── sync_worker.py
-├── goal.md
 ├── README.md
-└── antirez.md
+└── CHANGELOG.md
 ```
 
 This structure is intentionally small.

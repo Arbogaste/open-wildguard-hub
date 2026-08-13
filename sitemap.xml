@@ -13,6 +13,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://arbogaste.github.io/open-wildguard-hub/organizations.html</loc>
+    <lastmod>2026-08-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://arbogaste.github.io/open-wildguard-hub/scriptplay.html</loc>
     <lastmod>2026-08-12</lastmod>
     <changefreq>monthly</changefreq>

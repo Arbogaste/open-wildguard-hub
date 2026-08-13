@@ -1,6 +1,6 @@
 # WildGuard AI — piano tecnico (milestone M0–M6)
 
-> Architettura e specifiche per-milestone. Stato/priorità corrente → `goal.md`. Storico sessioni → `CHANGELOG.md`.
+> Architettura e specifiche per-milestone. Storico sessioni → `CHANGELOG.md`.
 > ⚠️ M0 (hub FastAPI) è **DEPRECATO** (deciso: nessun backend esposto). Resta qui come riferimento storico di design.
 
 ## Repo Layout
@@ -318,7 +318,7 @@ When an agent picks up a milestone:
 2. Read the relevant `docs/modules/M0N-*.md` for design context and recommended repos.
 3. Build the code in the exact files specified above. Do not create additional abstractions.
 4. Add tests in `hub/tests/test_MN_*.py` or `toolkit/tests/`.
-5. Update `goal.md`: mark milestone ✅ and fill in the "State of the Art" table.
+5. Record what changed in `CHANGELOG.md` — one entry per session, no status tables.
 6. Do NOT commit/push — user manages git.
 
 Priority order: **M0 → M2 → M1 → M3 → M4 → M5 → M6**

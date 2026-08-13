@@ -3,11 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mission &amp; README — WildGuard AI</title>
-  <meta name="description" content="WildGuard AI mission and project README: an open-source, offline-first anti-poaching platform for conservation teams.">
+  <title>Field Needs &amp; Organizations — WildGuard AI</title>
+  <meta name="description" content="Anti-poaching organizations and patrol units worldwide, what each one does, what they say they need, and how those needs drive the WildGuard AI roadmap.">
   <meta name="theme-color" content="#07090e">
-  <link rel="canonical" href="https://arbogaste.github.io/open-wildguard-hub/readme.html">
+  <link rel="canonical" href="https://arbogaste.github.io/open-wildguard-hub/organizations.html">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/brand/favicon-32.png">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Field Needs &amp; Organizations — WildGuard AI">
+  <meta property="og:description" content="What real anti-poaching organizations ask for, and how it shapes an open-source, offline-first platform.">
+  <meta property="og:url" content="https://arbogaste.github.io/open-wildguard-hub/organizations.html">
   <style>
     :root { --bg:#07090e; --surface:#0d111a; --border:rgba(255,255,255,.1);
             --text:#e8f0f4; --muted:#9aabb5; --link:#5ad1ff; --accent:#00ff66; }
@@ -31,7 +35,7 @@
     main { max-width:780px; margin:0 auto; padding:28px 20px 80px; }
     h1 { font-size:1.9rem; line-height:1.25; margin:1.6rem 0 .8rem; }
     h2 { font-size:1.4rem; margin:1.8rem 0 .7rem; border-bottom:1px solid var(--border); padding-bottom:.3rem; }
-    h3 { font-size:1.15rem; margin:1.4rem 0 .5rem; }
+    h3 { font-size:1.15rem; margin:1.4rem 0 .5rem; color:var(--accent); }
     p, li { color:var(--text); }
     a { color:var(--link); }
     code { background:rgba(255,255,255,.07); border:1px solid var(--border); border-radius:4px;
@@ -46,27 +50,28 @@
   </style>
 </head>
 <body>
-  <a class="skip" href="#content">Skip to content</a>
+  <a class="skip" href="#content" data-i18n="nav_skip">Skip to content</a>
   <header class="top">
     <span class="brand">WildGuard AI</span>
-    <a href="index.html">← Command Center</a>
-    <a href="organizations.html">Field Needs</a>
-    <a href="scriptplay.html">Script Generator</a>
-    <a href="https://github.com/Arbogaste/open-wildguard-hub" rel="noopener">GitHub ↗</a>
-    <a href="privacy.html">Privacy</a>
+    <a href="index.html" data-i18n="nav_command_center">← Command Center</a>
+    <a href="readme.html" data-i18n="nav_readme">README / Mission</a>
+    <a href="scriptplay.html" data-i18n="nav_scriptplay">Script Generator</a>
+    <a href="https://github.com/Arbogaste/open-wildguard-hub" rel="noopener" data-i18n="nav_github">GitHub ↗</a>
+    <a href="privacy.html" data-i18n="nav_privacy">Privacy</a>
   </header>
   <main id="content">
-    <article id="readme" aria-busy="true">
-      <p class="note">Loading mission &amp; README…</p>
+    <article id="field-needs" aria-busy="true">
+      <p class="note" data-i18n="fn_loading">Loading field needs…</p>
     </article>
     <noscript>
-      <p>Enable JavaScript to read the rendered README, or
-         <a href="https://github.com/Arbogaste/open-wildguard-hub#readme" rel="noopener">read it on GitHub</a>.</p>
+      <p data-i18n="fn_noscript">Enable JavaScript to read this page, or
+         <a href="https://github.com/Arbogaste/open-wildguard-hub/blob/main/docs/FIELD-NEEDS.md" rel="noopener">read it on GitHub</a>.</p>
     </noscript>
   </main>
 
   <script>
   // Tiny, safe Markdown renderer (escape first, then format). No external libraries, no API calls.
+  // Same renderer as readme.html — this page is a view over docs/FIELD-NEEDS.md, never a second copy of it.
   function esc(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
   function inline(s){
     return s
@@ -97,13 +102,13 @@
     closeList(); if(inCode) out.push('</code></pre>');
     return out.join('\n');
   }
-  const art=document.getElementById('readme');
-  fetch('README.md').then(r=>{ if(!r.ok) throw new Error(); return r.text(); })
+  const art=document.getElementById('field-needs');
+  fetch('docs/FIELD-NEEDS.md').then(r=>{ if(!r.ok) throw new Error(); return r.text(); })
     .then(md=>{ art.innerHTML=mdToHtml(md); art.setAttribute('aria-busy','false'); })
     .catch(()=>{ art.setAttribute('aria-busy','false');
-      art.innerHTML='<h1>Mission &amp; README</h1><p>Could not load <code>README.md</code> locally '+
-        '(this happens when opening the file directly). '+
-        '<a href="https://github.com/Arbogaste/open-wildguard-hub#readme" rel="noopener">Read it on GitHub ↗</a></p>'; });
+      art.innerHTML='<h1>Field Needs &amp; Organizations</h1><p>Could not load '+
+        '<code>docs/FIELD-NEEDS.md</code> locally (this happens when opening the file directly). '+
+        '<a href="https://github.com/Arbogaste/open-wildguard-hub/blob/main/docs/FIELD-NEEDS.md" rel="noopener">Read it on GitHub ↗</a></p>'; });
   </script>
 </body>
 </html>

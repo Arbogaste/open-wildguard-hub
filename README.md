@@ -32,9 +32,12 @@ This repository currently serves two roles:
 The documentation is intentionally split by role:
 
 - `README.md`
-  - Project mission, current scope, delivery milestones, and release readiness.
-- `goal.md`
-  - The canonical objective, non-goals, and acceptance criteria.
+  - Project mission, what runs today, and how to start.
+- `CHANGELOG.md`
+  - What already happened, session by session. Nothing else repeats it.
+- `docs/FIELD-NEEDS.md`
+  - The organizations doing anti-poaching work today, what they say they need, and the six work items
+    that come out of it. Rendered on the site as `organizations.html`.
 - `dev.md`
   - The master technical guide for architecture, implementation rules, and future documentation structure.
 - `docs/`
@@ -60,7 +63,7 @@ The documentation is intentionally split by role:
   - A Claude Code skill that drives the M7 OSINT tools with legal guardrails.
 - Planned `docs/use-cases/*.md`
   - One deployment guide per real-world scenario.
-- `index.html` / `scriptplay.html` / `readme.html`
+- `index.html` / `scriptplay.html` / `readme.html` / `organizations.html`
   - The **demo command center** (OSINT Leads + Toolkit Status tabs), the YouTube awareness-video
     generator, and the rendered mission/README. Illustrative UI — the real content is in `docs/` +
     `toolkit/`. The site makes **no external API calls** (mock data; only user-configured
@@ -116,40 +119,32 @@ The project is no longer docs-only. These run **offline, stdlib-only, on a Raspb
 | M9 evidence integrity + case file | `toolkit/python/case_file.py` | `--demo` |
 | M10 node health monitor | `toolkit/python/node_health.py` | `--demo` |
 | M2/M3 edge inference + training | `edge_infer_camera.py`, `tdoa_locate.py`, `train_*` | runnable on Pi/Jetson |
+| Offline runner — ties every module together | `toolkit/python/wildguard.py` | `--demo`, or `--events-dir events/` |
+| Event store: SQLite, query by type/time/radius, CSV/GeoJSON/DarwinCore export | `toolkit/python/wg_store.py` | `--demo` |
 
-Not yet built: **M0 hub** (FastAPI+SQLite — the critical path that makes the above post live data) and
-**M4** aerial/geo (Sentinel — heavy deps). See `goal.md` for the live status table.
+There is **no server and no hub to deploy**. An exposed backend was designed (`PLAN.md` M0) and then
+deliberately dropped: `wildguard.py` plus a single SQLite file do the same work with nothing to expose,
+nothing to rent, and nothing to patch. Detectors write events into a folder; the runner consumes them.
 
-## Roadmap
+## What is missing
 
-Milestone order for hardening the *repository*. State: documentation + a runnable per-module toolkit;
-the next gate is the live hub that wires the tools to the dashboard.
+Six things, and they are not our guesses — they come from what field organizations actually ask for. Each
+one is stated with its evidence in [`docs/FIELD-NEEDS.md`](docs/FIELD-NEEDS.md#what-this-survey-changes-in-the-project):
 
-| Milestone | Status | Outcome |
-|---|---|---|
-| M0 | ✅ Done | Canonical mission, documentation map, delivery contract |
-| M1 | ✅ Done | Production README, `goal.md`, `dev.md` technical guide |
-| Toolkit | ✅ Done | Runnable per-module scripts (M5–M10 + M7 OSINT), all `--demo` |
-| Dashboard | ✅ Done | `index.html` OSINT Leads + Toolkit Status tabs; `scriptplay.html`; `readme.html`; SEO + WCAG AA pass |
-| Hub (M0 cap.) | 🔴 Next | FastAPI+SQLite hub so tools POST live events to the map — critical path |
-| Sync | Planned | Offline store-and-forward, queueing, evidence integrity over the wire |
-| Use-cases | Planned | One deployment guide per real-world scenario (`docs/use-cases/`) |
-| Release | Planned | Hardening, tests, deployment readiness |
+1. **SMART interop.** Most funded ranger operations record patrols in SMART. Until we import and export it,
+   adopting this repo means abandoning their patrol history.
+2. **Poisoning as a threat class.** Poisoned bait is the dominant illegal-killing method in Europe and a
+   major one in Africa. Our event schema cannot express it, so an anti-poison dog unit has nothing to log.
+3. **Collar anomaly detection.** We alert when an animal crosses a line, not when it stops moving — and
+   prolonged immobility is the earliest signal that it was killed.
+4. **Tip credibility.** A plausible tip can be planted misinformation, and an informant network dies when
+   its handler leaves. We protect the source but assume the content is honest.
+5. **A trade vocabulary that scales.** 74 coded terms against the 4,000+ the industry coalition tracks.
+6. **Model weights are not shipped.** A fresh clone on a field Pi detects nothing until weights are staged
+   from a connected machine. `edge_infer_camera.py` must fail loudly instead of quietly finding nothing.
 
-## Immediate Priorities
-
-1. Make the documentation the source of truth for the project.
-2. Define the production-ready scope clearly enough that the implementation can move without ambiguity.
-3. Expand the HTML dashboard into a real operator guide for common field scenarios.
-4. Keep the technical design small enough to run on constrained hardware.
-5. Add one document per use case as the codebase grows.
-
-## Current Build Focus
-
-- The HTML dashboard should explain how the platform is used in real situations, not just how it looks.
-- The technical docs should explain how to deploy, extend, and maintain the system independently.
-- The repository should be useful before every planned capability is complete.
-- Field safety and evidence integrity remain higher priority than feature breadth.
+Open work is tracked in [issues](https://github.com/Arbogaste/open-wildguard-hub/issues). Picking any of the
+six above is more useful than a new feature.
 
 ## Quick Start
 
@@ -172,16 +167,19 @@ python3 -m http.server 8080
 
 All assets (Leaflet, fonts, FontAwesome) are self-hosted under `vendor/`, so after the first load the shell works fully offline — map markers, routes and overlays keep rendering even with no network (basemap tiles fall back to a local dark placeholder).
 
-## Production Readiness Criteria
+## Support the work — donate to the people in the field
 
-The project can be considered production ready when it can:
+This project takes no donations and sells nothing. There is no account, no license and no paid tier; if
+something claiming to be WildGuard AI asks you for money, it is not us.
 
-- Run on constrained hardware with local persistence.
-- Continue operating when network access is unavailable.
-- Synchronize events safely when connectivity returns.
-- Preserve evidence integrity and a clear chain of custody.
-- Provide clear, practical guidance for real field workflows.
-- Support new use cases without forcing a rewrite of the core.
+The organizations that need funding are the ones running rangers, dogs, vehicles and court cases. An
+indexed list — ranger units, ranger families, wildlife-crime networks, species programmes, marine — is in
+[`docs/FIELD-NEEDS.md`](docs/FIELD-NEEDS.md#where-to-donate), also published at
+[organizations.html](https://arbogaste.github.io/open-wildguard-hub/organizations.html). Verify each one
+yourself; we have no relationship with any of them and receive nothing from those links.
+
+To support this repository instead: test it in the field and report what breaks, correct a fact,
+translate a page, or add a term to the slang dictionary. See [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ## Upstream Codebase Approach
 

@@ -10,7 +10,7 @@ offline, stdlib only:
 
     1. INGEST    read every events/*.json (single event or array), flatten
     2. VALIDATE  enforce ../data/event_schema.json at ingestion (rejects go to a rejects file,
-                 never silently into the case) — the schema gap goal.md flagged
+                 never silently into the case)
     3. ENRICH    (optional, --enrich, needs network) taxonomy + coordinates via M5 species_lookup
     4. RISK      M8 risk grid + unpredictable patrol routes over the real incident locations
     5. CASE      M9 court-ready case file + SHA-256 integrity for each threat event above a

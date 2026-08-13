@@ -18,8 +18,13 @@ court-ready forensic chain-of-custody.
 | A **developer / technologist** wanting to contribute | M2 or M3 (most code depth) → M8 (prediction AI) |
 | A **researcher or analyst** | M5 (species intel) → M7 (OSINT) → M8 (occupancy models) |
 | An **incident investigator or lawyer** | M9 (evidence chain + chargesheet generator) |
+| Someone who wants to **help without deploying anything** | [FIELD-NEEDS.md](FIELD-NEEDS.md#where-to-donate) — who to fund, and what they buy with it |
 
 You do **not** need to be a developer to start. The Essential tier of every module works with a phone and a free app.
+
+Before choosing a module, it is worth reading [FIELD-NEEDS.md](FIELD-NEEDS.md): a survey of the
+organizations doing anti-poaching work today and what they say they actually need. It is the reason the open work on this
+repo is prioritised the way it is.
 
 ---
 
@@ -34,11 +39,13 @@ Each module solves one specific problem rangers face in the field. They are inde
 
 **The problem**: ranger teams across a park use incompatible apps, WhatsApp groups, paper forms and spreadsheets. An alert on one radio reaches only part of the team. Evidence is scattered. There is no shared picture.
 
-**What this gives you**: a central command hub — a local server or cloud API — that collects all events (camera traps, audio nodes, GPS collars, community tips) into one database. Every team member sees the same map. Alerts are routed automatically. Data syncs when connectivity returns.
+**What this gives you**: one place where every event lands — camera traps, audio nodes, GPS collars, community tips — validated against one schema, in one file everybody can copy. Every team member sees the same picture.
 
-**Who deploys it**: one technologist or IT-savvy NGO staff member. Everyone else just uses the result.
+**How, concretely**: no server. Detectors write event JSON into a folder; `toolkit/python/wildguard.py` ingests it, enforces the schema, computes risk and patrol routes, and produces case files; `wg_store.py` keeps it all in a single SQLite file you can query, export or carry on a USB stick. A hub with an exposed API was designed and then dropped on purpose — a field deployment should have no open port to attack and no service to pay for.
 
-**Effort**: 1–2 days for the Essential tier (FastAPI + SQLite + Leaflet map).
+**Who deploys it**: anyone who can run one command. There is nothing to administer.
+
+**Effort**: minutes. `cd toolkit/python && python3 wildguard.py --demo`.
 
 ---
 
@@ -173,6 +180,19 @@ These are the projects the playbooks pull from. Each entry explains the problem 
 | [Poaching-detection](https://github.com/Tarshdeep2210/Poaching-detection) | EfficientNet classifier that distinguishes animal / empty / poacher with Grad-CAM explainability (highlights what the AI is looking at). | When you need explainable AI for court evidence or for retraining with local data. |
 | [Ecosentinel](https://github.com/Kerbal12/Ecosentinel) | OpenCV + YOLOv3 CCTV intruder detection benchmark. Older but well-documented. | Useful as a baseline for comparing detection accuracy or for hardware with no GPU. |
 | [animl-frontend](https://github.com/tnc-ca-geo/animl-frontend) | Operational camera-trap management UI used by The Nature Conservancy. Handles image ingestion, labeling, and operator review workflow. | When you need a production-grade operator interface for reviewing camera-trap images at scale. |
+
+### Training data & pretrained weights
+
+A clone is useless in the field until it has weights. These are the open sources we draw on so M2 works
+out of the box instead of silently detecting nothing.
+
+| Source | What it actually gives you | When to use it |
+|--------|----------------------------|----------------|
+| [YOLOv8 + drones (RijuBera)](https://github.com/RijuBera/Animal-Species-Detection-unknown-species-detection-poaching-detection-using-yolov8-and-drones) · [dataset](https://www.kaggle.com/datasets/rijubera2000/poaching-and-animal-detection-dataset) | YOLOv8 over 81 classes including a trained `Poacher` class, from drone footage. Public dataset and training notebooks. | The most direct route to M2 weights better than a generic COCO `person`. Also the source of the "unknown species" idea: report a low-confidence detection as tentative with its nearest taxonomic group instead of dropping it. |
+| [WildGuard — AnimalHack 2024](https://github.com/nimadorostkar/WildGuard) | ~4.9k aerial elephant images with YOLO labels and train/valid/test splits. | Training and validating M2 on real aerial imagery rather than stock photos. Take the dataset, not the code — the web app is scaffold. |
+| [Animal-Poacher-Detection (snehitvaddi)](https://github.com/snehitvaddi/Animal-Poacher-Detection-and-Alerting-System) | Custom YOLOv3 trained on a "poacher" class, dataset and weights published. | Labelling reference for the armed-human case. The architecture is dated; the annotations are not. |
+| [Elephant-Poaching-Risk-Monitoring-System](https://github.com/akhilaku/Elephant-Poaching-Risk-Monitoring-System) | Quantised TensorFlow Lite human/elephant classifier built in Edge Impulse, plus the microcontroller deployment path. | Hardware below a Raspberry Pi — ESP32-CAM, Arduino Nano 33 BLE — where YOLOv8 will not run at all. |
+| [wildguard_ai (linfordlee14)](https://github.com/linfordlee14/wildguard_ai) | Movement-anomaly logic over GPS collar tracks: per-animal speed baseline, sudden drop, prolonged immobility, hotspot proximity. | Reference for M5 `track_anomaly.py`. Prolonged immobility is the earliest signal an animal has been killed — the gap our geofence does not cover. Ignore its cloud/LLM half; it needs a paid API we will not depend on. |
 
 ---
 

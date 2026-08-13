@@ -11,11 +11,14 @@ proves it works) → **Start** (the one command or link to begin). Reliability t
 ---
 
 ## M1 — Hub (the command center)
-The hub is the spine: every detection becomes one event on one map. Build this first.
+Every detection becomes one event in one store. **There is no server to run.** An exposed FastAPI hub was
+designed (`PLAN.md` M0) and then deliberately dropped: a field deployment should have no port open, no
+service to patch and nothing to rent. `wildguard.py` + `wg_store.py` do the same job from a folder.
 
 | Tool | Use it for | Seen in | Start |
 |------|-----------|---------|-------|
-| FastAPI + SQLite | the hub server itself (offline, tiny) | FaunaScope, Wildlife-News | `pip install fastapi uvicorn aiosqlite`; see `goal.md` M0 |
+| `wildguard.py` + `wg_store.py` (ours) | the whole spine: ingest, validate, enrich, risk, case files, one SQLite file | — | `python3 wildguard.py --demo` |
+| FastAPI + SQLite 🟡 | only if you genuinely need multi-site live sync and accept running a service | FaunaScope, Wildlife-News | historical design in `PLAN.md` M0 |
 | Leaflet 🟡 | the live map (already in `index.html`) | FaunaScope | already wired in the dashboard |
 | **SMART** 🟢 | the *standard* rangers already use for patrol data | conservation field standard | export your patrol CSV in SMART format → ingest |
 | **EarthRanger** 🟢 | if a park already runs ops software, sync to it | many parks | optional upstream the hub posts to |
@@ -71,6 +74,7 @@ NDVI-change alerts on a small parcel list, not "process all of Sentinel".
 | **Movebank / Wildbook** 🟢 | open collar tracking / individual photo-ID | — | data sources for collars + re-ID |
 | **CITES MIKE** 🟢 | elephant poaching baseline stats | Illegal_Elephant_Poaching_App | historical data for M8 |
 | `gps_geofence.py` (ours) | alert when a collared animal leaves the safe zone | — | `--demo` |
+| `track_anomaly.py` (ours, **not built yet**) | alert when a collared animal *stops moving* — earliest signal it was killed | wildguard_ai | open work, see `docs/FIELD-NEEDS.md` |
 
 **Concrete hook (already live):**
 ```bash
@@ -84,7 +88,7 @@ clean name and status for free.
 |------|-----------|---------|-------|
 | `tip_intake.py` (ours) | turn raw tips → events, hash the reporter (protect informants) | — | `--demo` |
 | **CyberTracker** 🟢 | offline field data collection on a phone | field standard | export → ingest |
-| **SMART** 🟢 | patrol/encounter standard | field standard | speak its schema |
+| **SMART** 🟢 | patrol/encounter standard used by most funded ranger operations | field standard | **we do not speak it yet** — highest-value open work |
 | **Airtable / n8n** 🟡 | quick tip portal + automation if you have connectivity | audtheia | optional cloud intake |
 
 **Strategy:** protect the source first — `tip_intake.py` already hashes the reporter. Move SMS tips to

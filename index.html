@@ -1190,7 +1190,7 @@
                  style="height:42px;width:42px;border-radius:8px;object-fit:cover;">
             <div class="logo-text">
                 <h1>OPEN-WILDGUARD-HUB</h1>
-                <span id="txt-sub-header">Centro di Comando // Anti-Bracconaggio Open-Source</span>
+                <span id="txt-sub-header">Open-source anti-poaching toolkit — documentation site, not a live system</span>
             </div>
         </div>
 
@@ -1205,9 +1205,9 @@
             </a>
 
             <div class="system-status">
-                <div class="status-pill">
-                    <span class="status-dot"></span>
-                    <span id="txt-status">SYSTEM ONLINE</span>
+                <div class="status-pill" title="Nothing on this page is connected to a sensor.">
+                    <span class="status-dot" style="background:var(--color-warning);box-shadow:none;"></span>
+                    <span id="txt-status">DEMO — SAMPLE DATA</span>
                 </div>
                 <div class="status-pill">
                     <i class="fa-solid fa-clock" style="color: var(--color-info);"></i>
@@ -1222,71 +1222,70 @@
 
         <!-- LEFT COLUMN: Status & Alerts -->
         <div class="column">
-            <!-- Stats Widget -->
+            <!-- What the repository actually contains. Every number here is checkable in the repo;
+                 none of it is sensor telemetry. -->
             <div class="panel" style="flex: 0 0 auto;">
                 <div class="panel-header">
-                    <span class="panel-title"><i class="fa-solid fa-chart-simple"></i><span
-                            id="txt-title-stats">Telemetria Sensori</span></span>
+                    <span class="panel-title"><i class="fa-solid fa-box-open"></i><span
+                            id="txt-title-stats">What you get when you clone</span></span>
                 </div>
                 <div class="panel-content stats-grid">
                     <div class="stat-card">
-                        <span class="stat-label" id="lbl-cameras">Cam Trap</span>
-                        <div class="stat-val" id="val-cameras">12</div>
+                        <span class="stat-label" id="lbl-cameras">Runnable scripts</span>
+                        <div class="stat-val" id="val-cameras">14</div>
                     </div>
                     <div class="stat-card">
-                        <span class="stat-label" id="lbl-audio">Nodi Audio</span>
-                        <div class="stat-val" id="val-audio">8</div>
+                        <span class="stat-label" id="lbl-audio">Tests passing</span>
+                        <div class="stat-val" id="val-audio">54</div>
                     </div>
                     <div class="stat-card">
-                        <span class="stat-label" id="lbl-collars">Collari IoT</span>
-                        <div class="stat-val" id="val-collars">34</div>
+                        <span class="stat-label" id="lbl-collars">Servers to run</span>
+                        <div class="stat-val" id="val-collars">0</div>
                     </div>
                     <div class="stat-card">
-                        <span class="stat-label" id="lbl-osint">Agg. OSINT</span>
-                        <div class="stat-val" id="val-osint">1.4K</div>
+                        <span class="stat-label" id="lbl-osint">Cost per year</span>
+                        <div class="stat-val" id="val-osint">&euro;0</div>
                     </div>
+                </div>
+                <div class="panel-content" style="padding-top:0;font-size:10px;color:var(--text-muted);line-height:1.6;">
+                    Python standard library only for the core &mdash; no pip install, no API key, no account.
+                    Runs on a Raspberry Pi Zero 2&nbsp;W.
                 </div>
             </div>
 
-            <!-- Active Threat Alerts Log -->
+            <!-- Real output, produced by running the toolkit. Not a mockup. -->
             <div class="panel" style="flex: 1;">
                 <div class="panel-header">
-                    <span class="panel-title"><i class="fa-solid fa-triangle-exclamation"
-                            style="color: var(--color-danger);"></i><span id="txt-title-alerts">Allarmi Minaccia
-                            Attivi</span></span>
+                    <span class="panel-title"><i class="fa-solid fa-terminal"
+                            style="color: var(--color-primary);"></i><span id="txt-title-alerts">Run it yourself &mdash; real output</span></span>
                 </div>
                 <div class="panel-content" id="alerts-log">
-                    <!-- Critical Alert Mock -->
-                    <div class="alert-item critical" id="alert-1">
-                        <div class="alert-meta">
-                            <span>CAM_TRAP_04</span>
-                            <span>15:42 UTC</span>
-                        </div>
-                        <div class="alert-desc" id="txt-alert-desc-1">Rilevamento Umano Armato (Bracconiere)</div>
-                        <div class="alert-footer">
-                            <span class="badge"
-                                style="color: var(--color-danger); border-color: rgba(255, 51, 68, 0.2);">CONF:
-                                94%</span>
-                            <button class="btn btn-danger btn-dispatch"
-                                onclick="dispatchRanger(-2.341, 34.842, 'CAM_TRAP_04')">Invia Ranger</button>
-                        </div>
-                    </div>
+                    <p style="font-size:10px;color:var(--text-muted);margin:0 0 8px;line-height:1.6;">
+                        Two commands, no setup. The text below is the actual output of the second one,
+                        copied from a real run &mdash; not an illustration.
+                    </p>
+<pre style="background:#0b0f17;border:1px solid rgba(255,255,255,.08);border-radius:6px;padding:10px;overflow:auto;font-size:10px;line-height:1.55;margin:0 0 10px;"><code>git clone https://github.com/Arbogaste/open-wildguard-hub
+cd open-wildguard-hub/toolkit/python &amp;&amp; python3 wildguard.py --demo</code></pre>
+<pre style="background:#0b0f17;border:1px solid rgba(255,255,255,.08);border-radius:6px;padding:10px;overflow:auto;font-size:10px;line-height:1.55;margin:0;"><code>[validate] 5 valid, 0 rejected
+[store]    5 events -&gt; report/wildguard.sqlite
+[risk]     225 cells, 4 patrol routes
+[cases]    5 case file(s)
 
-                    <!-- Warning Alert Mock -->
-                    <div class="alert-item warning" id="alert-2">
-                        <div class="alert-meta">
-                            <span>AUDIO_NODE_02</span>
-                            <span>15:39 UTC</span>
-                        </div>
-                        <div class="alert-desc" id="txt-alert-desc-2">Rilevamento Picco Energetico (Sparo)</div>
-                        <div class="alert-footer">
-                            <span class="badge"
-                                style="color: var(--color-warning); border-color: rgba(255, 179, 0, 0.2);">CONF:
-                                78%</span>
-                            <button class="btn btn-locate"
-                                onclick="dispatchRanger(-2.355, 34.819, 'AUDIO_NODE_02')">Rileva Posizione</button>
-                        </div>
-                    </div>
+TOP RISK ZONES (patrol these first):
+  1. cell c013_013  @ -2.31936,34.85069  risk=0.787
+  2. cell c013_012  @ -2.31936,34.84619  risk=0.693
+  3. cell c012_013  @ -2.32386,34.85069  risk=0.691
+
+COURT-READY CASES (M9):
+  - poacher          integrity=PASS
+  - gunshot          integrity=PASS
+  - geofence_breach  integrity=PASS
+
+EVIDENCE INTEGRITY: ALL PASS</code></pre>
+                    <p style="font-size:10px;color:var(--text-muted);margin:10px 0 0;line-height:1.6;">
+                        Replace <code>--demo</code> with <code>--events-dir events/</code> to run it on your own
+                        detections. If a file was altered after capture, the run exits non-zero and says which one.
+                    </p>
                 </div>
             </div>
         </div>
@@ -1309,6 +1308,11 @@
                             id="btn-txt-clear">Resetta</span></button>
                 </div>
             </div>
+            <div class="map-note" style="font-size:10px;color:var(--text-muted);padding:6px 2px 0;line-height:1.6;">
+                Synthetic scenario over a real basemap: the stations, tracks and alerts below are generated
+                in your browser to show what the map does. No sensor is connected to this page.
+            </div>
+            <div id="sim-log" aria-live="polite" aria-label="Simulated events"></div>
 
             <!-- Tab Panel Bottom -->
             <div class="tab-panel">
@@ -1334,26 +1338,48 @@
                     <!-- TAB 0: OVERVIEW (default landing) -->
                     <div id="tab-overview" class="tab-pane active" role="tabpanel" aria-labelledby="tab-lbl-overview">
                         <div class="overview-hero">
-                            <div class="overview-tagline">An open-source anti-poaching command center —<br>built on free tools, runs offline, costs $0 in licenses.</div>
+                            <div class="overview-tagline">Field tools, module playbooks and a reviewed catalogue<br>for anti-poaching teams. Offline-first, MIT, &euro;0 &mdash; and explicit about what is not built yet.</div>
                             <div class="overview-pills">
-                                <span class="ov-pill">10 capability modules</span>
-                                <span class="ov-pill">20+ repos integrated</span>
-                                <span class="ov-pill">works without internet</span>
-                                <span class="ov-pill">no vendor lock-in</span>
+                                <span class="ov-pill">14 runnable scripts</span>
+                                <span class="ov-pill">54 tests passing</span>
+                                <span class="ov-pill">10 module playbooks</span>
+                                <span class="ov-pill">30 repos reviewed</span>
+                                <span class="ov-pill">no server, no account</span>
                             </div>
+                        </div>
+
+                        <div class="docs-block" style="border:1px solid var(--color-primary,#00ff66);background:rgba(0,255,102,0.05);">
+                            <h3 style="font-size:12px;margin-bottom:8px;" data-i18n="start_here_title">Start here — pick the path that matches you</h3>
+                            <ul style="font-size:11px;line-height:1.8;margin:0;padding-left:1.1rem;color:var(--text-muted);">
+                                <li data-i18n="start_here_ranger"><strong style="color:var(--color-primary)">You protect a reserve.</strong>
+                                    Read <a href="https://github.com/Arbogaste/open-wildguard-hub/blob/main/QUICKSTART.md" target="_blank" rel="noopener" style="color:var(--color-primary)">QUICKSTART.md</a>:
+                                    clone, run one command, get validated detections, risk map and court-ready case files. No install, no server, no account.</li>
+                                <li data-i18n="start_here_dev"><strong style="color:var(--color-primary)">You write code.</strong>
+                                    Start from <a href="https://github.com/Arbogaste/open-wildguard-hub/tree/main/docs#readme" target="_blank" rel="noopener" style="color:var(--color-primary)">docs/</a>
+                                    for the module playbooks, then <a href="https://github.com/Arbogaste/open-wildguard-hub/issues" target="_blank" rel="noopener" style="color:var(--color-primary)">open issues</a>
+                                    and <a href="organizations.html" style="color:var(--color-primary)">Field needs</a> for what is still missing and why it matters.</li>
+                                <li data-i18n="start_here_ngo"><strong style="color:var(--color-primary)">You fund or run conservation work.</strong>
+                                    See <a href="organizations.html" style="color:var(--color-primary)">Field needs &amp; organizations</a> for who does this work today and what they say they need,
+                                    then the <a onclick="switchTab(null,'tab-proposal')" style="color:var(--color-primary);cursor:pointer">NGO pitch</a>.</li>
+                                <li data-i18n="start_here_curious"><strong style="color:var(--color-primary)">You just want to look around.</strong>
+                                    This dashboard is a demo running on sample data. Nothing here calls an external service.</li>
+                                <li data-i18n="start_here_donate"><strong style="color:var(--color-primary)">You want to donate.</strong>
+                                    Not to us — we take no money and sell nothing. The
+                                    <a href="organizations.html" style="color:var(--color-primary)">organizations page</a> indexes the groups that fund rangers, dogs, vehicles and court cases.</li>
+                            </ul>
                         </div>
 
                         <div class="overview-grid">
                             <div class="ov-card ov-card--vision">
                                 <div class="ov-card-icon">📷</div>
                                 <strong>Detect poachers on camera traps</strong>
-                                <p>AI runs on-device. Alert in 30s when a human appears. No cloud, no subscription.</p>
+                                <p>Detection runs on the device itself. A human in frame writes an event and an evidence frame locally &mdash; no cloud round trip, no subscription.</p>
                                 <a onclick="switchTab(null,'tab-roadmap')">M2 Playbook →</a>
                             </div>
                             <div class="ov-card ov-card--audio">
                                 <div class="ov-card-icon">🔊</div>
                                 <strong>Hear gunshots 3 km away, at night</strong>
-                                <p>Cheap microphone network. TDoA triangulation sends GPS coordinates in &lt;30s.</p>
+                                <p>Cheap synced microphones. Time-difference triangulation returns coordinates, plus the residual error in metres so a bad fix is visible instead of trusted.</p>
                                 <a onclick="switchTab(null,'tab-roadmap')">M3 Playbook →</a>
                             </div>
                             <div class="ov-card ov-card--osint">
@@ -1387,6 +1413,7 @@
                             <button class="ov-nav-btn" onclick="switchTab(null,'tab-docs')">🛠 Playbooks &amp; Toolkit</button>
                             <button class="ov-nav-btn" onclick="switchTab(null,'tab-proposal')">📄 NGO Pitch</button>
                             <button class="ov-nav-btn" onclick="switchTab(null,'tab-repos')">🔗 Open-Source Repos</button>
+                            <a class="ov-nav-btn" href="organizations.html" style="text-decoration:none;">🤝 Field Needs</a>
                         </div>
                     </div>
 
@@ -1573,14 +1600,35 @@
 
                     <!-- TAB: OSINT LEADS (M7) — rendered from toolkit/python output (Tactical Events) -->
                     <div id="tab-osint" class="tab-pane" role="tabpanel" aria-labelledby="tab-lbl-osint">
-                        <p style="font-size:11px;color:var(--text-muted);margin:0 0 6px;line-height:1.6;">
-                            Suspected illegal wildlife-trade listings found by <code>toolkit/python/osint_scrape.py</code>
-                            (M7, rule-based, offline). Each card is built from one Tactical Event
-                            (<code>source_type=osint</code>). <strong>SUSPECTED only — human review required before any report.</strong>
+                        <p style="font-size:11px;color:var(--text-muted);margin:0 0 10px;line-height:1.6;">
+                            <code>toolkit/python/osint_scrape.py</code> scores public marketplace listings against a
+                            dictionary of coded trade terms. <strong>Rule-based, no LLM, no external service</strong> — you can
+                            read every rule that produced a score. It does not identify people and it does not accuse anyone:
+                            output is a <strong>suspicion for a human analyst to check</strong>, and the tool says so in its own header.
                         </p>
-                        <div style="font-size:10px;color:var(--text-muted);margin:0 0 12px;">
-                            Load real output: <code>osint_scrape.py --sites ../data/osint_sites.json --query avorio --events leads.json</code>
-                            → drop <code>leads.json</code> over this panel, or it falls back to the bundled sample.
+<pre style="background:#0b0f17;border:1px solid rgba(255,255,255,.08);border-radius:6px;padding:10px;overflow:auto;font-size:10px;line-height:1.55;margin:0 0 10px;"><code>$ python3 osint_scrape.py --demo
+[dict] 74 slang + 15 hard keywords (v2026-07-03)
+[demo] scored a built-in Italian ivory listing, no network used
+
+OSINT BRIEFING — 1 listings scanned, 1 flagged (score &gt;= 3)
+All flags are SUSPECTED and require human review before any action.
+
+  score=9  species=ivory  price=1.200  loc=Napoli
+  slang: white gold, avorio, no documenti
+  evidence sha256: 641ceb529a7e4f10...  (chain of custody, M9)</code></pre>
+                        <div style="font-size:10px;color:var(--text-muted);margin:0 0 6px;line-height:1.6;">
+                            Run it against the 104-site target list:
+                            <code>osint_scrape.py --sites ../data/osint_sites.json --query avorio --events leads.json</code>.
+                            Every hit becomes a canonical event (<code>source_type=osint</code>) with a hash, so a lead that
+                            later matters in court has a custody trail from the moment it was collected.
+                        </div>
+                        <div style="font-size:10px;color:var(--color-warning);margin:0 0 12px;line-height:1.6;">
+                            Known limit: 74 coded terms. The industry coalition tracks over 4,000. Growing this dictionary is
+                            the single most useful contribution an analyst can make —
+                            <a href="organizations.html" style="color:var(--color-warning);">see why</a>.
+                        </div>
+                        <div style="font-size:10px;color:var(--text-muted);margin:0 0 8px;">
+                            The cards below are the bundled sample output, shown to illustrate the event shape.
                         </div>
                         <div id="osint-leads-grid" class="osint-grid"></div>
                     </div>
@@ -1681,6 +1729,41 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="docs-block">
+                            <h3 style="color:var(--color-primary);font-size:11px;margin-bottom:8px;">Training data &amp; pretrained weights — M2</h3>
+                            <p style="font-size:11px;color:var(--text-muted);margin:0 0 8px;line-height:1.6;">
+                                A clone is useless in the field until it has weights. These are the open sources we draw on
+                                to ship a detector that works out of the box, instead of one that silently detects nothing.
+                            </p>
+                            <div class="repo-list">
+                                <div class="repo-item">
+                                    <div class="repo-name">RijuBera/…-yolov8-and-drones <span class="repo-tag">Poacher class</span></div>
+                                    <div class="repo-what">YOLOv8 over 81 classes including a trained <code>Poacher</code> class, from drone footage. Public Kaggle dataset. The most direct route to M2 weights better than a generic COCO <code>person</code>. We also take its "unknown species" idea: a low-confidence detection is reported as tentative with its nearest taxonomic group, instead of being dropped.</div>
+                                </div>
+                                <div class="repo-item">
+                                    <div class="repo-name">WildGuard (AnimalHack 2024) <span class="repo-tag">~4.9k labelled</span></div>
+                                    <div class="repo-what">Aerial elephant dataset in YOLO format with train/valid/test splits. Used to train and validate M2 on real aerial imagery rather than on stock photos.</div>
+                                </div>
+                                <div class="repo-item">
+                                    <div class="repo-name">snehitvaddi/Animal-Poacher-Detection-and-Alerting-System</div>
+                                    <div class="repo-what">Custom YOLOv3 trained on a "poacher" class, with dataset and weights published. Architecture is dated, the annotated data is not — it is a labelling reference for the armed-human case.</div>
+                                </div>
+                                <div class="repo-item">
+                                    <div class="repo-name">akhilaku/Elephant-Poaching-Risk-Monitoring-System <span class="repo-tag">TFLite</span></div>
+                                    <div class="repo-what">Quantised TensorFlow Lite human/elephant classifier for microcontrollers. Reference for hardware below a Raspberry Pi — ESP32-CAM, Arduino Nano 33 BLE — where YOLOv8 will not run at all.</div>
+                                </div>
+                                <div class="repo-item">
+                                    <div class="repo-name">linfordlee14/wildguard_ai <span class="repo-tag">collar anomalies</span></div>
+                                    <div class="repo-what">Movement-anomaly logic over GPS collar tracks: per-animal speed baseline, sudden drop, prolonged immobility, hotspot proximity. Prolonged immobility is the earliest signal that an animal has been killed — the gap our M5 geofence does not cover.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p style="font-size:11px;color:var(--text-muted);margin:14px 0 0;line-height:1.6;">
+                            Why these and not others? Because of what field teams actually ask for — see
+                            <a href="organizations.html" style="color:var(--color-primary)">Field needs &amp; organizations</a>.
+                        </p>
                     </div>
 
                     <!-- TAB 4: PITCH PROPOSAL -->
@@ -1690,7 +1773,7 @@
                             <p id="doc-desc-proposal">WildGuard AI è concepito per essere presentato a ONG ed enti
                                 governativi come soluzione sostenibile a basso costo. Fornisce un ecosistema che
                                 garantisce la catena di custodia legale delle prove, ottimizza il coordinamento con
-                                logica di gioco stocastico e riduce del 90% i falsi allarmi sul campo.</p>
+                                rotte di pattuglia non prevedibili e nessun costo ricorrente. Nessun server esposto, nessuna licenza.</p>
 
                             <div
                                 style="font-size: 11px; display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
@@ -1790,6 +1873,7 @@
             <a class="credit-chip our-repo" href="https://github.com/Arbogaste/open-wildguard-hub" target="_blank" rel="noopener">⭐
                 open-wildguard-hub (questo repo)</a>
             <a class="credit-chip" href="readme.html"><i class="fa-solid fa-book-open" aria-hidden="true"></i> Read README / Mission</a>
+            <a class="credit-chip" href="organizations.html" data-i18n="nav_field_needs"><i class="fa-solid fa-people-group" aria-hidden="true"></i> Field needs &amp; organizations</a>
             <a class="credit-chip" href="privacy.html" data-i18n="pv_footer_link">Privacy notice</a>
             <a class="credit-chip" href="https://github.com/microsoft/Biodiversity" target="_blank">Biodiversity</a>
             <a class="credit-chip" href="https://github.com/microsoft/Pytorch-Wildlife" target="_blank">Pytorch-Wildlife</a>
@@ -1854,16 +1938,14 @@
 
         const translations = {
             it: {
-                txt_sub_header: "open-wildguard-hub // Centro di Comando",
-                txt_status: "SISTEMA ONLINE",
-                txt_title_stats: "Telemetria Sensori",
-                lbl_cameras: "Cam Trap",
-                lbl_audio: "Nodi Audio",
-                lbl_collars: "Collari IoT",
-                lbl_osint: "Agg. OSINT",
-                txt_title_alerts: "Allarmi Minaccia Attivi",
-                txt_alert_desc_1: "Rilevamento Umano Armato (Bracconiere)",
-                txt_alert_desc_2: "Rilevamento Picco Energetico (Sparo)",
+                txt_sub_header: "Toolkit anti-bracconaggio open source — sito di documentazione, non un sistema live",
+                txt_status: "DEMO — DATI DI ESEMPIO",
+                txt_title_stats: "Cosa ottieni clonando",
+                lbl_cameras: "Script eseguibili",
+                lbl_audio: "Test verdi",
+                lbl_collars: "Server da gestire",
+                lbl_osint: "Costo annuo",
+                txt_title_alerts: "Provalo — output reale",
                 btn_dispatch: "Invia Ranger",
                 btn_locate: "Rileva Posizione",
                 btn_txt_sim: "Simula Allerta Edge",
@@ -1877,7 +1959,7 @@
                 tab_lbl_proposal: "Proposta per NGO",
                 ideas_intro: `Ogni modulo risolve un problema di campo in modo indipendente — puoi deploiare uno, tutti, o qualsiasi combinazione. Il livello Essential di ogni modulo funziona con uno smartphone e un'app gratuita. Playbook completi con codice, lista hardware e prompt AI in <a href="https://github.com/Arbogaste/open-wildguard-hub/tree/main/docs" target="_blank" rel="noopener" style="color:var(--color-primary)">docs/</a>.`,
                 doc_title_proposal: "Proposta Istituzionale per WWF, Riserve & Guardie Forestali",
-                doc_desc_proposal: "WildGuard AI è concepito per essere presentato a ONG ed enti governativi come soluzione sostenibile a basso costo. Fornisce un ecosistema che garantisce la catena di custodia legale delle prove, ottimizza il coordinamento con logica di gioco stocastico e riduce del 90% i falsi allarmi sul campo.",
+                doc_desc_proposal: "WildGuard AI è concepito per essere presentato a ONG ed enti governativi come soluzione sostenibile a basso costo. Fornisce un ecosistema che garantisce la catena di custodia legale delle prove, genera rotte di pattuglia non prevedibili e non ha costi ricorrenti: nessun server esposto, nessuna licenza, nessuna API a pagamento.",
                 prop_lbl_1: "1. Sostenibilità Economica e Zero Licenze",
                 prop_desc_1: "Utilizza esclusivamente software open-source e hardware commerciale standard (Arduino/ESP32). Nessun canone di abbonamento o vincolo con vendor di tecnologie di sorveglianza proprietarie.",
                 prop_lbl_2: "2. Validità delle Prove in Tribunale",
@@ -1944,16 +2026,14 @@
                 chargesheet_instructions: "Seleziona un evento per redigere il verbale legale..."
             },
             en: {
-                txt_sub_header: "open-wildguard-hub // Command Center",
-                txt_status: "SYSTEM ONLINE",
-                txt_title_stats: "Sensor Telemetry",
-                lbl_cameras: "Cam Trap",
-                lbl_audio: "Audio Nodes",
-                lbl_collars: "IoT Collars",
-                lbl_osint: "OSINT Agg.",
-                txt_title_alerts: "Active Threat Alerts",
-                txt_alert_desc_1: "Armed Human Detected (Poacher)",
-                txt_alert_desc_2: "Energy Spike Detected (Gunshot)",
+                txt_sub_header: "Open-source anti-poaching toolkit — documentation site, not a live system",
+                txt_status: "DEMO — SAMPLE DATA",
+                txt_title_stats: "What you get when you clone",
+                lbl_cameras: "Runnable scripts",
+                lbl_audio: "Tests passing",
+                lbl_collars: "Servers to run",
+                lbl_osint: "Cost per year",
+                txt_title_alerts: "Run it yourself — real output",
                 btn_dispatch: "Dispatch Ranger",
                 btn_locate: "Locate Position",
                 btn_txt_sim: "Simulate Edge Alert",
@@ -1967,7 +2047,7 @@
                 tab_lbl_proposal: "NGO Pitch",
                 ideas_intro: `Each module solves one field problem independently — deploy one, all, or any combination. The Essential tier of every module works with a phone and a free app. Full playbooks with code, hardware lists, and agent prompts are in <a href="https://github.com/Arbogaste/open-wildguard-hub/tree/main/docs" target="_blank" rel="noopener" style="color:var(--color-primary)">docs/</a>.`,
                 doc_title_proposal: "Institutional Pitch for WWF, Reserves & Forestry Guards",
-                doc_desc_proposal: "WildGuard AI is designed as a low-cost, sustainable ecosystem for NGOs and government agencies. It ensures legal custody of evidence, optimizes patrol coordination with stochastic game theory, and reduces edge camera false alarms by 90%.",
+                doc_desc_proposal: "WildGuard AI is designed as a low-cost, sustainable ecosystem for NGOs and government agencies. It ensures legal custody of evidence, generates patrol routes poachers cannot memorise, and carries no recurring cost: no exposed server, no licence, no paid API.",
                 prop_lbl_1: "1. Economic Sustainability & Zero Licenses",
                 prop_desc_1: "Fully open-source codebase running on off-the-shelf standard hardware (Arduino/ESP32). No subscription plans, recurring maintenance fees, or proprietary technology vendor lock-ins.",
                 prop_lbl_2: "2. Admissible Legal Evidence",
@@ -2052,11 +2132,8 @@
             document.getElementById('txt-title-health').innerText = lang.txt_title_health;
             document.getElementById('txt-title-osint').innerText = lang.txt_title_osint;
 
-            // Static text alerts
-            document.getElementById('txt-alert-desc-1').innerText = lang.txt_alert_desc_1;
-            document.getElementById('txt-alert-desc-2').innerText = lang.txt_alert_desc_2;
-
-            // Buttons inside alerts (using querySelectorAll since there are multiple)
+            // The mock alert cards were removed: the left column now shows real toolkit output instead.
+            // These selectors stay tolerant so a future live-data panel can reuse the same keys.
             document.querySelectorAll('.btn-dispatch').forEach(btn => btn.innerText = lang.btn_dispatch);
             document.querySelectorAll('.btn-locate').forEach(btn => btn.innerText = lang.btn_locate);
 
@@ -2123,6 +2200,14 @@
                         <div class="idea-desc">${item.desc}</div>
                     </div>
                 `);
+            });
+
+            // Generic pass: any element tagged data-i18n="key" is replaced when that key exists in the
+            // bundle. Markup inside the key is intentional (links, <strong>), so innerHTML is used.
+            // Elements whose key has no translation yet keep their inline English fallback.
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const val = lang[el.getAttribute('data-i18n')];
+                if (typeof val === 'string') el.innerHTML = val;
             });
 
             // Proposal tab texts
@@ -2323,7 +2408,7 @@
         function triggerSimAlert() {
             const randomLat = centerCoords[0] + (Math.random() - 0.5) * 0.08;
             const randomLon = centerCoords[1] + (Math.random() - 0.5) * 0.08;
-            const log = document.getElementById('alerts-log');
+            const log = document.getElementById('sim-log');
             const alertId = 'alert-' + Date.now();
             const lang = translations[currentLanguage];
 
@@ -2341,10 +2426,8 @@
                 </div>
             `;
             log.insertAdjacentHTML('afterbegin', alertHtml);
-
-            // Update stats
-            const val = document.getElementById('val-cameras');
-            val.innerText = parseInt(val.innerText) + 1;
+            // Deliberately does not touch the counters on the left: those describe the repository,
+            // not a sensor network, and a simulated click must never inflate them.
 
             // Mark on map
             L.marker([randomLat, randomLon], {
@@ -2487,31 +2570,35 @@ Forest Officer Authorized Signature
 
         /* ---- Toolkit Status board: static mock of what each module produces (NO API calls) ---- */
         // Sample outputs are realistic (e.g. M5 mirrors a real GBIF taxonomy response shape).
+        // Every `out` string below is copied from an actual `--demo` run of that script, not written by hand.
+        // If you change a script and its output moves, this list is wrong until you re-run it.
         const TOOLKIT_STATUS = [
-          {m:"M0", name:"Hub server", st:"todo", produces:"Live event store + map feed (FastAPI+SQLite)",
-           cmd:"python hub/main.py", out:"GET /events · WS /ws/alerts · critical path — not built yet"},
-          {m:"M2", name:"Edge vision", st:"part", produces:"Animal/person/vehicle detections from camera traps",
-           cmd:"python edge_infer_camera.py", out:"detection: person conf=0.93 → Tactical Event (camera_trap)"},
-          {m:"M3", name:"Bioacoustics", st:"part", produces:"Gunshot/chainsaw localization (TDoA)",
-           cmd:"python tdoa_locate.py --file event.json", out:"source ≈ (-2.351, 34.819), 3-node solve"},
-          {m:"M5", name:"Species lookup", st:"done", produces:"Clean name + taxonomy + status + coords (GBIF/IUCN/OSM)",
-           cmd:'python species_lookup.py --name "tiger"', out:'Panthera tigris · Felidae · Carnivora · GBIF key 5219416 (conf 99)'},
-          {m:"M5", name:"Collar geofence", st:"done", produces:"Alert when a collared animal leaves the safe zone",
-           cmd:"python gps_geofence.py --demo", out:"[geofence_breach] ele_07 (elephant) outside protected boundary"},
-          {m:"M6", name:"Tip intake", st:"done", produces:"Community tips → events, reporter PII hashed",
-           cmd:"python tip_intake.py --demo", out:"[gunshot] rep_d1f23d2671dc @ -2.34,34.82"},
-          {m:"M7", name:"OSINT scraper", st:"done", produces:"Suspected wildlife-trade listings (104-site list)",
-           cmd:"python osint_scrape.py --sites osint_sites.json --query avorio", out:"score=9 ivory · slang: white gold, no documenti · sha256…"},
-          {m:"M8", name:"Risk model", st:"done", produces:"Daily risk heatmap + unpredictable patrol routes",
-           cmd:"python risk_model.py --demo", out:"top zone c002_002 risk=0.94 · 70% high-risk / 30% random"},
-          {m:"M9", name:"Case file", st:"done", produces:"Evidence integrity PASS/FAIL + signable case file",
-           cmd:"python case_file.py --demo", out:"CAM04.jpg integrity: PASS · custody log: captured→transferred→archived"},
-          {m:"M10", name:"Node health", st:"done", produces:"Battery/offline/weak-signal alerts per node",
-           cmd:"python node_health.py --demo", out:"cam_42 LOW-BAT · aco_07 OFFLINE · cam_19 WEAK-SIG"},
-          {m:"M4", name:"Aerial & geo", st:"design", produces:"NDVI/SAR change → deforestation, water (Sentinel)",
-           cmd:"— design only —", out:"path documented (Sentinel-1/2, OpenDroneMap); heavy deps"},
-          {m:"M11-20", name:"Pollution tier", st:"design", produces:"Water/air/waste/marine crime (legally traceable)",
-           cmd:"— design only —", out:"docs/modules/M11-M20-pollution-tier.md · reuses hub+M9"},
+          {m:"core", name:"Offline runner", st:"done", produces:"Ingest → schema check → risk → case files → bundle. No server exists to expose.",
+           cmd:"python3 wildguard.py --demo", out:"[validate] 5 valid, 0 rejected · [risk] 225 cells, 4 routes · EVIDENCE INTEGRITY: ALL PASS"},
+          {m:"core", name:"Event store", st:"done", produces:"One SQLite file: idempotent ingest, query by type/time/radius, export CSV/GeoJSON/DarwinCore",
+           cmd:"python3 wg_store.py query --db report/wildguard.sqlite --limit 3", out:"[3 events] canonical JSON, event_id + coordinates + threat_class + confidence"},
+          {m:"M2", name:"Edge vision", st:"part", produces:"Person/vehicle detections from a camera, evidence frame hashed at capture",
+           cmd:"python3 edge_infer_camera.py --source 0", out:"runs on Pi/Jetson — but ships no weights yet: a fresh clone detects nothing until you stage them"},
+          {m:"M3", name:"Bioacoustics (TDoA)", st:"done", produces:"Gunshot location from synced microphones, with the residual error in metres",
+           cmd:"python3 tdoa_locate.py --demo", out:"source (-2.351054, 34.829177) · confidence 1.0 · residual_rms_m 0.0 · 3 nodes"},
+          {m:"M5", name:"Species lookup", st:"done", produces:"Clean scientific name + taxonomy + IUCN status + coordinates (GBIF/IUCN/OSM)",
+           cmd:'python3 species_lookup.py --name "African elephant"', out:"Loxodonta africana · Elephantidae · Proboscidea · GBIF 2433722 · conf 98"},
+          {m:"M5", name:"Collar geofence", st:"done", produces:"Alert when a collared animal leaves the protected boundary",
+           cmd:"python3 gps_geofence.py --demo", out:"[geofence_breach] ele_07 (elephant) @ -2.405,34.84 — outside boundary"},
+          {m:"M6", name:"Tip intake", st:"done", produces:"Community tips → events, reporter identity hashed at intake, duplicates merged",
+           cmd:"python3 tip_intake.py --demo", out:"4 raw, 4 after dedupe · [gunshot] rep_d1f23d2671dc @ -2.34,34.82"},
+          {m:"M7", name:"OSINT scraper", st:"done", produces:"Suspected wildlife-trade listings scored against a coded-term dictionary",
+           cmd:"python3 osint_scrape.py --demo", out:"1 scanned, 1 flagged · score=9 ivory · slang: white gold, avorio, no documenti"},
+          {m:"M8", name:"Risk model", st:"done", produces:"Daily risk grid + patrol routes with deliberate randomness",
+           cmd:"python3 risk_model.py --demo", out:"top zone c002_002 risk=0.89 (incident_rate, days_since_patrol) · 4 rangers assigned"},
+          {m:"M9", name:"Case file", st:"done", produces:"Evidence integrity PASS/FAIL, custody log, court-ready report",
+           cmd:"python3 case_file.py --demo", out:"CAM04_demo.jpg integrity PASS · custody: captured → transferred → archived"},
+          {m:"M10", name:"Node health", st:"done", produces:"Battery, signal and silence alerts per field node",
+           cmd:"python3 node_health.py --demo", out:"cam_42 LOW-BAT (14%) · aco_07 OFFLINE (silent 166m) · cam_19 WEAK-SIG (-97)"},
+          {m:"M4", name:"Aerial & geo", st:"design", produces:"NDVI/SAR change detection for deforestation and water (Sentinel)",
+           cmd:"— not built —", out:"integration path documented; heavy dependencies, not started"},
+          {m:"M11-20", name:"Pollution tier", st:"design", produces:"Water/air/waste/marine environmental crime, same evidence chain",
+           cmd:"— not built —", out:"docs/modules/M11-M20-pollution-tier.md · would reuse the runner, schema and M9"},
         ];
         const ST_META = {done:{t:"RUNNABLE",c:"sev-high",dot:"#00ff66"},part:{t:"PARTIAL",c:"sev-med",dot:"#ffb300"},
             todo:{t:"CRITICAL PATH",c:"sev-med",dot:"#ff3344"},design:{t:"DESIGN ONLY",c:"sev-low",dot:"#6cb4ff"}};
