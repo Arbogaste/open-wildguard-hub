@@ -3,6 +3,23 @@
 > Storico tecnico, una voce per sessione. Cosa manca e perché → `README.md` e `docs/FIELD-NEEDS.md`.
 > Piano milestone → `PLAN.md`. 
 
+### open-wildguard-hub — sessione 2026-08-13c (dashboard semplificata, demo separata)
+- **Demo fuori dalla dashboard**: mappa tattica, simulazione allarmi e card OSINT di esempio → nuova
+  `demo.html`, con banner "tutto qui è inventato". JS estratto in `assets/demo-map.js` + `assets/demo-osint.js`,
+  caricati solo lì. `index.html` non carica più Leaflet.
+- **Colonna destra eliminata**: "Stato dei Sotto-Repository ONLINE/DEGRADED" (stato finto di repo altrui) e
+  "Intelligence Feed" (notizie inventate + verbale mock). Layout 3 colonne → 2.
+- **Tab 7 → 4**, numerati e in lingua piana: 1 Start here · 2 What runs today · 3 The 10 modules ·
+  4 What we build on. Playbook e pitch ONG diventano `<details>` dentro i tab pertinenti.
+- **Footer**: 25 chip tutti uguali (nav + crediti mescolati) → due gruppi con intestazione ("This project",
+  "Built on the work of others" con i 19 upstream in un `<details>`) + riga legale. Gestalt: regione comune
+  e prossimità invece di una fila indistinta.
+- **Accessibilità**: tab bar ora segue il pattern WAI-ARIA — frecce, Home/End, roving `tabindex`. Target
+  touch ≥44px, niente scroll orizzontale, breakpoint unico a 820px.
+- **Font**: rimossi Outfit e Space Mono self-hosted → stack di sistema. Meno richieste, nessun FOUT.
+- **SEO**: titolo e description riscritti (non più "command center"), JSON-LD `SoftwareSourceCode`,
+  `demo.html` in sitemap e service worker (cache v4).
+
 ### open-wildguard-hub — sessione 2026-08-13b (onestà del sito: via i numeri finti)
 - **Header**: "SYSTEM ONLINE" era una bugia (nessun sensore collegato) → `DEMO — SAMPLE DATA`. Sottotitolo:
   "documentation site, not a live system".

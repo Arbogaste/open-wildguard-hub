@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Example dashboard (synthetic data) — WildGuard AI</title>
+<meta name="description" content="Illustrative WildGuard AI dashboard: tactical map, patrol routing and simulated alerts on synthetic data. Nothing here is a live feed.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://arbogaste.github.io/open-wildguard-hub/demo.html">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/brand/favicon-32.png">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Example dashboard (synthetic data) — WildGuard AI">
+<meta property="og:description" content="What the map and alert flow look like, on invented data. The real toolkit is on the main page.">
+<meta property="og:url" content="https://arbogaste.github.io/open-wildguard-hub/demo.html">
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+<style>
+  :root{--bg:#07090e;--surface:#0d111a;--border:rgba(255,255,255,.1);--text:#e8f0f4;
+        --muted:#9aabb5;--link:#5ad1ff;--accent:#00ff66;--warn:#ffb300;--danger:#ff3344;
+        --color-primary:var(--accent);--color-danger:var(--danger);--color-info:#5ad1ff;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);line-height:1.6;
+       font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;font-size:16px}
+  .skip{position:absolute;left:-999px;top:0;background:var(--accent);color:#000;padding:10px 16px;
+        z-index:1000;font-weight:700;border-radius:0 0 6px 0}
+  .skip:focus{left:0}
+  a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:3px}
+  header.top{border-bottom:1px solid var(--border);background:var(--surface);padding:14px 20px;
+             display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+  header.top a{color:var(--link);text-decoration:none;font-size:14px}
+  header.top a:hover{text-decoration:underline}
+  .brand{font-weight:800;color:var(--accent);margin-right:auto;font-size:16px}
+  main{max-width:1000px;margin:0 auto;padding:24px 20px 72px}
+  h1{font-size:1.7rem;line-height:1.25;margin:.4rem 0 .6rem}
+  h2{font-size:1.15rem;margin:2rem 0 .6rem;border-bottom:1px solid var(--border);padding-bottom:.3rem}
+  p{margin:.6rem 0}
+  .banner{border:1px solid rgba(255,179,0,.45);background:rgba(255,179,0,.07);border-radius:8px;
+          padding:14px 16px;margin:0 0 20px}
+  .banner strong{color:var(--warn)}
+  .muted{color:var(--muted);font-size:.92rem}
+  #map{height:60vh;min-height:340px;border:1px solid var(--border);border-radius:8px}
+  .controls{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+  .btn{background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--text);
+       border-radius:6px;padding:9px 14px;font-size:14px;cursor:pointer;min-height:44px}
+  .btn:hover{border-color:var(--accent)}
+  .alert-item{border:1px solid var(--border);border-left:3px solid var(--danger);border-radius:6px;
+              padding:10px 12px;margin:8px 0;background:rgba(255,255,255,.02)}
+  .alert-meta,.alert-footer{display:flex;gap:10px;flex-wrap:wrap;align-items:center;
+              font-size:12px;color:var(--muted)}
+  .alert-desc{margin:4px 0;font-weight:600}
+  .badge{border:1px solid var(--border);border-radius:4px;padding:2px 6px;font-size:11px}
+  .osint-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+  .osint-card{border:1px solid var(--border);border-radius:8px;background:rgba(255,255,255,.02);
+              display:flex;flex-direction:column;overflow:hidden}
+  .osint-card.sev-high{border-color:rgba(255,51,68,.45)}
+  .osint-card.sev-med{border-color:rgba(255,179,0,.4)}
+  .osint-card.sev-low{border-color:rgba(108,180,255,.35)}
+  .oc-head,.oc-body,.oc-foot{padding:10px 12px}
+  .oc-head{display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid var(--border);font-size:13px}
+  .oc-body{font-size:13px;color:var(--muted);flex:1}
+  .oc-foot{border-top:1px solid var(--border);font-size:11px;color:var(--muted);
+           font-family:ui-monospace,Menlo,monospace;word-break:break-all}
+  @media (max-width:620px){body{font-size:15px}main{padding:18px 16px 56px}#map{height:52vh}}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="top">
+  <span class="brand">WildGuard AI</span>
+  <a href="index.html">← Back to the toolkit</a>
+  <a href="organizations.html">Field needs</a>
+  <a href="readme.html">README</a>
+  <a href="https://github.com/Arbogaste/open-wildguard-hub" rel="noopener">GitHub ↗</a>
+</header>
+
+<main id="content">
+  <h1>Example dashboard</h1>
+
+  <div class="banner">
+    <p style="margin:0"><strong>Everything on this page is invented.</strong> The park, the ranger stations,
+    the alerts and the marketplace listings are synthetic, generated in your browser so you can see what the
+    interface does. No sensor is connected, no request leaves your machine, and no number here means anything.</p>
+    <p class="muted" style="margin:.6rem 0 0">The real thing — the scripts, their commands and their actual
+    output — is on the <a href="index.html">main page</a>. It is kept separate on purpose: mixing a
+    demonstration with facts is how a reader stops trusting both.</p>
+  </div>
+
+  <h2>Tactical map</h2>
+  <p class="muted">Simulate a camera-trap detection, then compute a patrol route between the stations.
+  The route deliberately includes randomness: a patrol pattern a poacher can memorise is worse than no pattern.</p>
+
+  <div id="map" role="img" aria-label="Synthetic map of an example reserve with ranger stations"></div>
+  <div class="controls">
+    <button class="btn" onclick="triggerSimAlert()">Simulate an edge alert</button>
+    <button class="btn" onclick="calculatePatrolRoute()">Compute a patrol route</button>
+    <button class="btn" onclick="clearMapLayers()">Clear</button>
+  </div>
+  <div id="sim-log" aria-live="polite" aria-label="Simulated events"></div>
+
+  <h2>Sample online-trade leads</h2>
+  <p class="muted">One card per suspected listing, in the shape <code>osint_scrape.py</code> emits.
+  Sample data. Every flag is a suspicion for a human analyst to check, never an accusation — and the store
+  name is masked here on purpose, because naming a shop next to the word “crime” is defamation.</p>
+  <div id="osint-leads-grid" class="osint-grid"></div>
+</main>
+
+<script src="vendor/leaflet/leaflet.js"></script>
+<script>
+  // Minimal shims: the extracted demo scripts were written for the old dashboard.
+  const currentLanguage = 'en';
+  const translations = { en: { btn_dispatch: 'Dispatch ranger', alert_dispatch: 'Response patrol dispatched to sensor: ',
+                               alert_route_calculated: 'Patrol route computed across all stations.' } };
+  function openScriptplay(t, d, s, tag) {
+    window.open('scriptplay.html?' + new URLSearchParams({title: decodeURIComponent(t),
+      desc: decodeURIComponent(d), specie: s, tag: tag}), '_blank');
+  }
+  function generateChargesheet() {
+    alert('The legal report generator lives in the toolkit: toolkit/python/case_file.py');
+  }
+</script>
+<script src="assets/demo-map.js"></script>
+<script src="assets/demo-osint.js"></script>
+</body>
+</html>

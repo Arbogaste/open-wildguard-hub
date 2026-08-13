@@ -4,16 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WildGuard AI — Open Anti-Poaching Command Center</title>
-    <meta name="description" content="Open-source, offline-first anti-poaching command center. Edge AI camera traps, bioacoustics, species tracking, OSINT and field operator playbooks — free for any conservation team worldwide.">
+    <title>WildGuard AI — open-source anti-poaching toolkit</title>
+    <meta name="description" content="Free, offline-first anti-poaching toolkit: camera-trap detection, gunshot triangulation, patrol risk routing, court-ready evidence and online wildlife-trade monitoring. Runs on a Raspberry Pi, no server, no licence, no subscription.">
     <meta name="author" content="TheRoarWire / Arbogaste">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://arbogaste.github.io/open-wildguard-hub/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="WildGuard AI — Open Anti-Poaching Command Center">
-    <meta property="og:description" content="Offline-first, edge-AI anti-poaching platform. 10 capability modules, runnable toolkit, field playbooks. Free for any conservation team.">
+    <meta property="og:title" content="WildGuard AI — open-source anti-poaching toolkit">
+    <meta property="og:description" content="Free, offline-first anti-poaching toolkit: camera-trap detection, gunshot triangulation, patrol risk routing, court-ready evidence and online wildlife-trade monitoring. Runs on a Raspberry Pi, no server, no licence, no subscription.">
     <meta property="og:url" content="https://arbogaste.github.io/open-wildguard-hub/">
     <!-- og:image MUST be an absolute URL: crawlers fetch it out of page context and
          cannot resolve a relative path, so a relative one means no preview at all. -->
@@ -28,8 +28,8 @@
          square. summary_large_image expects ~1200x630 and centre-crops anything else,
          which turns the logo into a smear. Switch back once a real 1200x630 exists. -->
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="WildGuard AI — Open Anti-Poaching Command Center">
-    <meta name="twitter:description" content="Offline-first, edge-AI anti-poaching platform. 10 capability modules, runnable toolkit, field playbooks. Free for any conservation team.">
+    <meta name="twitter:title" content="WildGuard AI — open-source anti-poaching toolkit">
+    <meta name="twitter:description" content="Free, offline-first anti-poaching toolkit: camera-trap detection, gunshot triangulation, patrol risk routing, court-ready evidence and online wildlife-trade monitoring. Runs on a Raspberry Pi, no server, no licence, no subscription.">
     <meta name="twitter:image" content="https://arbogaste.github.io/open-wildguard-hub/assets/brand/favicon-256.png">
 
     <!-- Brand / favicons (TheRoarWire) -->
@@ -37,11 +37,19 @@
     <link rel="icon" type="image/png" sizes="256x256" href="assets/brand/favicon-256.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/brand/favicon-180.png">
 
-    <!-- Fonts (self-hosted, offline-first): Outfit & Space Mono -->
-    <link rel="stylesheet" href="vendor/fonts/fonts.css">
 
-    <!-- Leaflet CSS (self-hosted, offline-first) -->
-    <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"SoftwareSourceCode",
+     "name":"WildGuard AI / open-wildguard-hub",
+     "description":"Free, offline-first anti-poaching toolkit: camera-trap detection, gunshot triangulation, patrol risk routing, court-ready evidence and online wildlife-trade monitoring. Runs on a Raspberry Pi, no server, no licence, no subscription.",
+     "codeRepository":"https://github.com/Arbogaste/open-wildguard-hub",
+     "programmingLanguage":"Python",
+     "license":"https://opensource.org/licenses/MIT",
+     "url":"https://arbogaste.github.io/open-wildguard-hub/",
+     "applicationCategory":"Conservation technology",
+     "operatingSystem":"Linux, Raspberry Pi OS",
+     "isAccessibleForFree":true}
+    </script>
 
     <!-- FontAwesome Icons (self-hosted, offline-first) -->
     <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
@@ -101,7 +109,7 @@
         }
 
         body {
-            font-family: 'Outfit', sans-serif;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
             background-color: var(--bg-base);
             color: var(--text-main);
             overflow-x: hidden;
@@ -149,7 +157,7 @@
         }
 
         .logo-text span {
-            font-family: 'Space Mono', monospace;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
             font-size: 11px;
             color: var(--text-muted);
             text-transform: uppercase;
@@ -172,7 +180,7 @@
         }
 
         .lang-btn {
-            font-family: 'Space Mono', monospace;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
             font-size: 11px;
             font-weight: bold;
             padding: 4px 10px;
@@ -191,7 +199,7 @@
         }
 
         .lang-select {
-            font-family: 'Space Mono', monospace;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
             font-size: 11px;
             font-weight: bold;
             padding: 5px 10px;
@@ -222,7 +230,7 @@
             display: flex;
             align-items: center;
             gap: 15px;
-            font-family: 'Space Mono', monospace;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
             font-size: 11px;
         }
 
@@ -262,7 +270,7 @@
         /* Main Dashboard Grid */
         .dashboard-container {
             display: grid;
-            grid-template-columns: 360px 1fr 380px;
+            grid-template-columns: minmax(280px, 340px) 1fr;
             flex: 1;
             height: calc(100vh - 70px);
             padding: 12px;
@@ -356,7 +364,7 @@
         }
 
         .stat-val {
-            font-family: 'Space Mono', monospace;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
             font-size: 20px;
             font-weight: 700;
             margin-top: 3px;
@@ -399,7 +407,7 @@
             display: flex;
             justify-content: space-between;
             font-size: 10px;
-            font-family: 'Space Mono', monospace;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
             color: var(--text-muted);
             margin-bottom: 5px;
         }
@@ -427,7 +435,7 @@
             font-size: 10px;
             cursor: pointer;
             transition: all var(--transition-speed);
-            font-family: 'Outfit', sans-serif;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
             font-weight: 600;
             min-height: 36px; /* WCAG 2.5.5 touch target */
         }
@@ -496,7 +504,7 @@
             border: 1px solid var(--border-glow);
             border-radius: 8px;
             color: var(--text-light, #fff);
-            font-family: 'Space Mono', monospace;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
             font-size: 12px;
             font-weight: bold;
             padding: 8px 12px;
@@ -608,7 +616,7 @@
         }
 
         .idea-status {
-            font-family: 'Space Mono', monospace;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
             font-size: 9px;
             padding: 1px 6px;
             border-radius: 4px;
@@ -624,7 +632,7 @@
         .idea-problem { color: rgba(232,240,244,0.6); }
         .idea-gets    { color: rgba(232,240,244,0.85); }
         .idea-field-label {
-            font-family: 'Space Mono', monospace;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
             font-size: 9px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -635,7 +643,7 @@
         .idea-link {
             display: inline-block;
             margin-top: 7px;
-            font-family: 'Space Mono', monospace;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
             font-size: 10px;
             color: var(--color-primary);
             text-decoration: none;
@@ -646,7 +654,7 @@
         /* Repo list (tab-repos) */
         .repo-list { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
         .repo-item { padding: 8px 10px; background: rgba(255,255,255,0.015); border: 1px solid rgba(255,255,255,0.05); border-radius: 6px; }
-        .repo-name { font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; color: var(--color-info); margin-bottom: 4px; }
+        .repo-name { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 10px; font-weight: 700; color: var(--color-info); margin-bottom: 4px; }
         .repo-name a { color: inherit; text-decoration: none; }
         .repo-name a:hover { text-decoration: underline; }
         .repo-what { font-size: 11px; line-height: 1.5; color: rgba(232,240,244,0.75); }
@@ -670,7 +678,7 @@
             gap: 5px;
         }
         .ov-pill {
-            font-family: 'Space Mono', monospace;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
             font-size: 9px;
             padding: 2px 7px;
             border-radius: 10px;
@@ -697,7 +705,7 @@
         .ov-card-icon { font-size: 16px; margin-bottom: 5px; }
         .ov-card strong { display: block; font-size: 11px; color: var(--color-info); margin-bottom: 4px; line-height: 1.3; }
         .ov-card p { font-size: 10px; line-height: 1.5; color: rgba(232,240,244,0.65); margin-bottom: 5px; }
-        .ov-card a { font-family: 'Space Mono', monospace; font-size: 9px; color: var(--color-primary); text-decoration: none; cursor: pointer; }
+        .ov-card a { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 9px; color: var(--color-primary); text-decoration: none; cursor: pointer; }
         .ov-card a:hover { text-decoration: underline; }
         .ov-card--vision { border-left: 2px solid var(--color-primary); }
         .ov-card--audio  { border-left: 2px solid var(--color-warning); }
@@ -715,7 +723,7 @@
         .ov-nav-btn {
             flex: 1 1 auto;
             padding: 6px 10px;
-            font-family: 'Space Mono', monospace;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
             font-size: 9px;
             background: rgba(255,255,255,0.03);
             border: 1px solid rgba(255,255,255,0.08);
@@ -798,7 +806,7 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 6px;
             padding: 10px;
-            font-family: 'Space Mono', monospace;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
             font-size: 11px;
             color: #b8cddb;
             overflow-x: auto;
@@ -831,7 +839,7 @@
         }
 
         .node-status {
-            font-family: 'Space Mono', monospace;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
             font-size: 9px;
             padding: 1px 5px;
             border-radius: 3px;
@@ -882,7 +890,7 @@
 
         .badge {
             font-size: 9px;
-            font-family: 'Space Mono', monospace;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(255, 255, 255, 0.08);
             padding: 1px 5px;
@@ -901,14 +909,14 @@
             border-radius: 8px;
             padding: 12px;
             margin-top: 10px;
-            font-family: 'Space Mono', monospace;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
             font-size: 10px;
             line-height: 1.5;
             display: none;
         }
 
         .chargesheet-box h4 {
-            font-family: 'Outfit', sans-serif;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
             text-transform: uppercase;
             font-size: 11px;
             margin-bottom: 6px;
@@ -937,6 +945,30 @@
         }
 
         /* ── Credits Footer ── */
+        .site-footer { border-top:1px solid rgba(255,255,255,.08); background:rgba(7,9,14,.92);
+            padding:22px 24px 28px; display:grid; gap:22px; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); }
+        .foot-h { font-size:11px; text-transform:uppercase; letter-spacing:.08em; color:var(--text-muted);
+            margin:0 0 10px; font-weight:700; }
+        .foot-group a { display:block; color:var(--color-primary); text-decoration:none; font-size:13px;
+            padding:4px 0; }
+        .foot-group a:hover, .foot-group a:focus-visible { text-decoration:underline; }
+        .foot-note { font-size:12px; color:var(--text-muted); line-height:1.6; margin:0 0 8px; }
+        .foot-note a { display:inline; }
+        .foot-details summary { font-size:12px; color:var(--text-muted); cursor:pointer; padding:4px 0; }
+        .foot-chips { display:flex; flex-wrap:wrap; gap:6px 14px; margin-top:8px; }
+        .foot-chips a { font-size:12px; }
+        .foot-legal { grid-column:1/-1; font-size:12px; color:var(--text-muted); margin:0;
+            border-top:1px solid rgba(255,255,255,.06); padding-top:14px; }
+        .example-link { display:block; border:1px solid rgba(0,255,102,.25); border-radius:8px;
+            padding:12px 14px; margin-bottom:12px; text-decoration:none;
+            background:rgba(0,255,102,.04); }
+        .example-link:hover, .example-link:focus-visible { border-color:var(--color-primary); }
+        .example-link-t { display:block; color:var(--color-primary); font-weight:700; font-size:13px; }
+        .example-link-d { display:block; color:var(--text-muted); font-size:12px; margin-top:4px; line-height:1.6; }
+        .fold { border:1px solid rgba(255,255,255,.08); border-radius:8px; margin-top:14px; }
+        .fold > summary { padding:10px 12px; cursor:pointer; font-size:12px; color:var(--text-muted); }
+        .fold[open] > summary { border-bottom:1px solid rgba(255,255,255,.08); color:var(--color-primary); }
+        .fold-body { padding:12px; }
         .credits-footer {
             background: rgba(7, 9, 14, 0.92);
             border-top: 1px solid rgba(0, 255, 102, 0.08);
@@ -958,7 +990,7 @@
         }
 
         .credits-label {
-            font-family: 'Space Mono', monospace;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
             font-size: 9px;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -976,7 +1008,7 @@
         }
 
         .credit-chip {
-            font-family: 'Space Mono', monospace;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
             font-size: 9px;
             color: var(--text-muted);
             background: rgba(255, 255, 255, 0.02);
@@ -1006,7 +1038,7 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            font-family: 'Space Mono', monospace;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
             font-size: 10px;
             color: var(--text-muted);
             background: rgba(255, 255, 255, 0.03);
@@ -1031,7 +1063,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            font-family: 'Space Mono', monospace;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
             font-size: 10px;
             color: var(--color-warning);
             flex-shrink: 0;
@@ -1070,7 +1102,6 @@
             }
             .column { height: auto; overflow: visible; }
             .center-column { grid-column: auto !important; }
-            #map { height: 320px; }
         }
 
         @media (max-width: 640px) {
@@ -1166,6 +1197,19 @@
             border:1px dashed var(--border-color,#345); border-radius:4px; padding:3px 7px;
             letter-spacing:.5px; cursor:help; }
         .osint-review { font-size:8px; color:#ffb300; text-transform:uppercase; letter-spacing:.5px; }
+
+        /* Mobile first-aid: one column, tap targets >= 44px, no horizontal scroll. */
+        @media (max-width: 820px) {
+            .dashboard-container { grid-template-columns: 1fr; height: auto; overflow: visible;
+                padding: 10px; }
+            .column { height: auto; overflow: visible; }
+            .tab-nav { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+            .tab-link { min-height: 44px; padding: 10px 14px; white-space: nowrap; }
+            .site-footer { padding: 20px 16px 24px; }
+            header[role="banner"] { flex-wrap: wrap; gap: 10px; }
+        }
+        .tab-link { min-height: 40px; }
+        html, body { max-width: 100%; overflow-x: hidden; }
     </style>
 </head>
 
@@ -1293,44 +1337,26 @@ EVIDENCE INTEGRITY: ALL PASS</code></pre>
         <!-- CENTER COLUMN: Map View & Tabbed Roadmaps -->
         <div class="column center-column" style="grid-column: 2;">
             <!-- Map Top (collapsible for readability) -->
-            <button class="map-toggle" id="map-toggle" onclick="toggleMap()" aria-expanded="false" aria-controls="map-wrapper">
-                <span><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i> <span id="map-toggle-label">Mappa Tattica</span></span>
-                <i class="fa-solid fa-chevron-up map-chevron" aria-hidden="true"></i>
-            </button>
-            <div class="map-wrapper" id="map-wrapper">
-                <div id="map"></div>
-                <div class="map-overlay-controls">
-                    <button class="btn" onclick="triggerSimAlert()"><i class="fa-solid fa-crosshairs"></i> <span
-                            id="btn-txt-sim">Simula Allerta Edge</span></button>
-                    <button class="btn" onclick="calculatePatrolRoute()"><i class="fa-solid fa-route"></i> <span
-                            id="btn-txt-route">Calcola Rotta (MST)</span></button>
-                    <button class="btn" onclick="clearMapLayers()"><i class="fa-solid fa-trash-can"></i> <span
-                            id="btn-txt-clear">Resetta</span></button>
-                </div>
-            </div>
-            <div class="map-note" style="font-size:10px;color:var(--text-muted);padding:6px 2px 0;line-height:1.6;">
-                Synthetic scenario over a real basemap: the stations, tracks and alerts below are generated
-                in your browser to show what the map does. No sensor is connected to this page.
-            </div>
-            <div id="sim-log" aria-live="polite" aria-label="Simulated events"></div>
+            <!-- The tactical map, the simulated alerts and the sample OSINT cards live on demo.html.
+                 They are illustrations, and mixing illustrations with facts is how a reader stops trusting both. -->
+            <a class="example-link" href="demo.html">
+                <span class="example-link-t"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i>
+                    See the example dashboard</span>
+                <span class="example-link-d">Map, patrol routing and simulated alerts, on synthetic data.
+                    Separate page, clearly labelled &mdash; so nothing on this page pretends to be live.</span>
+            </a>
 
             <!-- Tab Panel Bottom -->
             <div class="tab-panel">
-                <div class="tab-nav" role="tablist" aria-label="Dashboard sections">
+                <div class="tab-nav" role="tablist" aria-label="Sections">
                     <button class="tab-link active" onclick="switchTab(event, 'tab-overview')" id="tab-lbl-overview"
-                            role="tab" aria-selected="true" aria-controls="tab-overview">Overview</button>
-                    <button class="tab-link" onclick="switchTab(event, 'tab-roadmap')" id="tab-lbl-roadmap"
-                            role="tab" aria-selected="false" aria-controls="tab-roadmap">All Modules</button>
-                    <button class="tab-link" onclick="switchTab(event, 'tab-docs')" id="tab-lbl-docs"
-                            role="tab" aria-selected="false" aria-controls="tab-docs">Playbooks</button>
-                    <button class="tab-link" onclick="switchTab(event, 'tab-proposal')" id="tab-lbl-proposal"
-                            role="tab" aria-selected="false" aria-controls="tab-proposal">NGO Pitch</button>
-                    <button class="tab-link" onclick="switchTab(event, 'tab-osint')" id="tab-lbl-osint"
-                            role="tab" aria-selected="false" aria-controls="tab-osint">OSINT Leads</button>
+                            role="tab" aria-selected="true" aria-controls="tab-overview" tabindex="0">1 &middot; Start here</button>
                     <button class="tab-link" onclick="switchTab(event, 'tab-toolkit')" id="tab-lbl-toolkit"
-                            role="tab" aria-selected="false" aria-controls="tab-toolkit">Toolkit Status</button>
+                            role="tab" aria-selected="false" aria-controls="tab-toolkit" tabindex="-1">2 &middot; What runs today</button>
+                    <button class="tab-link" onclick="switchTab(event, 'tab-roadmap')" id="tab-lbl-roadmap"
+                            role="tab" aria-selected="false" aria-controls="tab-roadmap" tabindex="-1">3 &middot; The 10 modules</button>
                     <button class="tab-link" onclick="switchTab(event, 'tab-repos')" id="tab-lbl-repos"
-                            role="tab" aria-selected="false" aria-controls="tab-repos">Repos</button>
+                            role="tab" aria-selected="false" aria-controls="tab-repos" tabindex="-1">4 &middot; What we build on</button>
                 </div>
 
                 <div class="tab-content-area">
@@ -1362,7 +1388,7 @@ EVIDENCE INTEGRITY: ALL PASS</code></pre>
                                     See <a href="organizations.html" style="color:var(--color-primary)">Field needs &amp; organizations</a> for who does this work today and what they say they need,
                                     then the <a onclick="switchTab(null,'tab-proposal')" style="color:var(--color-primary);cursor:pointer">NGO pitch</a>.</li>
                                 <li data-i18n="start_here_curious"><strong style="color:var(--color-primary)">You just want to look around.</strong>
-                                    This dashboard is a demo running on sample data. Nothing here calls an external service.</li>
+                                    Nothing on this page is a live feed, and nothing calls an external service. The map and the alert flow live on the <a href="demo.html" style="color:var(--color-primary)">example dashboard</a>.</li>
                                 <li data-i18n="start_here_donate"><strong style="color:var(--color-primary)">You want to donate.</strong>
                                     Not to us — we take no money and sell nothing. The
                                     <a href="organizations.html" style="color:var(--color-primary)">organizations page</a> indexes the groups that fund rangers, dogs, vehicles and court cases.</li>
@@ -1415,6 +1441,50 @@ EVIDENCE INTEGRITY: ALL PASS</code></pre>
                             <button class="ov-nav-btn" onclick="switchTab(null,'tab-repos')">🔗 Open-Source Repos</button>
                             <a class="ov-nav-btn" href="organizations.html" style="text-decoration:none;">🤝 Field Needs</a>
                         </div>
+                    
+                        <details class="fold">
+                            <summary>For NGOs, reserves and funders &mdash; the one-page case</summary>
+                            <div class="fold-body">
+
+                        <div class="docs-block">
+                            <h3 id="doc-title-proposal">Proposta Istituzionale per WWF, Riserve & Guardie Forestali</h3>
+                            <p id="doc-desc-proposal">WildGuard AI è concepito per essere presentato a ONG ed enti
+                                governativi come soluzione sostenibile a basso costo. Fornisce un ecosistema che
+                                garantisce la catena di custodia legale delle prove, ottimizza il coordinamento con
+                                rotte di pattuglia non prevedibili e nessun costo ricorrente. Nessun server esposto, nessuna licenza.</p>
+
+                            <div
+                                style="font-size: 11px; display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
+                                <div
+                                    style="background: rgba(255,255,255,0.02); padding: 8px; border: 1px solid rgba(255,255,255,0.05); border-radius: 4px;">
+                                    <strong style="color: var(--color-primary);" id="prop-lbl-1">1. Sostenibilità
+                                        Economica e Zero Licenze</strong><br>
+                                    <span id="prop-desc-1">Utilizza esclusivamente software open-source e hardware
+                                        commerciale standard (Arduino/ESP32). Nessun canone di abbonamento o vincolo con
+                                        vendor di tecnologie di sorveglianza proprietarie.</span>
+                                </div>
+                                <div
+                                    style="background: rgba(255,255,255,0.02); padding: 8px; border: 1px solid rgba(255,255,255,0.05); border-radius: 4px;">
+                                    <strong style="color: var(--color-warning);" id="prop-lbl-2">2. Validità delle Prove
+                                        in Tribunale</strong><br>
+                                    <span id="prop-desc-2">L'evidenza multimediale viene registrata con un hash
+                                        crittografico SHA-256 e legata ad una catena locale immutabile (hash chain).
+                                        Questo assicura l'integrità e previene obiezioni legali sulle foto delle camera
+                                        trap durante i procedimenti penali.</span>
+                                </div>
+                                <div
+                                    style="background: rgba(255,255,255,0.02); padding: 8px; border: 1px solid rgba(255,255,255,0.05); border-radius: 4px;">
+                                    <strong style="color: var(--color-info);" id="prop-lbl-3">3. Sottile Sicurezza sul
+                                        Campo e Anti-Tracciamento</strong><br>
+                                    <span id="prop-desc-3">I nodi periferici spengono i moduli trasmittenti subito dopo
+                                        l'invio (anti-tagging). Questo impedisce ai bracconieri dotati di scanner di
+                                        localizzare le posizioni dei ranger o le postazioni di guardia.</span>
+                                </div>
+                            </div>
+                        </div>
+                    
+                            </div>
+                        </details>
                     </div>
 
                     <!-- TAB 1: ALL MODULES -->
@@ -1428,10 +1498,11 @@ EVIDENCE INTEGRITY: ALL PASS</code></pre>
                         <div class="ideas-grid" id="roadmap-ideas-container">
                             <!-- Populated dynamically via JS translations -->
                         </div>
-                    </div>
+                    
+                        <details class="fold">
+                            <summary>Playbooks, hardware notes and documentation plan</summary>
+                            <div class="fold-body">
 
-                    <!-- TAB 2: DEVELOPER & ARDUINO TINYML GUIDE -->
-                    <div id="tab-docs" class="tab-pane" role="tabpanel" aria-labelledby="tab-lbl-docs">
                         <div class="docs-block" style="border:1px solid var(--color-primary,#00ff66);background:rgba(0,255,102,0.05);">
                             <h3>📚 Operator Playbooks &amp; Toolkit — the real content lives in <code>docs/</code></h3>
                             <p>This dashboard is an illustrative demo. The actionable material — one playbook per
@@ -1540,7 +1611,7 @@ EVIDENCE INTEGRITY: ALL PASS</code></pre>
                             </div>
 
                             <strong
-                                style="font-size: 11px; font-family: 'Space Mono', monospace; color: var(--color-info);">Reference firmware (Nicla Vision / ESP32):</strong>
+                                style="font-size: 11px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--color-info);">Reference firmware (Nicla Vision / ESP32):</strong>
                             <div class="code-snippet">#include &lt;Nicla_System.h&gt;
                                 #include &lt;EloquentTinyML.h&gt;       // TensorFlow Lite edge wrapper
                                 #include "model_yolo_quantized.h"  // quantised TinyML model
@@ -1586,20 +1657,27 @@ EVIDENCE INTEGRITY: ALL PASS</code></pre>
                             <p id="doc-desc-docs-strategy"><code>dev.md</code> is the master technical map. As recurring workflows stabilize, each use case should move into its own focused document so the project can be extended without losing clarity.</p>
                             <div id="doc-docs-strategy-list" style="display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:10px; margin-top:10px;"></div>
                         </div>
+                    
+                            </div>
+                        </details>
                     </div>
+
+                    <!-- TAB 2: DEVELOPER & ARDUINO TINYML GUIDE -->
+                    
 
                     <!-- TAB: TOOLKIT STATUS — mock vision of what each module produces (static, no API calls) -->
                     <div id="tab-toolkit" class="tab-pane" role="tabpanel" aria-labelledby="tab-lbl-toolkit">
                         <p style="font-size:11px;color:var(--text-muted);margin:0 0 12px;line-height:1.6;">
-                            What you actually get when you run each module. Status, the one command to start,
-                            and a sample of the output. <strong>Static preview — this page makes no external
-                            API calls.</strong> See <code>docs/INTEGRATION-MAP.md</code> for what to plug in.
+                            One card per module: what it produces, the command that starts it, and the output of a
+                            real run. Nothing here is connected to a sensor &mdash; the point is that you can
+                            reproduce every line yourself in under a minute.
                         </p>
                         <div id="toolkit-status-grid" class="osint-grid"></div>
-                    </div>
 
-                    <!-- TAB: OSINT LEADS (M7) — rendered from toolkit/python output (Tactical Events) -->
-                    <div id="tab-osint" class="tab-pane" role="tabpanel" aria-labelledby="tab-lbl-osint">
+                        <details class="fold">
+                            <summary>How the online-trade scanner (M7) decides something is suspicious</summary>
+                            <div class="fold-body">
+
                         <p style="font-size:11px;color:var(--text-muted);margin:0 0 10px;line-height:1.6;">
                             <code>toolkit/python/osint_scrape.py</code> scores public marketplace listings against a
                             dictionary of coded trade terms. <strong>Rule-based, no LLM, no external service</strong> — you can
@@ -1627,11 +1705,12 @@ All flags are SUSPECTED and require human review before any action.
                             the single most useful contribution an analyst can make —
                             <a href="organizations.html" style="color:var(--color-warning);">see why</a>.
                         </div>
-                        <div style="font-size:10px;color:var(--text-muted);margin:0 0 8px;">
-                            The cards below are the bundled sample output, shown to illustrate the event shape.
-                        </div>
-                        <div id="osint-leads-grid" class="osint-grid"></div>
+                        
+                    
+                            </div>
+                        </details>
                     </div>
+
 
                     <!-- TAB 3: OPEN-SOURCE REPOS -->
                     <div id="tab-repos" class="tab-pane" role="tabpanel" aria-labelledby="tab-lbl-repos">
@@ -1767,98 +1846,8 @@ All flags are SUSPECTED and require human review before any action.
                     </div>
 
                     <!-- TAB 4: PITCH PROPOSAL -->
-                    <div id="tab-proposal" class="tab-pane" role="tabpanel" aria-labelledby="tab-lbl-proposal">
-                        <div class="docs-block">
-                            <h3 id="doc-title-proposal">Proposta Istituzionale per WWF, Riserve & Guardie Forestali</h3>
-                            <p id="doc-desc-proposal">WildGuard AI è concepito per essere presentato a ONG ed enti
-                                governativi come soluzione sostenibile a basso costo. Fornisce un ecosistema che
-                                garantisce la catena di custodia legale delle prove, ottimizza il coordinamento con
-                                rotte di pattuglia non prevedibili e nessun costo ricorrente. Nessun server esposto, nessuna licenza.</p>
+                    
 
-                            <div
-                                style="font-size: 11px; display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
-                                <div
-                                    style="background: rgba(255,255,255,0.02); padding: 8px; border: 1px solid rgba(255,255,255,0.05); border-radius: 4px;">
-                                    <strong style="color: var(--color-primary);" id="prop-lbl-1">1. Sostenibilità
-                                        Economica e Zero Licenze</strong><br>
-                                    <span id="prop-desc-1">Utilizza esclusivamente software open-source e hardware
-                                        commerciale standard (Arduino/ESP32). Nessun canone di abbonamento o vincolo con
-                                        vendor di tecnologie di sorveglianza proprietarie.</span>
-                                </div>
-                                <div
-                                    style="background: rgba(255,255,255,0.02); padding: 8px; border: 1px solid rgba(255,255,255,0.05); border-radius: 4px;">
-                                    <strong style="color: var(--color-warning);" id="prop-lbl-2">2. Validità delle Prove
-                                        in Tribunale</strong><br>
-                                    <span id="prop-desc-2">L'evidenza multimediale viene registrata con un hash
-                                        crittografico SHA-256 e legata ad una catena locale immutabile (hash chain).
-                                        Questo assicura l'integrità e previene obiezioni legali sulle foto delle camera
-                                        trap durante i procedimenti penali.</span>
-                                </div>
-                                <div
-                                    style="background: rgba(255,255,255,0.02); padding: 8px; border: 1px solid rgba(255,255,255,0.05); border-radius: 4px;">
-                                    <strong style="color: var(--color-info);" id="prop-lbl-3">3. Sottile Sicurezza sul
-                                        Campo e Anti-Tracciamento</strong><br>
-                                    <span id="prop-desc-3">I nodi periferici spengono i moduli trasmittenti subito dopo
-                                        l'invio (anti-tagging). Questo impedisce ai bracconieri dotati di scanner di
-                                        localizzare le posizioni dei ranger o le postazioni di guardia.</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <!-- RIGHT COLUMN: OSINT & Node Health -->
-        <div class="column">
-            <!-- Node Health Status -->
-            <div class="panel" style="flex: 0 0 auto;">
-                <div class="panel-header">
-                    <span class="panel-title"><i class="fa-solid fa-server"></i><span id="txt-title-health">Stato dei
-                            Sotto-Repository</span></span>
-                </div>
-                <div class="panel-content node-list">
-                    <div class="node-item">
-                        <span class="node-name"><a href="https://github.com/tanmaynikhare45/FaunaScope-Wildlife-Camera-Trap-Analysis-Platform" target="_blank" rel="noopener">FaunaScope (TrapSense)</a></span>
-                        <span class="node-status status-online">ONLINE</span>
-                    </div>
-                    <div class="node-item">
-                        <span class="node-name"><a href="https://github.com/KarnaPratik/Forest-Conservation-System" target="_blank" rel="noopener">Forest-Conservation (VanaRakshya)</a></span>
-                        <span class="node-status status-online">ONLINE</span>
-                    </div>
-                    <div class="node-item">
-                        <span class="node-name"><a href="https://github.com/lily-x/PAWS-public" target="_blank" rel="noopener">PAWS-public (Predictor)</a></span>
-                        <span class="node-status status-online">ONLINE</span>
-                    </div>
-                    <div class="node-item">
-                        <span class="node-name"><a href="https://github.com/Siddhanthkjain2005/Wildlife-News" target="_blank" rel="noopener">Wildlife-News (OSINT Parser)</a></span>
-                        <span class="node-status status-online">ONLINE</span>
-                    </div>
-                    <div class="node-item">
-                        <span class="node-name"><a href="https://github.com/MeGaurav4/WildlifeFL" target="_blank" rel="noopener">WildlifeFL (Federated Learning)</a></span>
-                        <span class="node-status status-degraded">DEGRADED</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- OSINT Feed and Auto Chargesheet Draft -->
-            <div class="panel" style="flex: 1; min-height: 0;">
-                <div class="panel-header">
-                    <span class="panel-title"><i class="fa-solid fa-globe" style="color: var(--color-info);"></i><span
-                            id="txt-title-osint">Intelligence Feed</span></span>
-                </div>
-                <div class="panel-content" id="osint-feed-container">
-                    <!-- Populated dynamically via JS translations -->
-                </div>
-                <!-- Legal Report output — shown when user clicks Draft Legal Report -->
-                <div id="chargesheet-output" class="chargesheet-box" style="display:none; margin:0 12px 12px; border-radius:6px; flex-shrink:0;">
-                    <h4 id="chargesheet-title-lbl">📋 Legal Report Draft</h4>
-                    <pre id="chargesheet-text" class="chargesheet-content"></pre>
-                    <div style="display:flex; gap:6px; margin-top:8px;">
-                        <button class="btn" style="font-size:9px; padding:3px 8px;" onclick="copyChargesheet()">Copy to clipboard</button>
-                        <button class="btn" style="font-size:9px; padding:3px 8px; opacity:0.6;" onclick="document.getElementById('chargesheet-output').style.display='none'">✕ Close</button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -1866,60 +1855,51 @@ All flags are SUSPECTED and require human review before any action.
     </main>
 
     <!-- Credits Footer: upstream open-source repos -->
-    <footer class="credits-footer" role="contentinfo">
-        <span class="credits-label"><i class="fa-solid fa-heart" style="color:var(--color-danger);"></i>&nbsp;Built
-            on</span>
-        <div class="credits-repos">
-            <a class="credit-chip our-repo" href="https://github.com/Arbogaste/open-wildguard-hub" target="_blank" rel="noopener">⭐
-                open-wildguard-hub (questo repo)</a>
-            <a class="credit-chip" href="readme.html"><i class="fa-solid fa-book-open" aria-hidden="true"></i> Read README / Mission</a>
-            <a class="credit-chip" href="organizations.html" data-i18n="nav_field_needs"><i class="fa-solid fa-people-group" aria-hidden="true"></i> Field needs &amp; organizations</a>
-            <a class="credit-chip" href="privacy.html" data-i18n="pv_footer_link">Privacy notice</a>
-            <a class="credit-chip" href="https://github.com/microsoft/Biodiversity" target="_blank">Biodiversity</a>
-            <a class="credit-chip" href="https://github.com/microsoft/Pytorch-Wildlife" target="_blank">Pytorch-Wildlife</a>
-            <a class="credit-chip" href="https://github.com/microsoft/MegaDetector" target="_blank">MegaDetector</a>
-            <a class="credit-chip" href="https://github.com/eceo-epfl/MammAlps" target="_blank">MammAlps</a>
-            <a class="credit-chip" href="https://github.com/tnc-ca-geo/animl-frontend" target="_blank">Animl</a>
-            <a class="credit-chip" href="https://github.com/AudtheiaOfficial/audtheia-environmental-monitoring" target="_blank">Audtheia</a>
-            <a class="credit-chip" href="https://github.com/Kerbal12/Ecosentinel" target="_blank">Ecosentinel</a>
-            <a class="credit-chip"
-                href="https://github.com/tanmaynikhare45/FaunaScope-Wildlife-Camera-Trap-Analysis-Platform"
-                target="_blank">FaunaScope (TrapSense AI)</a>
-            <a class="credit-chip" href="https://github.com/KarnaPratik/Forest-Conservation-System"
-                target="_blank">Forest-Conservation (VanaRakshya)</a>
-            <a class="credit-chip" href="https://github.com/grac3smith/Illegal_Elephant_Poaching_App"
-                target="_blank">Illegal Elephant Poaching App</a>
-            <a class="credit-chip" href="https://github.com/lily-x/PAWS-public" target="_blank">PAWS-public (Harvard
-                Teamcore)</a>
-            <a class="credit-chip"
-                href="https://github.com/violentlydave/Poaching-Hunting-in-an-Uncooperative-Environment"
-                target="_blank">Poaching-Hunting OPSEC</a>
-            <a class="credit-chip" href="https://github.com/Tarshdeep2210/Poaching-detection"
-                target="_blank">Poaching-detection (EfficientNet)</a>
-            <a class="credit-chip"
-                href="https://github.com/Ruthwik9590/Tracking-and-Poaching-Alert-System-using-Advanced-Data-Structures"
-                target="_blank">Tracking & Alert DSA</a>
-            <a class="credit-chip" href="https://github.com/Siddhanthkjain2005/Wildlife-News"
-                target="_blank">Wildlife-News (WTI / OSINT)</a>
-            <a class="credit-chip" href="https://github.com/MeGaurav4/WildlifeFL" target="_blank">WildlifeFL (Federated
-                Learning)</a>
-            <a class="credit-chip" href="https://github.com/lemonadedw/anti-poaching-platform"
-                target="_blank">anti-poaching-platform</a>
-            <a class="credit-chip" href="https://github.com/uw-cefs/genetic-forensic-portal"
-                target="_blank">genetic-forensic-portal (UW)</a>
-            <a class="credit-chip" href="https://github.com/mikukula/greenwood" target="_blank">greenwood
-                (Bioacoustics)</a>
-            <a class="credit-chip" href="https://github.com/oliviergimenez/poaching_occupancy"
-                target="_blank">poaching_occupancy (HMM)</a>
-            <a class="credit-chip" href="https://github.com/karthikka430-rgb/wildlife-poaching-detection"
-                target="_blank">wildlife-poaching-detection</a>
-            <a class="credit-chip" href="https://github.com/lucashu1/wildlifeRL" target="_blank">wildlifeRL (DDPG
-                RL)</a>
+    <footer class="site-footer" role="contentinfo">
+        <nav class="foot-group" aria-labelledby="foot-h-project">
+            <h2 class="foot-h" id="foot-h-project">This project</h2>
+            <a href="https://github.com/Arbogaste/open-wildguard-hub" target="_blank" rel="noopener">Repository (MIT)</a>
+            <a href="readme.html">Mission &amp; README</a>
+            <a href="organizations.html">Field needs &amp; organizations</a>
+            <a href="demo.html">Example dashboard</a>
+            <a href="scriptplay.html">Awareness video script generator</a>
+            <a href="privacy.html" data-i18n="pv_footer_link">Privacy notice</a>
+        </nav>
+        <div class="foot-group">
+            <h2 class="foot-h">Built on the work of others</h2>
+            <p class="foot-note">This repo integrates and documents existing open-source projects rather than
+                replacing them. Full credits and integration notes in
+                <a href="https://github.com/Arbogaste/open-wildguard-hub/tree/main/docs#readme" target="_blank" rel="noopener">docs/</a>.</p>
+            <details class="foot-details">
+                <summary>19 upstream projects</summary>
+                <div class="foot-chips">
+                <a href="https://github.com/microsoft/Biodiversity" target="_blank" rel="noopener">Biodiversity</a>
+                <a href="https://github.com/microsoft/Pytorch-Wildlife" target="_blank" rel="noopener">Pytorch-Wildlife</a>
+                <a href="https://github.com/microsoft/MegaDetector" target="_blank" rel="noopener">MegaDetector</a>
+                <a href="https://github.com/eceo-epfl/MammAlps" target="_blank" rel="noopener">MammAlps</a>
+                <a href="https://github.com/tnc-ca-geo/animl-frontend" target="_blank" rel="noopener">Animl</a>
+                <a href="https://github.com/AudtheiaOfficial/audtheia-environmental-monitoring" target="_blank" rel="noopener">Audtheia</a>
+                <a href="https://github.com/Kerbal12/Ecosentinel" target="_blank" rel="noopener">Ecosentinel</a>
+                <a href="https://github.com/KarnaPratik/Forest-Conservation-System" target="_blank" rel="noopener">Forest-Conservation (VanaRakshya)</a>
+                <a href="https://github.com/grac3smith/Illegal_Elephant_Poaching_App" target="_blank" rel="noopener">Illegal Elephant Poaching App</a>
+                <a href="https://github.com/lily-x/PAWS-public" target="_blank" rel="noopener">PAWS-public (Harvard Teamcore)</a>
+                <a href="https://github.com/Tarshdeep2210/Poaching-detection" target="_blank" rel="noopener">Poaching-detection (EfficientNet)</a>
+                <a href="https://github.com/Siddhanthkjain2005/Wildlife-News" target="_blank" rel="noopener">Wildlife-News (WTI / OSINT)</a>
+                <a href="https://github.com/MeGaurav4/WildlifeFL" target="_blank" rel="noopener">WildlifeFL (Federated Learning)</a>
+                <a href="https://github.com/lemonadedw/anti-poaching-platform" target="_blank" rel="noopener">anti-poaching-platform</a>
+                <a href="https://github.com/uw-cefs/genetic-forensic-portal" target="_blank" rel="noopener">genetic-forensic-portal (UW)</a>
+                <a href="https://github.com/mikukula/greenwood" target="_blank" rel="noopener">greenwood (Bioacoustics)</a>
+                <a href="https://github.com/oliviergimenez/poaching_occupancy" target="_blank" rel="noopener">poaching_occupancy (HMM)</a>
+                <a href="https://github.com/karthikka430-rgb/wildlife-poaching-detection" target="_blank" rel="noopener">wildlife-poaching-detection</a>
+                <a href="https://github.com/lucashu1/wildlifeRL" target="_blank" rel="noopener">wildlifeRL (DDPG RL)</a>
+                </div>
+            </details>
         </div>
+        <p class="foot-legal">MIT licensed. No cookies, no analytics, no tracking.
+            Nothing on this site is a live feed.</p>
     </footer>
 
     <!-- Leaflet.js library (self-hosted, offline-first) -->
-    <script src="vendor/leaflet/leaflet.js"></script>
 
     <!-- Register offline-first service worker (caches shell + vendor assets) -->
     <script>
@@ -2129,20 +2109,7 @@ All flags are SUSPECTED and require human review before any action.
             document.getElementById('lbl-collars').innerText = lang.lbl_collars;
             document.getElementById('lbl-osint').innerText = lang.lbl_osint;
             document.getElementById('txt-title-alerts').innerText = lang.txt_title_alerts;
-            document.getElementById('txt-title-health').innerText = lang.txt_title_health;
-            document.getElementById('txt-title-osint').innerText = lang.txt_title_osint;
 
-            // The mock alert cards were removed: the left column now shows real toolkit output instead.
-            // These selectors stay tolerant so a future live-data panel can reuse the same keys.
-            document.querySelectorAll('.btn-dispatch').forEach(btn => btn.innerText = lang.btn_dispatch);
-            document.querySelectorAll('.btn-locate').forEach(btn => btn.innerText = lang.btn_locate);
-
-            // Controls
-            document.getElementById('btn-txt-sim').innerText = lang.btn_txt_sim;
-            document.getElementById('btn-txt-route').innerText = lang.btn_txt_route;
-            document.getElementById('btn-txt-clear').innerText = lang.btn_txt_clear;
-            const mtl = document.getElementById('map-toggle-label');
-            if (mtl && lang.map_toggle_label) mtl.innerText = lang.map_toggle_label;
 
             // Tab Labels
             if (lang.tab_lbl_overview) document.getElementById('tab-lbl-overview').innerText = lang.tab_lbl_overview;
@@ -2239,24 +2206,6 @@ All flags are SUSPECTED and require human review before any action.
                 ideasContainer.insertAdjacentHTML('beforeend', card);
             });
 
-            // Render OSINT Feed
-            const osintContainer = document.getElementById('osint-feed-container');
-            osintContainer.innerHTML = '';
-            lang.osint.forEach(item => {
-                const box = `
-                    <div class="osint-item">
-                        <div class="osint-title">${item.title}</div>
-                        <div class="osint-summary">${item.desc}</div>
-                        <div class="osint-tags osint-item-actions">
-                            <span class="badge badge-schedule">${item.schedule}</span>
-                            <span class="badge">${item.tag}</span>
-                            <button class="btn" style="padding: 2px 6px; font-size: 9px; margin-left: auto;" onclick="generateChargesheet('${item.specie}', '${item.reato}', '${item.sezioni}')">${currentLanguage === 'it' ? '📋 Bozza Verbale' : '📋 Draft Legal Report'}</button>
-                            <button class="btn" style="padding: 2px 6px; font-size: 9px; background:rgba(0,188,212,0.1); border-color:rgba(0,188,212,0.3); color:var(--color-info);" onclick="openScriptplay('${encodeURIComponent(item.title)}','${encodeURIComponent(item.desc)}','${item.specie}','${item.tag}')">✍️ Video Script</button>
-                        </div>
-                    </div>
-                `;
-                osintContainer.insertAdjacentHTML('beforeend', box);
-            });
         }
 
         // Toggling Language function
@@ -2300,6 +2249,23 @@ All flags are SUSPECTED and require human review before any action.
         }
 
         // Tab Switching logic
+        // Keyboard support for the tab bar (WAI-ARIA authoring practice: arrows, Home, End).
+        document.addEventListener('keydown', (e) => {
+            const bar = e.target.closest && e.target.closest('.tab-nav');
+            if (!bar || !e.target.classList.contains('tab-link')) return;
+            const tabs = [...bar.querySelectorAll('.tab-link')];
+            const i = tabs.indexOf(e.target);
+            let n = null;
+            if (e.key === 'ArrowRight') n = (i + 1) % tabs.length;
+            else if (e.key === 'ArrowLeft') n = (i - 1 + tabs.length) % tabs.length;
+            else if (e.key === 'Home') n = 0;
+            else if (e.key === 'End') n = tabs.length - 1;
+            if (n === null) return;
+            e.preventDefault();
+            tabs[n].focus();
+            tabs[n].click();
+        });
+
         function switchTab(evt, tabName) {
             const tabpanes = document.getElementsByClassName("tab-pane");
             for (let i = 0; i < tabpanes.length; i++) tabpanes[i].classList.remove("active");
@@ -2307,206 +2273,20 @@ All flags are SUSPECTED and require human review before any action.
             for (let i = 0; i < tablinks.length; i++) {
                 tablinks[i].classList.remove("active");
                 tablinks[i].setAttribute("aria-selected", "false");
+                tablinks[i].setAttribute("tabindex", "-1");
             }
             document.getElementById(tabName).classList.add("active");
             // evt can be null when called from overview nav buttons
             if (evt && evt.currentTarget) {
                 evt.currentTarget.classList.add("active");
                 evt.currentTarget.setAttribute("aria-selected", "true");
+                evt.currentTarget.setAttribute("tabindex", "0");
             } else {
                 // find matching tab-link by aria-controls
                 const match = document.querySelector(`.tab-link[aria-controls="${tabName}"]`);
-                if (match) { match.classList.add("active"); match.setAttribute("aria-selected", "true"); }
+                if (match) { match.classList.add("active"); match.setAttribute("aria-selected", "true");
+                             match.setAttribute("tabindex", "0"); }
             }
-        }
-
-        // Init Map of Serengeti-like park area (mocked coordinates)
-        const centerCoords = [-2.35, 34.83];
-        const map = L.map('map', {
-            zoomControl: true,
-            attributionControl: false
-        }).setView(centerCoords, 12);
-
-        // Dark-mode tactical map tiles. Online: CartoCDN dark basemap.
-        // Offline-first: failed tiles fall back to a local dark placeholder so the
-        // command center (markers, routes, overlays) stays usable with no network.
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-            maxZoom: 20,
-            errorTileUrl: 'vendor/leaflet/tile-offline.png',
-            crossOrigin: true
-        }).addTo(map);
-
-        // Layer groups for dynamic controls
-        const markerLayer = L.layerGroup().addTo(map);
-        const routeLayer = L.layerGroup().addTo(map);
-
-        // Core data
-        const rangerStations = [
-            { name: "Stazione Nord", coords: [-2.312, 34.821] },
-            { name: "Stazione Sud", coords: [-2.385, 34.851] },
-            { name: "Posto di Controllo Ovest", coords: [-2.348, 34.789] }
-        ];
-
-        // Draw initial ranger stations
-        rangerStations.forEach(station => {
-            L.marker(station.coords, {
-                icon: L.divIcon({
-                    html: `<i class="fa-solid fa-building-shield" style="color: #00bcd4; font-size: 16px; text-shadow: 0 0 6px #00bcd4;"></i>`,
-                    className: 'custom-icon',
-                    iconSize: [20, 20]
-                })
-            }).bindPopup(`<b>${station.name}</b><br>Stazione Ranger`).addTo(markerLayer);
-        });
-
-        // Time ticker helper
-        function updateTime() {
-            const now = new Date();
-            document.getElementById('tactical-time').innerText = now.toUTCString().replace("GMT", "UTC");
-        }
-        setInterval(updateTime, 1000);
-        updateTime();
-
-        // Dispatch ranger action (Dijkstra simulation)
-        function dispatchRanger(lat, lon, sensorId) {
-            routeLayer.clearLayers();
-            const lang = translations[currentLanguage];
-
-            // Draw threat point
-            const threatMarker = L.marker([lat, lon], {
-                icon: L.divIcon({
-                    html: `<i class="fa-solid fa-circle-exclamation" style="color: #ff3344; font-size: 22px; text-shadow: 0 0 10px #ff3344;"></i>`,
-                    className: 'custom-icon',
-                    iconSize: [25, 25]
-                })
-            }).addTo(routeLayer);
-
-            // Find "nearest" station (Simple Euclidean distance mock Dijkstra)
-            let nearestStation = rangerStations[0];
-            let minDist = Infinity;
-            rangerStations.forEach(s => {
-                let d = Math.sqrt(Math.pow(s.coords[0] - lat, 2) + Math.pow(s.coords[1] - lon, 2));
-                if (d < minDist) {
-                    minDist = d;
-                    nearestStation = s;
-                }
-            });
-
-            // Draw line simulating shortest path route
-            const route = L.polyline([nearestStation.coords, [lat, lon]], {
-                color: '#00ff66',
-                weight: 3,
-                dashArray: '5, 10',
-                opacity: 0.8
-            }).addTo(routeLayer);
-
-            map.fitBounds(route.getBounds(), { padding: [50, 50] });
-
-            alert(`${lang.alert_dispatch}${sensorId} (${nearestStation.name}).`);
-        }
-
-        // Simulate edge alert
-        function triggerSimAlert() {
-            const randomLat = centerCoords[0] + (Math.random() - 0.5) * 0.08;
-            const randomLon = centerCoords[1] + (Math.random() - 0.5) * 0.08;
-            const log = document.getElementById('sim-log');
-            const alertId = 'alert-' + Date.now();
-            const lang = translations[currentLanguage];
-
-            const alertHtml = `
-                <div class="alert-item critical" id="${alertId}">
-                    <div class="alert-meta">
-                        <span>CAMERA_EDGE_SIM</span>
-                        <span>${currentLanguage === 'it' ? 'Tempo Reale' : 'Realtime'}</span>
-                    </div>
-                    <div class="alert-desc">${currentLanguage === 'it' ? 'Rilevamento Sospetto Intruso' : 'Suspicious Intruder Detected'}</div>
-                    <div class="alert-footer">
-                        <span class="badge" style="color: var(--color-danger); border-color: rgba(255, 51, 68, 0.2);">CONF: 91%</span>
-                        <button class="btn btn-danger" onclick="dispatchRanger(${randomLat}, ${randomLon}, 'CAMERA_EDGE_SIM')">${lang.btn_dispatch}</button>
-                    </div>
-                </div>
-            `;
-            log.insertAdjacentHTML('afterbegin', alertHtml);
-            // Deliberately does not touch the counters on the left: those describe the repository,
-            // not a sensor network, and a simulated click must never inflate them.
-
-            // Mark on map
-            L.marker([randomLat, randomLon], {
-                icon: L.divIcon({
-                    html: `<i class="fa-solid fa-person-rifle" style="color: #ff3344; font-size: 20px; text-shadow: 0 0 8px #ff3344;"></i>`,
-                    className: 'custom-icon-alert',
-                    iconSize: [20, 20]
-                })
-            }).addTo(routeLayer).bindPopup(`<b>${currentLanguage === 'it' ? 'Allarme Intrusione' : 'Intrusion Alert'}</b>`).openPopup();
-        }
-
-        // Calculate Minimum Spanning Tree patrol path for all stations
-        function calculatePatrolRoute() {
-            routeLayer.clearLayers();
-            const lang = translations[currentLanguage];
-
-            const points = rangerStations.map(s => s.coords);
-            const polyline = L.polygon(points, {
-                color: '#00bcd4',
-                fillColor: '#00bcd4',
-                fillOpacity: 0.05,
-                weight: 2
-            }).addTo(routeLayer);
-
-            map.fitBounds(polyline.getBounds(), { padding: [50, 50] });
-            alert(lang.alert_route_calculated);
-        }
-
-        // Generate legal document chargesheet
-        function generateChargesheet(specie, reato, sezioni) {
-            const box = document.getElementById('chargesheet-output');
-            const content = document.getElementById('chargesheet-text');
-            const now = new Date();
-            const lang = translations[currentLanguage];
-
-            const template = `${currentLanguage === 'it' ? 'VERBALE DI REPARTO FORENSE' : 'FORENSIC INCIDENT REPORT'} // CITES & WPA COMPLIANT
---------------------------------------------------
-${currentLanguage === 'it' ? 'DATA DI REDAZIONE' : 'REPORT DATE'}: ${now.toLocaleDateString()} ${now.toLocaleTimeString()}
-${currentLanguage === 'it' ? 'GIURISDIZIONE' : 'JURISDICTION'}: Forestry Territorial Office - Reserve Division
-
-${currentLanguage === 'it' ? "CAPO D'ACCUSA" : 'ACCUSATION'}:
-Wildlife Protection Act Violation.
-${currentLanguage === 'it' ? 'SPECIE COINVOLTA' : 'INVOLVED SPECIES'}: ${specie} (Ref. Schedules WPA)
-${currentLanguage === 'it' ? 'TIPO DI REATO' : 'OFFENSE TYPE'}: ${reato}
-${currentLanguage === 'it' ? 'SEZIONI APPLICATE' : 'APPLIED SECTIONS'}: WPA 1972, ${sezioni}
-
-${currentLanguage === 'it' ? 'STATO DELLE PROVE' : 'EVIDENCE STATUS'}:
-- Original media files securely archived in local vault.
-- SHA-256 generated and appended to local immutable hash chain.
-- Integrity verification: OK.
-
-Forest Officer Authorized Signature
---------------------------------------------------`;
-
-            content.innerText = template;
-            box.style.display = 'block';
-        }
-
-        function copyChargesheet() {
-            const text = document.getElementById('chargesheet-text').innerText;
-            navigator.clipboard.writeText(text);
-            alert(currentLanguage === 'it' ? "Verbale legale copiato negli appunti." : "Legal writ copied to clipboard.");
-        }
-
-        function clearMapLayers() {
-            routeLayer.clearLayers();
-        }
-
-        // Collapse/expand the tactical map so the tabs (Integration Plans etc) read better.
-        function toggleMap(force) {
-            const w = document.getElementById('map-wrapper');
-            const t = document.getElementById('map-toggle');
-            const collapsed = (typeof force === 'boolean') ? force : !w.classList.contains('collapsed');
-            w.classList.toggle('collapsed', collapsed);
-            t.classList.toggle('collapsed', collapsed);
-            t.setAttribute('aria-expanded', String(!collapsed));
-            try { localStorage.setItem('wildguard_map_collapsed', collapsed ? '1' : '0'); } catch (_) {}
-            // Leaflet needs a resize nudge when the container reopens
-            if (!collapsed && typeof map !== 'undefined') setTimeout(() => map.invalidateSize(), 250);
         }
 
         // Open scriptplay generator page with OSINT news item data
@@ -2519,54 +2299,6 @@ Forest Officer Authorized Signature
             });
             window.open('scriptplay.html?' + params.toString(), '_blank');
         }
-
-        /* ---- M7 OSINT lead cards: render from Tactical Events (toolkit/python output) ---- */
-        // Bundled sample (mirrors toolkit/data/sample_osint_leads.json). Same shape osint_scrape.py emits.
-        // Store names + listing refs are masked on purpose (privacy / no live linking to listings).
-        const OSINT_SAMPLE = [
-            {evidence_url:"marketplace://listing/anon-7731",confidence:0.95,evidence_hash:"641ceb529a7e4f10b8d2a9c3e7f04a1b6d8c2e9f30a5b71c8e2f0d4a6b9c1e35",
-             metadata:{title:"Antico avorio lavorato - white gold, no documenti",score:9,species_suspected:"ivory",price:"1.200,00 EUR",location_text:"Napoli",seller_contact:"+39 333 1234567",slang_terms_found:["white gold","avorio","no documenti"],source_site:"MarketPlace A",scraped_at_iso:"2026-06-21T03:42:11Z",needs_human_review:true,image:null}},
-            {evidence_url:"classifieds://listing/anon-4420",confidence:0.78,evidence_hash:"a7b4f2188c0e6d31f95a2b7c4e8d019a3f6b2c8e1d4a709b5c3e6f1a2d8b4c70",
-             metadata:{title:"Richiamo vivo da caccia - cardellino selvatico, senza permesso",score:7,species_suspected:"songbird",price:"80,00 EUR",location_text:"Foggia",seller_contact:"venditore_anon@example.com",slang_terms_found:["cardellino","richiamo vivo","selvatico","senza permesso"],source_site:"Classifieds B",scraped_at_iso:"2026-06-21T04:42:11Z",needs_human_review:true,image:null}},
-            {evidence_url:"overseas-shop://listing/anon-9015",confidence:0.5,evidence_hash:"0d2f9a4c7e1b6835a0c4e8f2d6b9170c3a5e8f1b4d7092a6c8e0f3b5d1a7c920",
-             metadata:{title:"Carved pendant - pangolin scale style, traditional",score:4,species_suspected:"pangolin",price:"$24.90",location_text:null,seller_contact:null,slang_terms_found:["artichoke"],source_site:"Overseas Shop C",scraped_at_iso:"2026-06-21T05:42:11Z",needs_human_review:true,image:null}}
-        ];
-        function listingRef(u){ const m=String(u||"").match(/anon-[\w]+/); return m?m[0]:"listing-redacted"; }
-        const SPECIES_ICON = {ivory:"🐘",rhino_horn:"🦏",pangolin:"🦔",big_cat:"🐅",parrot:"🦜",songbird:"🐦",shark:"🦈",turtle:"🐢",generic:"⁉️"};
-        function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));}
-        function severity(sc){return sc>=8?"high":sc>=5?"med":"low";}
-        function renderOsintLeads(events){
-            const grid=document.getElementById('osint-leads-grid'); if(!grid)return;
-            const rows=[...events].sort((a,b)=>(b.metadata.score||0)-(a.metadata.score||0));
-            grid.innerHTML=rows.map(ev=>{
-                const m=ev.metadata, sev=severity(m.score||0), ic=SPECIES_ICON[m.species_suspected]||"⁉️";
-                const thumb=m.image?`style="background-image:url('${esc(m.image)}')"`:"";
-                return `<div class="osint-card sev-${sev}">
-                  <div class="osint-thumb" ${thumb}>${m.image?"":ic}</div>
-                  <div class="osint-body">
-                    <div class="osint-title">${esc(m.title)}</div>
-                    <div class="osint-row"><span>Species</span><b>${esc(m.species_suspected||"?")}</b></div>
-                    <div class="osint-row"><span>Price</span><b>${esc(m.price||"—")}</b></div>
-                    <div class="osint-row"><span>Location</span><b>${esc(m.location_text||"—")}</b></div>
-                    <div class="osint-row"><span>Site</span><b>${esc(m.source_site||"")}</b></div>
-                    <div class="osint-slang">${(m.slang_terms_found||[]).map(t=>`<span class="osint-tag">${esc(t)}</span>`).join("")}</div>
-                  </div>
-                  <div class="osint-foot">
-                    <span class="osint-score">SCORE ${m.score} · ${Math.round((ev.confidence||0)*100)}%</span>
-                    <span class="osint-ref" title="Listing reference is masked. Full URL stays in the secure case file (M9), not on the public dashboard — naming a specific shop for a suspected crime is a legal/defamation risk.">ref ${esc(listingRef(ev.evidence_url))} 🔒</span>
-                  </div>
-                  <div class="osint-foot" style="border-top:none;padding-top:0">
-                    <span class="osint-hash" title="SHA-256 evidence hash (chain of custody, M9)">sha256 ${esc((ev.evidence_hash||"").slice(0,18))}…</span>
-                    ${m.needs_human_review?'<span class="osint-review">⚠ review</span>':""}
-                  </div>
-                </div>`;
-            }).join("");
-        }
-        // Try the live file; fall back to the bundled sample (works under file://)
-        (function loadOsint(){
-            fetch('toolkit/data/sample_osint_leads.json').then(r=>r.ok?r.json():Promise.reject())
-                .then(renderOsintLeads).catch(()=>renderOsintLeads(OSINT_SAMPLE));
-        })();
 
         /* ---- Toolkit Status board: static mock of what each module produces (NO API calls) ---- */
         // Sample outputs are realistic (e.g. M5 mirrors a real GBIF taxonomy response shape).
@@ -2627,11 +2359,6 @@ Forest Officer Authorized Signature
         } catch (_) {}
         populateLangSelect();
         setLanguage(currentLanguage);
-        // map collapsed by default; restore if user explicitly opened it
-        try {
-            const saved = localStorage.getItem('wildguard_map_collapsed');
-            toggleMap(saved === '0' ? false : true);
-        } catch (_) { toggleMap(true); }
     </script>
 </body>
 
