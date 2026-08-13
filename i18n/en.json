@@ -181,7 +181,7 @@
   "chargesheet_instructions": "Select an OSINT event to draft the legal chargesheet...",
   "tab_lbl_overview": "Overview",
   "ideas_intro": "Each module solves one field problem independently — deploy one, all, or any combination. The Essential tier of every module works with a phone and a free app. Full playbooks with code, hardware lists, and agent prompts are in <a href=\"https://github.com/Arbogaste/open-wildguard-hub/tree/main/docs\" target=\"_blank\" rel=\"noopener\" style=\"color:var(--color-primary)\">docs/</a>.",
-  "nav_field_needs": "<i class=\"fa-solid fa-people-group\" aria-hidden=\"true\"></i> Field needs &amp; organizations",
+  "nav_field_needs": "Field needs &amp; organizations",
   "nav_skip": "Skip to content",
   "nav_command_center": "← Command Center",
   "nav_readme": "README / Mission",

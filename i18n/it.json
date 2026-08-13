@@ -181,7 +181,7 @@
   "chargesheet_instructions": "Seleziona un evento per redigere il verbale legale...",
   "tab_lbl_overview": "Panoramica",
   "ideas_intro": "Ogni modulo risolve un problema di campo in modo indipendente — puoi deploiare uno, tutti, o qualsiasi combinazione. Il livello Essential di ogni modulo funziona con uno smartphone e un'app gratuita. Playbook completi con codice, lista hardware e prompt AI in <a href=\"https://github.com/Arbogaste/open-wildguard-hub/tree/main/docs\" target=\"_blank\" rel=\"noopener\" style=\"color:var(--color-primary)\">docs/</a>.",
-  "nav_field_needs": "<i class=\"fa-solid fa-people-group\" aria-hidden=\"true\"></i> Esigenze sul campo e organizzazioni",
+  "nav_field_needs": "Esigenze sul campo e organizzazioni",
   "nav_skip": "Vai al contenuto",
   "nav_command_center": "← Centro di comando",
   "nav_readme": "README / Missione",

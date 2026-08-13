@@ -31,7 +31,7 @@
         rangerStations.forEach(station => {
             L.marker(station.coords, {
                 icon: L.divIcon({
-                    html: `<i class="fa-solid fa-building-shield" style="color: #00bcd4; font-size: 16px; text-shadow: 0 0 6px #00bcd4;"></i>`,
+                    html: ``,
                     className: 'custom-icon',
                     iconSize: [20, 20]
                 })
@@ -54,7 +54,7 @@
             // Draw threat point
             const threatMarker = L.marker([lat, lon], {
                 icon: L.divIcon({
-                    html: `<i class="fa-solid fa-circle-exclamation" style="color: #ff3344; font-size: 22px; text-shadow: 0 0 10px #ff3344;"></i>`,
+                    html: ``,
                     className: 'custom-icon',
                     iconSize: [25, 25]
                 })
@@ -112,7 +112,7 @@
             // Mark on map
             L.marker([randomLat, randomLon], {
                 icon: L.divIcon({
-                    html: `<i class="fa-solid fa-person-rifle" style="color: #ff3344; font-size: 20px; text-shadow: 0 0 8px #ff3344;"></i>`,
+                    html: ``,
                     className: 'custom-icon-alert',
                     iconSize: [20, 20]
                 })

@@ -11,9 +11,7 @@
   <meta property="og:title" content="WildGuard — YouTube Script Generator">
   <meta property="og:description" content="Wildlife alert → awareness video script + YouTube-ready metadata. Free, offline-capable.">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="stylesheet" href="vendor/fonts/fonts.css">
-  <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/brand/favicon-32.png">
+      <link rel="icon" type="image/png" sizes="32x32" href="assets/brand/favicon-32.png">
 
   <style>
     :root {
@@ -38,22 +36,22 @@
 
     /* footer */
     .site-footer { border-top: 1px solid var(--border); background: var(--surface);
-      margin-top: 28px; padding: 26px 22px 0; font-family: 'Outfit', sans-serif; }
+      margin-top: 28px; padding: 26px 22px 0; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
     .footer-grid { max-width: 1180px; margin: 0 auto; display: grid;
       grid-template-columns: 1.2fr 1fr 1fr; gap: 28px; }
     @media (max-width: 820px) { .footer-grid { grid-template-columns: 1fr; gap: 22px; } }
-    .footer-brand { font-family: 'Space Mono', monospace; font-size: 16px; font-weight: 700;
+    .footer-brand { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; font-size: 16px; font-weight: 700;
       color: var(--primary); margin-bottom: 8px; }
     .footer-tag { font-size: 12.5px; line-height: 1.6; color: var(--text); opacity: .82; }
     .footer-links { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 12px; }
     .footer-links a { color: var(--cyan); text-decoration: none; font-size: 12px; }
     .footer-links a:hover { text-decoration: underline; }
-    .footer-h { font-family: 'Space Mono', monospace; font-size: 12.5px; font-weight: 700;
+    .footer-h { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; font-size: 12.5px; font-weight: 700;
       color: var(--text); margin-bottom: 10px; letter-spacing: .3px; }
     .footer-h i { color: var(--primary); margin-right: 6px; }
     .footer-steps { margin: 0 0 8px 16px; padding: 0; display: flex; flex-direction: column; gap: 6px; }
     .footer-steps li { font-size: 12px; line-height: 1.55; color: var(--text); opacity: .88; }
-    .site-footer code { font-family: 'Space Mono', monospace; font-size: 11px;
+    .site-footer code { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; font-size: 11px;
       background: rgba(0,0,0,.35); border: 1px solid var(--border); border-radius: 4px;
       padding: 1px 5px; color: var(--cyan); }
     .footer-note { font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
@@ -65,7 +63,7 @@
     :focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; border-radius: 4px; }
 
     body {
-      font-family: 'Outfit', sans-serif;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
@@ -84,7 +82,7 @@
       background: rgba(7,9,14,0.95);
     }
     .back-link {
-      font-family: 'Space Mono', monospace;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
       font-size: 11px;
       color: var(--muted);
       text-decoration: none;
@@ -101,14 +99,14 @@
       color: var(--text);
     }
     .header-sub {
-      font-family: 'Space Mono', monospace;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
       font-size: 10px;
       color: var(--muted);
       text-transform: uppercase;
     }
     .mode-badge {
       margin-left: auto;
-      font-family: 'Space Mono', monospace;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
       font-size: 10px;
       padding: 4px 10px;
       border-radius: 20px;
@@ -137,7 +135,7 @@
     }
 
     .section-label {
-      font-family: 'Space Mono', monospace;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
       font-size: 10px;
       color: var(--muted);
       text-transform: uppercase;
@@ -152,7 +150,7 @@
       border: 1px solid var(--border);
       border-radius: 8px;
       color: var(--text);
-      font-family: 'Outfit', sans-serif;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
       font-size: 13px;
       padding: 10px 12px;
       resize: none;
@@ -175,7 +173,7 @@
       border: 1px solid var(--border);
       border-radius: 6px;
       color: var(--text);
-      font-family: 'Outfit', sans-serif;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
       font-size: 12px;
       padding: 7px 10px;
       outline: none;
@@ -237,7 +235,7 @@
       box-shadow: 0 0 6px rgba(0,255,102,.4);
     }
     .slider-val {
-      font-family: 'Space Mono', monospace;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
       font-size: 11px;
       color: var(--primary);
       min-width: 48px;
@@ -256,7 +254,7 @@
       border: 1px solid var(--border);
       background: transparent;
       color: var(--muted);
-      font-family: 'Space Mono', monospace;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
       font-size: 10px;
       text-align: center;
       cursor: pointer;
@@ -273,7 +271,7 @@
       color: #000;
       border: none;
       border-radius: 10px;
-      font-family: 'Space Mono', monospace;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
       font-size: 13px;
       font-weight: 700;
       cursor: pointer;
@@ -311,7 +309,7 @@
     }
     .out-tab {
       padding: 14px 18px;
-      font-family: 'Space Mono', monospace;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
       font-size: 10px;
       font-weight: 700;
       text-transform: uppercase;
@@ -363,7 +361,7 @@
       margin-bottom: 10px;
     }
     .copy-btn {
-      font-family: 'Space Mono', monospace;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
       font-size: 10px;
       padding: 5px 12px;
       border-radius: 6px;
@@ -385,7 +383,7 @@
       margin-bottom: 12px;
     }
     .scene-num {
-      font-family: 'Space Mono', monospace;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
       font-size: 10px;
       color: var(--cyan);
       text-transform: uppercase;
@@ -413,7 +411,7 @@
       background: rgba(0,0,0,.4);
       border-radius: 6px;
       padding: 10px 12px;
-      font-family: 'Space Mono', monospace;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
       font-size: 11px;
       color: #b3e5c8;
       white-space: pre-wrap;
@@ -421,7 +419,7 @@
     }
 
     .status-bar {
-      font-family: 'Space Mono', monospace;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
       font-size: 10px;
       color: var(--muted);
       padding: 7px 28px;
@@ -434,7 +432,7 @@
       margin-bottom: 22px;
     }
     .wf-phase-title {
-      font-family: 'Space Mono', monospace;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
       font-size: 10px;
       text-transform: uppercase;
       letter-spacing: 1px;
@@ -471,7 +469,7 @@
       cursor: pointer;
     }
     .wf-task label .tag {
-      font-family: 'Space Mono', monospace;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
       font-size: 10px;
       padding: 2px 7px;
       border-radius: 10px;
@@ -506,7 +504,7 @@
 
 <header>
   <a class="back-link" href="index.html">
-    <i class="fa-solid fa-arrow-left"></i> Command Center
+    Command Center
   </a>
   <div style="margin-left:12px;">
     <div class="header-title">YouTube Script Generator</div>
@@ -589,7 +587,6 @@
 
     <button class="btn-generate" id="btn-gen" onclick="generate()">
       <span class="spinner" id="spinner"></span>
-      <i class="fa-solid fa-clapperboard" id="gen-icon"></i>
       <span id="gen-label">Generate Script</span>
     </button>
 
@@ -609,13 +606,12 @@
 
       <div id="tab-script" class="out-section active">
         <div class="empty-state" id="empty-script">
-          <i class="fa-solid fa-scroll"></i>
           <p>Configure and click Generate to create your script.</p>
         </div>
         <div id="script-wrap" style="display:none">
           <div class="copy-row">
             <button class="copy-btn" onclick="copy('script-text')">
-              <i class="fa-solid fa-copy"></i> Copy script
+              Copy script
             </button>
           </div>
           <div class="script-area" id="script-text"></div>
@@ -624,7 +620,6 @@
 
       <div id="tab-scenes" class="out-section">
         <div class="empty-state" id="empty-scenes">
-          <i class="fa-solid fa-film"></i>
           <p>Scenes will appear here after generation.</p>
         </div>
         <div id="scenes-wrap" style="display:none">
@@ -634,7 +629,6 @@
 
       <div id="tab-prompts" class="out-section">
         <div class="empty-state" id="empty-prompts">
-          <i class="fa-solid fa-image"></i>
           <p>Image generation prompts (one per scene).</p>
         </div>
         <div id="prompts-wrap" style="display:none">
@@ -644,20 +638,19 @@
 
       <div id="tab-meta" class="out-section">
         <div class="empty-state" id="empty-meta">
-          <i class="fa-brands fa-youtube"></i>
           <p>Title, description, tags for YouTube upload.</p>
         </div>
         <div id="meta-wrap" style="display:none">
           <div class="copy-row">
             <button class="copy-btn" onclick="copy('meta-text')">
-              <i class="fa-solid fa-copy"></i> Copy JSON
+              Copy JSON
             </button>
           </div>
           <div class="script-area" id="meta-text"></div>
 
           <details style="margin-top:14px;border:1px solid var(--border,#243);border-radius:8px;padding:10px 12px;">
             <summary style="cursor:pointer;font-weight:600;font-size:13px;">
-              <i class="fa-brands fa-google"></i> Upload via YouTube Data API v3 — key/auth steps + example code
+              Upload via YouTube Data API v3 — key/auth steps + example code
             </summary>
             <div style="font-size:12px;line-height:1.6;margin-top:10px;">
               <strong>Why OAuth, not just an API key:</strong> reading public data (search, video info)
@@ -734,7 +727,6 @@ print("https://youtu.be/" + resp["id"])
 
       <div id="tab-workflow" class="out-section">
         <div class="empty-state" id="empty-workflow">
-          <i class="fa-solid fa-list-check"></i>
           <p>Generate a script first — workflow tasks will appear here.</p>
           <p style="font-size:11px;margin-top:4px;opacity:.6">Or fill in the topic above and generate to get your outline.</p>
         </div>
@@ -1084,7 +1076,7 @@ Write the script now. No preamble.`;
       <div class="wf-phase" style="margin-top:24px">
         <div class="wf-phase-title" style="color:var(--cyan)">Script outline (blank — fill manually)</div>
         <div class="copy-row" style="margin-bottom:8px">
-          <button class="copy-btn" onclick="copyOutline()"><i class="fa-solid fa-copy"></i> Copy plain text</button>
+          <button class="copy-btn" onclick="copyOutline()">Copy plain text</button>
         </div>
         ${scenes.map((s, i) => `
           <div class="outline-card">
@@ -1197,21 +1189,21 @@ Write the script now. No preamble.`;
 <footer class="site-footer">
   <div class="footer-grid">
     <div class="footer-col">
-      <div class="footer-brand"><i class="fa-solid fa-shield-halved"></i> OPEN-WILDGUARD-HUB</div>
+      <div class="footer-brand">OPEN-WILDGUARD-HUB</div>
       <p class="footer-tag">Open-source anti-poaching intelligence. Runs offline, $0 licenses.
          This tool turns a wildlife alert into a ready-to-shoot awareness video.</p>
       <div class="footer-links">
-        <a href="https://github.com/Arbogaste/open-wildguard-hub" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> Repository</a>
-        <a href="readme.html"><i class="fa-solid fa-book-open"></i> README / Mission</a>
-        <a href="organizations.html"><i class="fa-solid fa-people-group"></i> Field Needs</a>
-        <a href="demo.html"><i class="fa-solid fa-map-location-dot"></i> Example dashboard</a>
-        <a href="index.html"><i class="fa-solid fa-gauge-high"></i> Command Center</a>
-        <a href="https://github.com/Arbogaste/open-wildguard-hub/tree/main/docs#readme" target="_blank" rel="noopener"><i class="fa-solid fa-book"></i> Docs</a>
+        <a href="https://github.com/Arbogaste/open-wildguard-hub" target="_blank" rel="noopener">Repository</a>
+        <a href="readme.html">README / Mission</a>
+        <a href="organizations.html">Field Needs</a>
+        <a href="demo.html">Example dashboard</a>
+        <a href="index.html">Command Center</a>
+        <a href="https://github.com/Arbogaste/open-wildguard-hub/tree/main/docs#readme" target="_blank" rel="noopener">Docs</a>
       </div>
     </div>
 
     <div class="footer-col">
-      <div class="footer-h"><i class="fa-solid fa-microchip"></i> Run with a local model — Ollama</div>
+      <div class="footer-h">Run with a local model — Ollama</div>
       <ol class="footer-steps">
         <li>Install: <code>curl -fsSL https://ollama.com/install.sh | sh</code></li>
         <li>Pull a small model: <code>ollama pull phi3</code> (or <code>llama3</code>)</li>
@@ -1225,7 +1217,7 @@ Write the script now. No preamble.`;
     </div>
 
     <div class="footer-col">
-      <div class="footer-h"><i class="fa-solid fa-cloud"></i> Run with a hosted model — OpenRouter</div>
+      <div class="footer-h">Run with a hosted model — OpenRouter</div>
       <ol class="footer-steps">
         <li>Create a key at <code>openrouter.ai/keys</code>.</li>
         <li>Set <code>OPENROUTER_KEY</code> in the config block (use a <code>config.js</code> you
@@ -1240,8 +1232,7 @@ Write the script now. No preamble.`;
 
   <div class="footer-bar">
     <span>© <span id="footer-year"></span> OPEN-WILDGUARD-HUB — MIT License · Demo data is fictitious.</span>
-    <span class="footer-disclaimer"><i class="fa-solid fa-triangle-exclamation"></i>
-      Awareness/educational tool. Verify every fact before publishing; never name a specific
+    <span class="footer-disclaimer">Awareness/educational tool. Verify every fact before publishing; never name a specific
       individual or shop in connection with a crime.</span>
   </div>
 </footer>

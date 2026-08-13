@@ -15,176 +15,210 @@ Over time: more resources, more case studies, more real examples from real campa
 Your experience + corrections shape what this becomes
 Not waiting for perfect. Building toward useful. If something here helps you fight for what you believe in, use it. If it needs work, tell us.
 
-This repository currently serves two roles:
+# So, what can I actually do with this?
 
-1. It is the product home for the platform architecture, roadmap, and operator-facing documentation.
-2. It is the public-facing guide for how to extend the project with new capabilities, new datasets, and new use-case specific documents.
+**Turn a folder of detections into a court file, on a laptop with no internet.** Point
+`wildguard.py` at a directory of event JSON and it validates every record against one schema,
+scores risk zones, plans patrol routes, hashes the evidence and writes a case file per incident.
+If a photo was altered after capture, the run exits non-zero and names the file. This is the whole
+product in one command, and it needs nothing installed beyond Python.
 
-## What This Repo Is For
+**Put a €30 camera on a Raspberry Pi and get an alert when a human walks past.** The inference runs
+on the device, so the images never leave the park and there is no cloud bill. This is the one part
+that is not turnkey yet: we do not ship model weights, so a fresh clone detects nothing until you
+stage them from a connected machine.
 
-- A lightweight command center for conservation operations.
-- A modular technical base that can grow from a minimal edge deployment to a broader multi-site ecosystem.
-- A documentation hub for people who need to adapt the system to their own field conditions.
-- A reference implementation that favors local operation, explicit data contracts, and safe synchronization over infrastructure complexity.
+**Locate a gunshot instead of guessing its direction.** Three cheap synced microphones and
+`tdoa_locate.py` return coordinates, plus the residual error in metres — so a bad fix looks bad
+instead of sending a patrol 6 km into the bush.
 
-## Documentation Contract
+**Watch the online market without hiring an analyst.** `osint_scrape.py` scores marketplace listings
+against a dictionary of coded terms ("white gold" is ivory) across 104 sites. It is rule-based, so you
+can read exactly why something was flagged. Every hit is a suspicion for a human to check, never an
+accusation, and it is hashed at collection so a lead that matters later still has a custody trail.
 
-The documentation is intentionally split by role:
+**Give a researcher your data without a week of rework.** `wg_store.py` exports the same events to
+CSV, GeoJSON or Darwin Core, the GBIF standard, from a single SQLite file you can carry on a USB stick.
 
-- `README.md`
-  - Project mission, what runs today, and how to start.
-- `CHANGELOG.md`
-  - What already happened, session by session. Nothing else repeats it.
-- `docs/FIELD-NEEDS.md`
-  - The organizations doing anti-poaching work today, what they say they need, and the six work items
-    that come out of it. Rendered on the site as `organizations.html`.
-- `dev.md`
-  - The master technical guide for architecture, implementation rules, and future documentation structure.
-- `docs/`
-  - **The heart of the project — the "repo of repos".** Operator playbooks (`docs/modules/M01..M10.md`),
-    the recommended-repo catalog and use-case matrix (`docs/README.md`), and agent prompt packs
-    (`docs/prompts/`). Clone the hub, pick your use case, follow the playbook with free tools.
-- `docs/modules/`
-  - `M01` hub + sync patterns, `M02` camera-trap CV, `M03` bioacoustics, `M04` geo/terrain,
-    `M05` species intelligence, `M06` field intake, `M07` OSINT, `M08` prediction, `M09` evidence,
-    `M10` resilience / federated learning.
-- `toolkit/`
-  - Runnable, vendor-free code: `toolkit/python/` (edge inference + the M5–M10 module scripts),
-    `toolkit/arduino/` (sensor-node firmware), `toolkit/data/` (event schema, OSINT site list + slang
-    dictionary, sample leads, open-dataset pointers).
-- `docs/INTEGRATION-MAP.md`
-  - Activist-friendly: per module, *what tool · why · which repo already uses it · how to start* +
-    a copy-paste list of free public APIs (GBIF, IUCN, Nominatim, Open-Meteo…).
-- `docs/ACCESSIBILITY.md`
-  - The accessibility standard for all pages — WCAG 2.1 (W3C), AA target, checklist + patterns + tests.
-- `docs/modules/M11-M20-pollution-tier.md`
-  - **Design only.** Optional environmental-crime tier (water/air/waste/marine) that reuses the core.
-- `skills/wildlife-osint/`
-  - A Claude Code skill that drives the M7 OSINT tools with legal guardrails.
-- Planned `docs/use-cases/*.md`
-  - One deployment guide per real-world scenario.
-- `index.html` / `scriptplay.html` / `readme.html` / `organizations.html`
-  - The **demo command center** (OSINT Leads + Toolkit Status tabs), the YouTube awareness-video
-    generator, and the rendered mission/README. Illustrative UI — the real content is in `docs/` +
-    `toolkit/`. The site makes **no external API calls** (mock data; only user-configured
-    Ollama/OpenRouter in the script generator).
+## Motivations
 
-Core external resources already integrated in the docs and toolkit:
-- `MammAlps` for multi-view video/audio behavior data.
-- `Biodiversity` / `Pytorch-Wildlife` / `MegaDetector` for the wildlife model stack.
-- `SMART`, `EarthRanger`, `CyberTracker` for field ops and sync.
-- `Movebank`, `Wildbook`, `GBIF`, `IUCN`, `CITES MIKE` for species intelligence.
-- `OpenDroneMap`, `QGIS`, `Copernicus Sentinel-1`, `Open-Meteo`, `Nominatim`, `SoilGrids` for geo.
-- `OpenSoundscape`, `RFCx`, `xeno-canto`, `ESC-50` for audio.
-- `DVC`, `Flower`, `OpenVINO` for resilience, versioning, and federation.
+Anti-poaching software exists, and some of it is very good. It is also priced, licensed and hosted for
+organisations that have an IT budget. The teams we surveyed do not: they buy boots, radios, dog food and
+fuel, and every euro of subscription is a euro not spent on a ranger.
 
-## Privacy
+So the constraint came first and the features second. No server to expose, no port to attack, no account,
+no paid API on the critical path, and the Python standard library for anything a ranger depends on. If a
+feature cannot survive a Raspberry Pi with no network, it does not go in the core.
 
-The public hub (`privacy.html`) sets no cookies, runs no analytics and calls no AI service:
-the Script Generator ships in demo mode with no API key, so nothing you type leaves your
-browser unless you point it at your own Ollama instance or your own OpenRouter key. Hosting
-logs and the CARTO map-tile CDN are the only third parties, and both are declared.
+The second constraint is evidence. A poacher caught with a broken chain of custody walks free, and that
+is a software problem as much as a legal one. Every event is hashed at capture, and tampering is loud.
 
-The software itself ships **no telemetry**: a deployed instance sends nothing back to us.
-A real field deployment handles camera images, GPS positions, tip submissions and evidence
-on suspects — that processing belongs to the deploying organisation and needs its own DPIA.
+## Status
 
-## Who Can Reuse This
+Beta. The offline pipeline runs end to end with 54 tests green, and the modules are used one at a time
+rather than as a platform. **Nobody is running this on real data yet** — if you do, tell us what broke.
+That report is worth more to us than a feature request.
 
-- WWF / reserve teams: start with M1, M2, M3, M5, M6 and the datasets in `toolkit/data/`.
-- Activists / NGOs: use the docs as a field guide, then keep only the modules that match your workflow and legal context.
-- Small local teams: take the offline-first pieces, especially SMART/CyberTracker, camera-trap CV, and the event schema.
-- Technical teams: can extend the modules independently because the data contract and playbooks are already split by capability.
+# How to use this project
 
-## Capability modules vs delivery milestones (two different axes)
+Clone it and run the demo. It takes about ten seconds and needs no installation:
 
-To avoid confusion: this README's **delivery milestones** (M0–M6 below) track how the *repository*
-hardens. The **capability modules** (M1–M10, in `docs/modules/` and `dev.md` §5) are the *what the
-platform does* — edge vision, bioacoustics, OSINT, forensics, etc. They are independent numbering.
+```sh
+git clone https://github.com/Arbogaste/open-wildguard-hub
+cd open-wildguard-hub/toolkit/python
+python3 wildguard.py --demo
+```
 
-## What runs today (toolkit)
+You get validated detections, a ranked risk grid, four patrol routes and one hash-verified case file
+per incident, written under `report/`. Then swap the demo data for your own:
 
-The project is no longer docs-only. These run **offline, stdlib-only, on a Raspberry Pi** — each has a
-`--demo` you can run with zero setup. They all emit the canonical Tactical Event
-(`toolkit/data/event_schema.json`), so they compose.
+```sh
+python3 wildguard.py --events-dir /path/to/your/events
+```
 
-| Capability | Script | Try it |
-|---|---|---|
-| M5 species/place enrichment (GBIF/IUCN/OSM) | `toolkit/python/species_lookup.py` | `--demo` / `--name "tiger"` |
-| M5 collar geofence | `toolkit/python/gps_geofence.py` | `--demo` |
-| M6 community tip intake (PII-hashed) | `toolkit/python/tip_intake.py` | `--demo` |
-| M7 OSINT wildlife-trade scraper | `toolkit/python/osint_scrape.py` + `ebay_adapter.py` | `--demo` / `--sites ... --query avorio` |
-| M7 target list (104 sites) + slang dict | `toolkit/data/osint_sites.json`, `slang_dict.json` | edit + feed the scraper |
-| M8 risk heatmap + patrol routes | `toolkit/python/risk_model.py` | `--demo` |
-| M9 evidence integrity + case file | `toolkit/python/case_file.py` | `--demo` |
-| M10 node health monitor | `toolkit/python/node_health.py` | `--demo` |
-| M2/M3 edge inference + training | `edge_infer_camera.py`, `tdoa_locate.py`, `train_*` | runnable on Pi/Jetson |
-| Offline runner — ties every module together | `toolkit/python/wildguard.py` | `--demo`, or `--events-dir events/` |
-| Event store: SQLite, query by type/time/radius, CSV/GeoJSON/DarwinCore export | `toolkit/python/wg_store.py` | `--demo` |
+Every module also runs alone, and each has a `--demo` so you can see its output before wiring anything:
 
-There is **no server and no hub to deploy**. An exposed backend was designed (`PLAN.md` M0) and then
-deliberately dropped: `wildguard.py` plus a single SQLite file do the same work with nothing to expose,
-nothing to rent, and nothing to patch. Detectors write events into a folder; the runner consumes them.
+```sh
+python3 osint_scrape.py --demo      # marketplace scan
+python3 risk_model.py --demo        # risk grid + patrol routes
+python3 case_file.py --demo         # evidence integrity + case file
+python3 tdoa_locate.py --demo       # gunshot triangulation
+python3 node_health.py --demo       # battery, signal, silence
+```
+
+They compose because they all speak the same event schema
+([`toolkit/data/event_schema.json`](toolkit/data/event_schema.json)): a detector writes JSON into a
+folder, the runner reads it. That is the entire integration contract, and it is why you can adopt one
+module without adopting the project.
+
+To browse the site locally, serve it over HTTP — `file://` blocks the service worker and the JSON fetches:
+
+```sh
+python3 -m http.server 8080   # then open http://localhost:8080
+```
+
+## What each module does
+
+Ten modules, one field problem each, independent. The full playbook for each — hardware, cost, what to
+expect — is in [`docs/modules/`](docs/modules), and [`docs/INTEGRATION-MAP.md`](docs/INTEGRATION-MAP.md)
+tells you what external tool to plug into each one and the single command to start.
+
+**M1 collects everything into one place.** Not a hub you deploy: a runner and a single SQLite file.
+We designed an exposed FastAPI backend, then deleted it — a field deployment should have nothing to
+patch and nothing to rent.
+
+**M2 watches camera traps.** Human, vehicle and weapon detection on the device itself. Runnable, but
+you must stage the weights yourself.
+
+**M3 listens.** Gunshots and chainsaws, located by time difference across synced microphones.
+
+**M4 looks from above.** Satellite and drone change detection for illegal clearing. Documented, not built:
+it needs heavy dependencies that break the offline promise, and that trade-off is still open.
+
+**M5 knows the animals.** Clean scientific names and IUCN status from GBIF, plus geofence alerts when a
+collared animal leaves the protected area. It does *not* yet alert when an animal stops moving, which is
+the earlier and more important signal.
+
+**M6 handles people.** Patrol logs and community tips, with the reporter's identity hashed at intake and
+never stored raw, because being named as an informant gets people killed.
+
+**M7 monitors online trade.** The scanner described above.
+
+**M8 plans patrols.** Ranks risk zones from incident history, then builds routes with deliberate
+randomness. A patrol pattern a poacher can memorise is worse than no pattern, so do not "optimise away"
+the random waypoints.
+
+**M9 builds the court file.** Hash chain, custody log, integrity PASS/FAIL. This is the module that turns
+a detection into a conviction, and it is why the project exists.
+
+**M10 keeps the network alive.** Battery, signal and silence alerts per node — a camera that stopped
+reporting three weeks ago is a hole in the fence.
+
+## Weights and datasets
+
+**This repository contains no model weights and no datasets.** Not an oversight: they are hundreds of
+megabytes each, most carry a licence we cannot sublicense, and shipping a stale copy of someone else's
+data helps nobody. What we ship is code plus the exact pointers.
+
+For M2 (camera detection) you need one detector. Start with **MegaDetector v5** — human, animal and
+vehicle, trained on millions of camera-trap frames, MIT licensed:
+[github.com/microsoft/CameraTraps](https://github.com/microsoft/CameraTraps). Without a custom model,
+`edge_infer_camera.py` falls back to YOLOv8n on COCO, which knows `person` and `car` and nothing about
+poaching. That is enough to start and honest about what it is.
+
+To do better, train on data that actually looks like your problem. A YOLOv8 dataset with a trained
+`Poacher` class is on Kaggle:
+[poaching-and-animal-detection-dataset](https://www.kaggle.com/datasets/rijubera2000/poaching-and-animal-detection-dataset).
+About 4,900 labelled aerial elephant images live in
+[nimadorostkar/WildGuard](https://github.com/nimadorostkar/WildGuard) under `ml-ai/`. For camera traps in
+general, [lila.science](https://lila.science/) hosts Snapshot Serengeti and the rest, free for research.
+
+For M3 (audio) you need positives and negatives: [xeno-canto](https://xeno-canto.org/) for calls,
+[ESC-50](https://github.com/karolpiczak/ESC-50) for gunshot, chainsaw and vehicle sounds to train against.
+
+The full list, with what each source is good for, is in
+[`toolkit/data/README.md`](toolkit/data/README.md).
+
+**Check the licence of each one before you redistribute anything.** Several of these forbid commercial
+use, and a few forbid redistribution entirely — which is exactly why they are links here and not files.
+Staging them onto an SD card for an offline Pi is still manual work: that gap is open, see
+[issues](https://github.com/Arbogaste/open-wildguard-hub/issues).
+
+## The projects we build on
+
+We integrate rather than rebuild. Thirty open-source projects have been read, judged and mapped to the
+module each one serves: MegaDetector and Pytorch-Wildlife for detection, PAWS for patrol game theory,
+OpenSoundscape for audio, Wildbook for photo-ID, plus datasets with a trained `Poacher` class and ~4.9k
+labelled aerial elephant images we can use for M2 weights.
+
+The honest verdict on each — including "take the dataset, ignore the code" — is in
+[`docs/README.md`](docs/README.md#recommended-open-source-repos--what-each-one-is-for).
+
+## The organisations doing this work
+
+Thirteen anti-poaching organisations, surveyed from their own public pages: Patrol, Protrack, Big Life,
+Panthera, Thula Thula, Global Conservation Force, IFAW, LIFE WolfAlps, Sea Shepherd and others. What each
+one does, what each one says it needs, and where to donate.
+
+This is not a courtesy list. It is where the roadmap comes from, and reading it explains the priorities
+below better than any argument we could make: [`docs/FIELD-NEEDS.md`](docs/FIELD-NEEDS.md).
 
 ## What is missing
 
-Six things, and they are not our guesses — they come from what field organizations actually ask for. Each
-one is stated with its evidence in [`docs/FIELD-NEEDS.md`](docs/FIELD-NEEDS.md#what-this-survey-changes-in-the-project):
+Six gaps, and none of them is our opinion — each comes from something a field organisation said out loud.
 
-1. **SMART interop.** Most funded ranger operations record patrols in SMART. Until we import and export it,
-   adopting this repo means abandoning their patrol history.
-2. **Poisoning as a threat class.** Poisoned bait is the dominant illegal-killing method in Europe and a
-   major one in Africa. Our event schema cannot express it, so an anti-poison dog unit has nothing to log.
-3. **Collar anomaly detection.** We alert when an animal crosses a line, not when it stops moving — and
-   prolonged immobility is the earliest signal that it was killed.
-4. **Tip credibility.** A plausible tip can be planted misinformation, and an informant network dies when
-   its handler leaves. We protect the source but assume the content is honest.
-5. **A trade vocabulary that scales.** 74 coded terms against the 4,000+ the industry coalition tracks.
-6. **Model weights are not shipped.** A fresh clone on a field Pi detects nothing until weights are staged
-   from a connected machine. `edge_infer_camera.py` must fail loudly instead of quietly finding nothing.
+The largest is **SMART interoperability**. Most funded ranger operations already record patrols in SMART,
+so until we can import and export it, adopting this repo means abandoning their history. That alone is
+worth more than any new detector.
 
-Open work is tracked in [issues](https://github.com/Arbogaste/open-wildguard-hub/issues). Picking any of the
-six above is more useful than a new feature.
+Then: **poisoned bait is not in our event schema**, although it is the dominant illegal-killing method in
+Europe, so an anti-poison dog unit has nothing to log. **We alert when a collared animal crosses a line,
+not when it stops moving**, which is the earliest sign it was killed. **A tip can be planted
+misinformation** and we have no corroboration model, only source protection. **Our slang dictionary holds
+74 coded terms** against the 4,000+ the industry coalition tracks. And **we ship no model weights**, so
+M2 is honest-looking but blind out of the box.
 
-## Quick Start
+Picking any of these beats adding a feature.
+[Issues](https://github.com/Arbogaste/open-wildguard-hub/issues).
 
-This repository is still in active development. The current front-end is a static, **offline-first** prototype and should be treated as the command center shell, not the full runtime. All sensor data (camera traps, audio, IoT collars, OSINT) is intentionally mocked to showcase the interface.
+## Donations
 
-**Serve it over HTTP** — do not open `index.html` directly via `file://`. The dashboard registers a service worker and fetches `i18n/*.json` for translations (and `toolkit/data/*.json` for the demo cards); both are blocked under `file://`.
+We take none and sell nothing. There is no account, no paid tier and no wallet address; if something
+claiming to be WildGuard AI asks you for money, it is not us.
 
-To run the toolkit (no server needed):
+Fund the people running rangers, dogs and court cases instead — the indexed list is in
+[`docs/FIELD-NEEDS.md`](docs/FIELD-NEEDS.md#where-to-donate). Verify each organisation yourself; we have
+no relationship with any of them and receive nothing from those links.
 
-```bash
-cd toolkit/python
-python3 risk_model.py --demo      # or osint_scrape.py, case_file.py, node_health.py, ...
-```
-
-```bash
-cd open-wildguard-hub
-python3 -m http.server 8080
-# then open http://localhost:8080
-```
-
-All assets (Leaflet, fonts, FontAwesome) are self-hosted under `vendor/`, so after the first load the shell works fully offline — map markers, routes and overlays keep rendering even with no network (basemap tiles fall back to a local dark placeholder).
-
-## Support the work — donate to the people in the field
-
-This project takes no donations and sells nothing. There is no account, no license and no paid tier; if
-something claiming to be WildGuard AI asks you for money, it is not us.
-
-The organizations that need funding are the ones running rangers, dogs, vehicles and court cases. An
-indexed list — ranger units, ranger families, wildlife-crime networks, species programmes, marine — is in
-[`docs/FIELD-NEEDS.md`](docs/FIELD-NEEDS.md#where-to-donate), also published at
-[organizations.html](https://arbogaste.github.io/open-wildguard-hub/organizations.html). Verify each one
-yourself; we have no relationship with any of them and receive nothing from those links.
-
-To support this repository instead: test it in the field and report what breaks, correct a fact,
-translate a page, or add a term to the slang dictionary. See [`CONTRIBUTING.md`](CONTRIBUTING.md).
-
-## Upstream Codebase Approach
-
-This hub is intended to orchestrate and document capabilities that may be sourced from existing open projects. The long-term goal is not to absorb everything into one monolith, but to expose stable interfaces, shared conventions, and practical integration patterns.
+To help this repository instead: run it in the field and report what broke, correct a fact, translate a
+page, or add a term to the slang dictionary. See [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ## License
 
-MIT License, unless a specific upstream component requires a different license.
+**Our code is MIT** — `toolkit/`, the site, the docs. Fork it, ship it, no attribution drama.
+
+One exception: `vendor/leaflet/` is Leaflet 1.9.4, BSD-2-Clause. There are no vendored fonts or icon
+packs — the site uses the system font stack, so there is no third-party font licence to respect and
+nothing extra to download. Basemap tiles are fetched from CARTO under their terms and not redistributed.
+
+Weights and datasets are covered above: none are in this repo, and each source keeps its own licence.

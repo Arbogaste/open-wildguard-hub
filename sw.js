@@ -1,9 +1,9 @@
 /* open-wildguard-hub — offline-first service worker.
-   Caches the demo shell + all self-hosted vendor assets so the command center
+   Caches the shell and the vendored Leaflet build so the site
    loads with zero network. Map tiles are cached opportunistically (online);
    when offline, Leaflet falls back to vendor/leaflet/tile-offline.png. */
 
-const CACHE = 'wildguard-shell-v4';
+const CACHE = 'wildguard-shell-v5';
 
 const PRECACHE = [
   './',
@@ -20,7 +20,6 @@ const PRECACHE = [
   './assets/brand/favicon-32.png',
   './assets/brand/favicon-180.png',
   './assets/brand/favicon-256.png',
-  './vendor/fonts/fonts.css',
   './vendor/leaflet/leaflet.css',
   './vendor/leaflet/leaflet.js',
   './vendor/leaflet/images/marker-icon.png',
@@ -28,24 +27,14 @@ const PRECACHE = [
   './vendor/leaflet/images/marker-shadow.png',
   './vendor/leaflet/images/layers.png',
   './vendor/leaflet/images/layers-2x.png',
-  './vendor/leaflet/tile-offline.png',
-  './vendor/fontawesome/css/all.min.css',
-  './vendor/fontawesome/webfonts/fa-solid-900.woff2',
-  './vendor/fontawesome/webfonts/fa-regular-400.woff2',
-  './vendor/fontawesome/webfonts/fa-brands-400.woff2'
+  './vendor/leaflet/tile-offline.png'
 ];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(
     caches.open(CACHE).then(async (cache) => {
-      // Precache the shell. Also pull in every font woff2 referenced by fonts.css.
+      // Precache the shell. System fonts only — nothing to fetch, nothing to license.
       await cache.addAll(PRECACHE);
-      try {
-        const css = await (await fetch('./vendor/fonts/fonts.css')).text();
-        const fonts = [...css.matchAll(/url\(\.\/([^)]+\.woff2)\)/g)]
-          .map((m) => './vendor/fonts/' + m[1]);
-        await cache.addAll([...new Set(fonts)]);
-      } catch (_) { /* fonts are optional for offline boot */ }
     }).then(() => self.skipWaiting())
   );
 });
